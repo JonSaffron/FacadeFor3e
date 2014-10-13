@@ -3,7 +3,7 @@ using System.Security.Principal;
 using System.ServiceModel;
 using System.Text;
 using JetBrains.Annotations;
-using FacadeFor3e.TransactionServiceLive;
+using FacadeFor3e.TransactionService;
 
 namespace FacadeFor3e
     {

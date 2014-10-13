@@ -53,9 +53,39 @@
     <Compile Include="RunProcess.cs" />
     <Compile Include="RunProcessParameters.cs" />
     <Compile Include="RunProcessResult.cs" />
+    <Compile Include="Service References\TransactionService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="sample.app.config" />
+    <None Include="Service References\TransactionService\FacadeFor3e.TransactionService.ReturnInfoType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\TransactionService\TransactionService.wsdl" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\TransactionService\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\TransactionService\TransactionService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\TransactionService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\TransactionService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\TransactionService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
