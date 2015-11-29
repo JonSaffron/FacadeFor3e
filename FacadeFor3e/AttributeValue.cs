@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Xml;
+using JetBrains.Annotations;
 
 namespace FacadeFor3e
     {
     /// <summary>
     /// Defines a value for an object attribute
     /// </summary>
+    [UsedImplicitly(ImplicitUseTargetFlags.Members)]
     public class AttributeValue
         {
         private readonly string _name;

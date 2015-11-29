@@ -216,11 +216,14 @@ namespace FacadeFor3e
         /// <returns>The new DataObject</returns>
         public DataObject AddChild(string name)
             {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException("Invalid name.", "name");
+            if (this._children.Exists(child => child.Name == name))
+                throw new ArgumentOutOfRangeException("name", "A child with the name " + name + " has already been added.");
+
             var a = new DataObject(name);
             this._children.Add(a);
             return a;
             }
-
-
         }
     }
