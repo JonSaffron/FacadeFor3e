@@ -18,22 +18,32 @@ namespace FacadeFor3e
         /// </summary>
         public string NewKey { get; private set; }
 
-        internal RunProcessResult(XmlDocument response, bool setKey, string objectName)
+        internal RunProcessResult(XmlDocument response)
             {
             if (response == null || response.DocumentElement == null)
                 throw new ArgumentException("Invalid response.", "response");
 
-            if (setKey)
-                {
-                string path = string.Format(CultureInfo.InvariantCulture, "Keys/{0}", objectName);
-                var element = response.DocumentElement.SelectSingleNode(path) as XmlElement;
-                if (element == null)
-                    throw new InvalidOperationException();
-                this.NewKey = element.GetAttribute("KeyValue");
-                }
-
             this.Response = response;
+            }
+
+        public Guid ProcessId
+            {
+            get
+                {
+                // ReSharper disable once PossibleNullReferenceException
+                var result = new Guid(this.Response.DocumentElement.GetAttribute("ProcessItemId"));
+                return result;
+                }
+            }
+
+        internal void SetKey(string objectName)
+            {
+            string path = string.Format(CultureInfo.InvariantCulture, "Keys/{0}", objectName);
+            // ReSharper disable once PossibleNullReferenceException
+            var element = this.Response.DocumentElement.SelectSingleNode(path) as XmlElement;
+            if (element == null)
+                throw new InvalidOperationException("Failed to find new key value for " + objectName);
+            this.NewKey = element.GetAttribute("KeyValue");
             }
         }
     }
-

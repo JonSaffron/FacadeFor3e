@@ -52,7 +52,7 @@ namespace FacadeFor3e
                     return result2;
                     }
 
-                throw new InvalidOperationException("Cannot identify the data errors node in the output.");
+                return null;
                 }
 
             var errors = new List<string>();

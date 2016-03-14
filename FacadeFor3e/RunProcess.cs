@@ -54,7 +54,7 @@ namespace FacadeFor3e
 
             var resultsDoc = new XmlDocument();
             resultsDoc.LoadXml(response);
-            var r = new RunProcessResult(resultsDoc, p.GetKey, p.ObjectName);
+            var r = new RunProcessResult(resultsDoc);
             string responseFormatted = resultsDoc.PrettyPrintXml();
             System.Diagnostics.Trace.WriteLine(responseFormatted);
 
@@ -67,7 +67,11 @@ namespace FacadeFor3e
                 string result = root.GetAttribute("Result");
                 if (result == "Interface")
                     {
-                    if (p.ThrowExceptionIfProcessDoesNotComplete)
+                    string outputId = root.GetAttribute("OutputId");        // This is probably the ID of the last step in the process. It could therefore be called anything!
+                    if (outputId != "Success" && outputId != "Succeeded")
+                        processException = ProcessExceptionBuilder.BuildForDataError(p, r);
+
+                    if (processException == null && p.ThrowExceptionIfProcessDoesNotComplete)
                         processException = new ProcessException("The process did not complete and will appear on action list.", p, r);
                     }
                 else if (result != "Success")
@@ -76,7 +80,11 @@ namespace FacadeFor3e
                     {
                     string outputId = root.GetAttribute("OutputId");        // This is probably the ID of the last step in the process. It could therefore be called anything!
                     if (outputId != "Success" && outputId != "Succeeded")
+                        {
                         processException = ProcessExceptionBuilder.BuildForDataError(p, r);
+                        if (processException == null)
+                            throw new InvalidOperationException("Cannot identify the data errors node in the output.");
+                        }
                     }
                 }
             catch
@@ -87,6 +95,9 @@ namespace FacadeFor3e
 
             if (processException != null)
                 throw processException;
+
+            if (p.GetKey)
+                r.SetKey(p.ObjectName);
 
             return r;
             }
