@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Security.Principal;
 using System.ServiceModel;
 using System.Text;
 using System.Xml;
 using System.Globalization;
+using System.Linq;
 using JetBrains.Annotations;
 using FacadeFor3e.TransactionService;
 
@@ -13,7 +16,7 @@ namespace FacadeFor3e
     /// <summary>
     /// Executes a process
     /// </summary>
-    [UsedImplicitly(ImplicitUseTargetFlags.Members)]
+    [PublicAPI]
     public static class RunProcess
         {
         /// <summary>
@@ -27,12 +30,7 @@ namespace FacadeFor3e
             {
             if (process == null)
                 throw new ArgumentNullException("process");
-
-            if (process.Operations.Count == 0)
-                {
-                string msg = string.Format(CultureInfo.InvariantCulture, "There are no operations to carry out for process {0}", process.ProcessName);
-                throw new InvalidOperationException(msg);
-                }
+            ValidateProcess(process);
 
             var rp = new RunProcessParameters(process)
                         {
@@ -48,17 +46,22 @@ namespace FacadeFor3e
             return result;
             }
 
-        public static RunProcessResult ExecuteProcess(RunProcessParameters p)
+        public static RunProcessResult ExecuteProcess(RunProcessParameters runProcessParameters)
             {
-            string response = CallTransactionService(p);
+            if (runProcessParameters == null)
+                throw new ArgumentNullException("runProcessParameters");
+            if (runProcessParameters.Request == null)
+                throw new InvalidOperationException("Request is not set.");
+
+            string response = CallTransactionService(runProcessParameters);
 
             var resultsDoc = new XmlDocument();
             resultsDoc.LoadXml(response);
             var r = new RunProcessResult(resultsDoc);
             string responseFormatted = resultsDoc.PrettyPrintXml();
-            System.Diagnostics.Trace.WriteLine(responseFormatted);
+            Trace.WriteLine(responseFormatted);
 
-            ProcessException processException = null;
+            ProcessException processException;
             try
                 {
                 XmlElement root = resultsDoc.DocumentElement;
@@ -67,46 +70,71 @@ namespace FacadeFor3e
                 string result = root.GetAttribute("Result");
                 if (result == "Interface")
                     {
-                    string outputId = root.GetAttribute("OutputId");        // This is probably the ID of the last step in the process. It could therefore be called anything!
-                    if (outputId != "Success" && outputId != "Succeeded")
-                        processException = ProcessExceptionBuilder.BuildForDataError(p, r);
-
-                    if (processException == null && p.ThrowExceptionIfProcessDoesNotComplete)
-                        processException = new ProcessException("The process did not complete and will appear on action list.", p, r);
+                    // process did not complete
+                    processException = ProcessExceptionBuilder.BuildForDataError(runProcessParameters, r);
+                    if (processException == null && runProcessParameters.ThrowExceptionIfProcessDoesNotComplete)
+                        processException = new ProcessException("The process did not complete and will appear on action list.", runProcessParameters, r);
                     }
-                else if (result != "Success")
-                    processException = ProcessExceptionBuilder.BuildForProcessError(p, r);
+                else if (result == "Success")
+                    {
+                    // process completed - you can still get data errors and a next message though
+                    processException = ProcessExceptionBuilder.BuildForDataError(runProcessParameters, r);
+                    }
+                else if (result == "Failure")
+                    {
+                    processException = ProcessExceptionBuilder.BuildForProcessError(runProcessParameters, r);
+                    }
                 else
                     {
-                    string outputId = root.GetAttribute("OutputId");        // This is probably the ID of the last step in the process. It could therefore be called anything!
-                    if (outputId != "Success" && outputId != "Succeeded")
-                        {
-                        processException = ProcessExceptionBuilder.BuildForDataError(p, r);
-                        if (processException == null)
-                            throw new InvalidOperationException("Cannot identify the data errors node in the output.");
-                        }
+                    throw new InvalidOperationException("Unexpected result value in ProcessExecutionResults.");
                     }
                 }
             catch
                 {
-                System.Diagnostics.Trace.WriteLine(response);
-                processException = new ProcessException("An error occurred that was not dealt with appropriately.", p, r);
+                Trace.WriteLine(response);
+                processException = new ProcessException("An error occurred that was not dealt with appropriately.", runProcessParameters, r);
                 }
 
             if (processException != null)
                 throw processException;
 
-            if (p.GetKey)
-                r.SetKey(p.ObjectName);
+            if (runProcessParameters.GetKey)
+                r.SetKey(runProcessParameters.ObjectName);
 
             return r;
+            }
+
+        private static void ValidateProcess(Process process)
+            {
+            if (!process.Operations.Any())
+                {
+                throw new InvalidOperationException("There are no operations to carry out for process " + process.ProcessName);
+                }
+            if (process.Operations.OfType<DeleteByPosition>().Any() || process.Operations.OfType<DeleteByKeyField>().Any()
+                || process.Operations.OfType<EditByPosition>().Any() || process.Operations.OfType<EditByKeyField>().Any())
+                throw new InvalidOperationException("Cannot use KeyField or by Position operations at the top level.");
+
+            CheckForCircularReferences(process);
+            }
+
+        private static void CheckForCircularReferences(DataObject da, HashSet<DataObject> hierarchy = null)
+            {
+            if (hierarchy == null)
+                hierarchy = new HashSet<DataObject>();
+
+            if (!hierarchy.Add(da))
+                throw new InvalidOperationException("There is a circular reference within the Process definition.");
+
+            foreach (var childOp in da.Operations.OfType<OperationWithAttributesBase>())
+                foreach (var childDa in childOp.Children)
+                    CheckForCircularReferences(childDa, hierarchy);
             }
 
         private static string GetCurrentWindowsIdentity()
             {
             string result;
             using (var wi = WindowsIdentity.GetCurrent())
-                result = wi == null ? null : wi.Name;
+                result = wi.Name;
             return result;
             }
 
@@ -132,7 +160,7 @@ namespace FacadeFor3e
                 sb.AppendFormat("\tIdentity: {0}", p.AccountToImpersonate == null ? (GetCurrentWindowsIdentity() ?? "<none>") : string.Format("Impersonating {0}", p.AccountToImpersonate.Name));
                 sb.AppendLine();
                 sb.Append(p.Request.PrettyPrintXml());
-                System.Diagnostics.Trace.WriteLine(sb.ToString());
+                Trace.WriteLine(sb.ToString());
 
 // ReSharper disable BitwiseOperatorOnEnumWithoutFlags
                 var returnInfoType = (int) ((p.GetKey ? ReturnInfoType.Keys : ReturnInfoType.None) | ReturnInfoType.Timing);

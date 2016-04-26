@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Xml;
 using JetBrains.Annotations;
 
@@ -7,24 +8,20 @@ namespace FacadeFor3e
     /// <summary>
     /// Defines a value for an object attribute
     /// </summary>
-    [UsedImplicitly(ImplicitUseTargetFlags.Members)]
+    [PublicAPI]
     public class AttributeValue
         {
-        private readonly string _name;
-        private readonly string _alias;
-        private readonly string _value;
+        private readonly string _attributeName;
+        private readonly object _originalValue;
+        private readonly string _stringValue;
 
-        /// <summary>
-        /// Constructs a new attribute
-        /// </summary>
-        /// <param name="name">The column name</param>
-        /// <param name="value">The value to assign</param>
-        public AttributeValue(string name, string value)
+        private AttributeValue(string name)
             {
             if (name == null)
                 throw new ArgumentNullException("name");
-            this._name = name;
-            this._value = value ?? string.Empty;
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException("The name parameter must specify a valid attribute name.");
+            this._attributeName = name;
             }
 
         /// <summary>
@@ -32,12 +29,10 @@ namespace FacadeFor3e
         /// </summary>
         /// <param name="name">The column name</param>
         /// <param name="value">The value to assign</param>
-        public AttributeValue(string name, bool? value)
+        public AttributeValue(string name, string value = null) : this(name)
             {
-            if (name == null)
-                throw new ArgumentNullException("name");
-            this._name = name;
-            this._value = value.HasValue ? (value.Value ? "1" : "0") : string.Empty;
+            this._originalValue = value;
+            this._stringValue = value.To3eString();
             }
 
         /// <summary>
@@ -45,12 +40,10 @@ namespace FacadeFor3e
         /// </summary>
         /// <param name="name">The column name</param>
         /// <param name="value">The value to assign</param>
-        public AttributeValue(string name, int? value)
+        public AttributeValue(string name, bool value) : this(name)
             {
-            if (name == null)
-                throw new ArgumentNullException("name");
-            this._name = name;
-            this._value = value.HasValue ? value.Value.ToString("F0") : string.Empty;
+            this._originalValue = value;
+            this._stringValue = value.To3eString();
             }
 
         /// <summary>
@@ -58,12 +51,10 @@ namespace FacadeFor3e
         /// </summary>
         /// <param name="name">The column name</param>
         /// <param name="value">The value to assign</param>
-        public AttributeValue(string name, decimal? value)
+        public AttributeValue(string name, int? value) : this(name)
             {
-            if (name == null)
-                throw new ArgumentNullException("name");
-            this._name = name;
-            this._value = value.HasValue ? value.Value.ToString("G") : string.Empty;
+            this._originalValue = value;
+            this._stringValue = value.To3eString();
             }
 
         /// <summary>
@@ -71,17 +62,10 @@ namespace FacadeFor3e
         /// </summary>
         /// <param name="name">The column name</param>
         /// <param name="value">The value to assign</param>
-        public AttributeValue(string name, DateTime? value)
+        public AttributeValue(string name, decimal? value) : this(name)
             {
-            if (name == null)
-                throw new ArgumentNullException("name");
-            this._name = name;
-            if (!value.HasValue)
-                this._value = string.Empty;
-            else if (value.Value.TimeOfDay == TimeSpan.Zero)
-                this._value = value.Value.ToString("d-MMM-yyyy");
-            else
-                this._value = value.Value.ToString("d-MMM-yyyy HH:mm:ss");
+            this._originalValue = value;
+            this._stringValue = value.To3eString();
             }
 
         /// <summary>
@@ -89,135 +73,70 @@ namespace FacadeFor3e
         /// </summary>
         /// <param name="name">The column name</param>
         /// <param name="value">The value to assign</param>
-        public AttributeValue(string name, Guid value)
+        public AttributeValue(string name, DateTime? value) : this(name)
             {
-            if (name == null)
-                throw new ArgumentNullException("name");
-            this._name = name;
-            this._value = value.ToString("B");
+            this._originalValue = value;
+            this._stringValue = value.To3eString();
             }
 
         /// <summary>
         /// Constructs a new attribute
         /// </summary>
         /// <param name="name">The column name</param>
-        /// <param name="alias">The name of the alias column in a foreign key relationship</param>
         /// <param name="value">The value to assign</param>
-        public AttributeValue(string name, string alias, string value) : this(name, value)
+        public AttributeValue(string name, Guid? value) : this(name)
             {
-            if (alias == null)
-                throw new ArgumentNullException("alias", "alias cannot be null (name is " + name + ")");
-            this._alias = alias;
+            this._originalValue = value;
+            this._stringValue = value.To3eString();
             }
 
         /// <summary>
-        /// Constructs a new attribute
-        /// </summary>
-        /// <param name="name">The column name</param>
-        /// <param name="alias">The name of the alias column in a foreign key relationship</param>
-        /// <param name="value">The value to assign</param>
-        public AttributeValue(string name, string alias, bool? value) : this(name, value)
-            {
-            if (alias == null)
-                throw new ArgumentNullException("alias", "alias cannot be null (name is " + name + ")");
-            this._alias = alias;
-            }
-
-        /// <summary>
-        /// Constructs a new attribute
-        /// </summary>
-        /// <param name="name">The column name</param>
-        /// <param name="alias">The name of the alias column in a foreign key relationship</param>
-        /// <param name="value">The value to assign</param>
-        public AttributeValue(string name, string alias, int? value) : this(name, value)
-            {
-            if (alias == null)
-                throw new ArgumentNullException("alias", "alias cannot be null (name is " + name + ")");
-            this._alias = alias;
-            }
-
-        /// <summary>
-        /// Constructs a new attribute
-        /// </summary>
-        /// <param name="name">The column name</param>
-        /// <param name="alias">The name of the alias column in a foreign key relationship</param>
-        /// <param name="value">The value to assign</param>
-        public AttributeValue(string name, string alias, decimal? value) : this(name, value)
-            {
-            if (alias == null)
-                throw new ArgumentNullException("alias", "alias cannot be null (name is " + name + ")");
-            this._alias = alias;
-            }
-
-        /// <summary>
-        /// Constructs a new attribute
-        /// </summary>
-        /// <param name="name">The column name</param>
-        /// <param name="alias">The name of the alias column in a foreign key relationship</param>
-        /// <param name="value">The value to assign</param>
-        public AttributeValue(string name, string alias, DateTime? value) : this(name, value)
-            {
-            if (alias == null)
-                throw new ArgumentNullException("alias", "alias cannot be null (name is " + name + ")");
-            this._alias = alias;
-            }
-
-        /// <summary>
-        /// Constructs a new attribute
-        /// </summary>
-        /// <param name="name">The column name</param>
-        /// <param name="alias">The name of the alias column in a foreign key relationship</param>
-        /// <param name="value">The value to assign</param>
-        public AttributeValue(string name, string alias, Guid value) : this(name, value)
-            {
-            if (alias == null)
-                throw new ArgumentNullException("alias", "alias cannot be null (name is " + name + ")");
-            this._alias = alias;
-            }
-
-        /// <summary>
-        /// Constructs a new attribute which will have a null value
-        /// </summary>
-        /// <param name="name">The column name</param>
-        public AttributeValue(string name) : this(name, string.Empty)
-            {
-            }
-
-        /// <summary>
-        /// Gets the name of the column
+        /// Gets the name of the attribute
         /// </summary>
         public string Name
             {
-            get { return this._name; }
+            get { return this._attributeName; }
             }
 
         /// <summary>
-        ///  Gets the name of the alias
+        /// Gets the value to assign to the attribute
         /// </summary>
-        public string Alias
+        public object Value
             {
-            get { return this._alias; }
+            get { return this._originalValue; }
             }
 
         /// <summary>
-        /// Gets the value to assign
+        /// Gets the representation of the attribute value that will used in the call to the transaction service
         /// </summary>
-        public string Value
+        public string OutputValue
             {
-            get { return this._value; }
+            get { return this._stringValue; }
             }
 
         /// <summary>
         /// Outputs this attribute
         /// </summary>
         /// <param name="writer">An XMLWriter to output to</param>
-        internal void Render(XmlWriter writer)
+        protected internal virtual void Render(XmlWriter writer)
             {
-            writer.WriteStartElement(this._name);
-            if (this._alias != null)
-                writer.WriteAttributeString("AliasField", this._alias);
-            writer.WriteValue(this._value);
+            writer.WriteStartElement(this._attributeName);
+            writer.WriteValue(this._stringValue);
             writer.WriteEndElement();
+            }
+
+        public override string ToString()
+            {
+            string result;
+            using (var sw = new StringWriter())
+                {
+                using (var xw = XmlWriter.Create(sw))
+                    {
+                    Render(xw);
+                    }
+                result = sw.ToString();
+                }
+            return result;
             }
         }
     }

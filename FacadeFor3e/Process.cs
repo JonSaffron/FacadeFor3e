@@ -1,7 +1,7 @@
 ﻿using System.Xml;
 using JetBrains.Annotations;
 
-// the schema suggests that there are various other properies that could be added, such as:
+// todo: the schema suggests that there are various other properies that could be added, such as:
 // Name Description Priority (LOW MEDIUM HIGH) OperatingUnit CheckSum ProxyUser ProxyUserID
 
 namespace FacadeFor3e
@@ -9,7 +9,7 @@ namespace FacadeFor3e
     /// <summary>
     /// Defines a process for performing one or more operations on an object
     /// </summary>
-    [UsedImplicitly(ImplicitUseTargetFlags.Members)]
+    [PublicAPI]
     public class Process : DataObject
         {
         private readonly string _processName;
@@ -128,6 +128,26 @@ namespace FacadeFor3e
         public static Process NewClientProcess()
             {
             var result = new Process("N_WsClient", "Client");
+            return result;
+            }
+
+        /// <summary>
+        /// Constructs a new ESBTimeCardLoad process
+        /// </summary>
+        /// <returns>A process for updating matters</returns>
+        public static Process NewEsbTimeCardLoadProcess()
+            {
+            var result = new Process("ESBTimeCardLoad", "TimeCardPending");
+            return result;
+            }
+
+        /// <summary>
+        /// Constructs a new ESBCostCardLoad process
+        /// </summary>
+        /// <returns>A process for updating matters</returns>
+        public static Process NewEsbCostCardLoadProcess()
+            {
+            var result = new Process("ESBCostCardLoad", "CostCardPending");
             return result;
             }
         }

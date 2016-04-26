@@ -44,16 +44,7 @@ namespace FacadeFor3e
                 throw new InvalidOperationException();
             var element = root.SelectSingleNode("DATA_ERRORS") as XmlElement;
             if (element == null)
-                {
-                element = root.SelectSingleNode("MESSAGE") as XmlElement;
-                if (element != null && element.ChildNodes.Count == 1 && element.ChildNodes[0].NodeType == XmlNodeType.CDATA)
-                    {
-                    var result2 = new ProcessException(element.ChildNodes[0].InnerText, p, r);
-                    return result2;
-                    }
-
                 return null;
-                }
 
             var errors = new List<string>();
             GatherDataErrors(element, string.Empty, errors);

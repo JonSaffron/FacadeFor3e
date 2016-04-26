@@ -31,6 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="JetBrains.Annotations, Version=10.1.4.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>..\..\TestInterCompanyBilling\packages\JetBrains.Annotations.10.1.4\lib\net20\JetBrains.Annotations.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
@@ -38,8 +42,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddAttachment.cs" />
+    <Compile Include="AttributeCollection.cs" />
+    <Compile Include="AttributeRelationship.cs" />
     <Compile Include="AttributeValue.cs" />
+    <Compile Include="ChildCollection.cs" />
     <Compile Include="DataObject.cs" />
+    <Compile Include="EditByPosition.cs" />
+    <Compile Include="EdityKeyField.cs" />
+    <Compile Include="EditByKey.cs" />
+    <Compile Include="EditByAlias.cs" />
+    <Compile Include="DeleteByAlias.cs" />
+    <Compile Include="DeleteByKey.cs" />
+    <Compile Include="DeleteByKeyField.cs" />
+    <Compile Include="DeleteByPosition.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="OperationAdd.cs" />
     <Compile Include="OperationBase.cs" />
     <Compile Include="OperationDelete.cs" />
@@ -49,7 +65,6 @@
     <Compile Include="ProcessException.cs" />
     <Compile Include="ProcessExceptionBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ResharperAnnotations.cs" />
     <Compile Include="RunProcess.cs" />
     <Compile Include="RunProcessParameters.cs" />
     <Compile Include="RunProcessResult.cs" />
@@ -63,6 +78,7 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="sample.app.config" />
     <None Include="Service References\TransactionService\FacadeFor3e.TransactionService.ReturnInfoType.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>

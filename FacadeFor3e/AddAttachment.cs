@@ -7,7 +7,7 @@ using FacadeFor3e.TransactionService;
 
 namespace FacadeFor3e
     {
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
+    [PublicAPI]
     public static class AddAttachment
         {
         /// <summary>

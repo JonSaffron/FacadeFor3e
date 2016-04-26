@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 
 namespace FacadeFor3e
     {
-    [UsedImplicitly(ImplicitUseTargetFlags.Members)]
+    [PublicAPI]
     public class RunProcessResult
         {
         /// <summary>
@@ -32,6 +32,17 @@ namespace FacadeFor3e
                 {
                 // ReSharper disable once PossibleNullReferenceException
                 var result = new Guid(this.Response.DocumentElement.GetAttribute("ProcessItemId"));
+                return result;
+                }
+            }
+
+        public string NextMessage
+            {
+            get
+                {
+                // ReSharper disable once PossibleNullReferenceException
+                var nextMessage = this.Response.DocumentElement.SelectSingleNode("MESSAGE");
+                var result = nextMessage == null ? null : nextMessage.InnerText;
                 return result;
                 }
             }

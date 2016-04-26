@@ -1,4 +1,5 @@
-﻿using System.Xml;
+﻿using System;
+using System.Xml;
 
 namespace FacadeFor3e
     {
@@ -7,6 +8,38 @@ namespace FacadeFor3e
     /// </summary>
     public class OperationAdd : OperationWithAttributesBase
         {
+        /// <summary>
+        /// The ID of the template to use for the Add operation
+        /// </summary>
+        public Guid? TemplateId { get; set; }
+
+        /// <summary>
+        /// The ID of the existing row to clone
+        /// </summary>
+        public Guid? ModelRowId { get; set; }
+
+        /// <summary>
+        /// Creates a new Add operation using a template
+        /// </summary>
+        /// <param name="modelId">The ID of the template to use</param>
+        /// <returns>An Add operation</returns>
+        public static OperationAdd AddFromModel(Guid modelId)
+            {
+            var result = new OperationAdd {TemplateId = modelId};
+            return result;
+            }
+
+        /// <summary>
+        /// Creates a new Add operation that clones an existing row
+        /// </summary>
+        /// <param name="modelRowId">The ID of the existing row</param>
+        /// <returns>An Add operation</returns>
+        public static OperationAdd AddModelFromDb(Guid modelRowId)
+            {
+            var result = new OperationAdd {ModelRowId = modelRowId};
+            return result;
+            }
+
         /// <summary>
         /// Outputs this operation
         /// </summary>
@@ -17,21 +50,8 @@ namespace FacadeFor3e
             writer.WriteStartElement("Add");
             writer.WriteStartElement(objectName);
 
-            if (this.Attributes.Count > 0)
-                {
-                writer.WriteStartElement("Attributes");
-                foreach (AttributeValue a in this.Attributes)
-                    a.Render(writer);
-                writer.WriteEndElement();
-                }
-
-            if (this.Children.Count > 0)
-                {
-                writer.WriteStartElement("Children");
-                foreach (DataObject a in this.Children)
-                    a.Render(writer);
-                writer.WriteEndElement();
-                }
+            RenderAttributes(writer);
+            RenderChildren(writer);
 
             writer.WriteEndElement();
             writer.WriteEndElement();

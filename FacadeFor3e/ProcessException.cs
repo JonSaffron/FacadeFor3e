@@ -9,7 +9,7 @@ namespace FacadeFor3e
     /// Represents an error that occurred during execution of a process
     /// </summary>
     [Serializable]
-    [UsedImplicitly(ImplicitUseTargetFlags.Members)]
+    [PublicAPI]
     public class ProcessException : Exception
         {
         private const string StandardMessage = "An error occurred whilst running a 3e process.";

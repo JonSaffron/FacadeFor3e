@@ -8,7 +8,7 @@ namespace FacadeFor3e
     /// <summary>
     /// Encapsulates the running of a process within 3e
     /// </summary>
-    [UsedImplicitly(ImplicitUseTargetFlags.Members)]
+    [PublicAPI]
     public class RunProcessParameters
         {
         /// <summary>
