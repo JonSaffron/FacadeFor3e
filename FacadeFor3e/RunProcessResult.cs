@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Globalization;
+using System.Collections.Generic;
 using System.Xml;
 using JetBrains.Annotations;
 
@@ -8,22 +8,35 @@ namespace FacadeFor3e
     [PublicAPI]
     public class RunProcessResult
         {
-        /// <summary>
-        /// Gets the repsonse from 3e
-        /// </summary>
-        public XmlDocument Response {get; private set;}
+        private readonly XmlDocument _request;
+        private readonly XmlDocument _response;
+        
 
-        /// <summary>
-        /// Gets the value of a key field created during the process
-        /// </summary>
-        public string NewKey { get; private set; }
-
-        internal RunProcessResult(XmlDocument response)
+        internal RunProcessResult(XmlDocument request, XmlDocument response)
             {
+            if (request == null || request.DocumentElement == null)
+                throw new ArgumentException("Invalid request.", "request");
             if (response == null || response.DocumentElement == null)
                 throw new ArgumentException("Invalid response.", "response");
 
-            this.Response = response;
+            this._request = request;
+            this._response = response;
+            }
+
+        /// <summary>
+        /// Gets the request sent to 3e
+        /// </summary>
+        public XmlDocument Request
+            {
+            get { return this._request; }
+            }
+
+        /// <summary>
+        /// Gets the repsonse from 3e
+        /// </summary>
+        public XmlDocument Response
+            {
+            get { return this._response; }
             }
 
         public Guid ProcessId
@@ -47,14 +60,19 @@ namespace FacadeFor3e
                 }
             }
 
-        internal void SetKey(string objectName)
+        public IEnumerable<string> GetKeys()
             {
-            string path = string.Format(CultureInfo.InvariantCulture, "Keys/{0}", objectName);
-            // ReSharper disable once PossibleNullReferenceException
-            var element = this.Response.DocumentElement.SelectSingleNode(path) as XmlElement;
-            if (element == null)
-                throw new InvalidOperationException("Failed to find new key value for " + objectName);
-            this.NewKey = element.GetAttribute("KeyValue");
+            var keys = this.Response.SelectSingleNode("ProcessExecutionResults/Keys");
+            if (keys == null)
+                // The presence of the Keys node is dependant only upon whether ReturnInfoType.Keys was specified when calling ExecuteProcess 
+                throw new InvalidOperationException("Key information was not requested.");
+        
+            var result = new List<string>();
+            foreach (XmlElement node in keys.ChildNodes)
+                {
+                result.Add(node.InnerText);
+                }
+            return result;
             }
         }
     }

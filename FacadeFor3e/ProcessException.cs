@@ -13,7 +13,6 @@ namespace FacadeFor3e
     public class ProcessException : Exception
         {
         private const string StandardMessage = "An error occurred whilst running a 3e process.";
-        public RunProcessParameters RunProcessParameters { get; private set; }
         public RunProcessResult RunProcessResult { get; private set; }
         private readonly List<string> _errorMessages;
 
@@ -71,12 +70,10 @@ namespace FacadeFor3e
         /// Constructs a new ProcessException
         /// </summary>
         /// <param name="message">The error message that explains the reason for the exception</param>
-        /// <param name="p">The run process parameters</param>
-        /// <param name="r">The run process result</param>
-        public ProcessException(string message, RunProcessParameters p, RunProcessResult r) : base(message)
+        /// <param name="runProcessResult">The run process result</param>
+        public ProcessException(string message, RunProcessResult runProcessResult) : base(message)
             {
-            this.RunProcessParameters = p;
-            this.RunProcessResult = r;
+            this.RunProcessResult = runProcessResult;
             }
 
         /// <summary>
@@ -84,26 +81,22 @@ namespace FacadeFor3e
         /// </summary>
         /// <param name="message">The error message that explains the reason for the exception</param>
         /// <param name="innerException">The exception that is the cause of the current exception, or a null reference if no inner exception is specified</param>
-        /// <param name="p">The run process parameters</param>
-        /// <param name="r">The run process result</param>
-        public ProcessException(string message, Exception innerException, RunProcessParameters p, RunProcessResult r) : base(message, innerException)
+        /// <param name="runProcessResult">The run process result</param>
+        public ProcessException(string message, Exception innerException, RunProcessResult runProcessResult) : base(message, innerException)
             {
-            this.RunProcessParameters = p;
-            this.RunProcessResult = r;
+            this.RunProcessResult = runProcessResult;
             }
 
         /// <summary>
         /// Constructs a new ProcessException
         /// </summary>
         /// <param name="message">The error message that explains the reason for the exception</param>
-        /// <param name="p">The run process parameters</param>
-        /// <param name="r">The run process result</param>
+        /// <param name="runProcessResult">The run process result</param>
         /// <param name="errorMessages">The list of error messages from 3e</param>
-        public ProcessException(string message, RunProcessParameters p, RunProcessResult r, IEnumerable<string> errorMessages) : base(message)
+        public ProcessException(string message, RunProcessResult runProcessResult, IEnumerable<string> errorMessages) : base(message)
             {
-            this.RunProcessParameters = p;
-            this.RunProcessResult = r;
-            this._errorMessages = (errorMessages == null) ? null : new List<string>(errorMessages); 
+            this.RunProcessResult = runProcessResult;
+            this._errorMessages = errorMessages != null ? new List<string>(errorMessages) : null;
             }
         }
     }

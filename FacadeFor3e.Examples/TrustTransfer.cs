@@ -3,6 +3,7 @@ using System.Configuration;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.ComponentModel;
+using System.Linq;
 
 namespace FacadeFor3e.Examples
     {
@@ -117,16 +118,17 @@ namespace FacadeFor3e.Examples
             to.AddAttribute("BankAcctTrust", "Name", ttp.ToBankAccount);
             to.AddAttribute("TrustIntendedUse", ttp.ToIntendedUse);
 
-            var rp = new RunProcessParameters(p)
-                         {
-                             AccountToImpersonate = GetWindowsIdentity(),
-                             EndpointName = EndpointName,
-                             GetKey = true,
-                             ThrowExceptionIfProcessDoesNotComplete = true
-                         };
-            var r = RunProcess.ExecuteProcess(rp);
-            int result = int.Parse(r.NewKey);
-            return result;
+            using (var rp = new RunProcess())
+                {
+                rp.AccountToImpersonate = GetWindowsIdentity();
+                rp.EndpointName = EndpointName;
+                rp.GetKeys = true;
+                rp.ThrowExceptionIfProcessDoesNotComplete = true;
+ 
+                var r = rp.Execute(p);
+                int result = int.Parse(r.GetKeys().First());
+                return result;
+                }
             }
 
         public void Dispose()

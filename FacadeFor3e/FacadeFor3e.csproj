@@ -46,6 +46,7 @@
     <Compile Include="AttributeRelationship.cs" />
     <Compile Include="AttributeValue.cs" />
     <Compile Include="ChildCollection.cs" />
+    <Compile Include="CommonLibrary.cs" />
     <Compile Include="DataObject.cs" />
     <Compile Include="EditByPosition.cs" />
     <Compile Include="EdityKeyField.cs" />
@@ -66,7 +67,6 @@
     <Compile Include="ProcessExceptionBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RunProcess.cs" />
-    <Compile Include="RunProcessParameters.cs" />
     <Compile Include="RunProcessResult.cs" />
     <Compile Include="Service References\TransactionService\Reference.cs">
       <AutoGen>True</AutoGen>

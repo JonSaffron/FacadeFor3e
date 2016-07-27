@@ -11,7 +11,7 @@ namespace FacadeFor3e
         {
         private const string ErrorMessagePrefix = "Error in the application.-";
 
-        public static ProcessException BuildForProcessError(RunProcessParameters p, RunProcessResult r)
+        public static ProcessException BuildForProcessError(RunProcessResult r)
             {
             XmlElement root = r.Response.DocumentElement;
             if (root == null)
@@ -33,11 +33,11 @@ namespace FacadeFor3e
             if (string.IsNullOrEmpty(message))
                 message = "Unknown error";
             string msg = string.Format(CultureInfo.InvariantCulture, "{0} {1}", message, errorMessage);
-            var result = new ProcessException(msg, p, r);
+            var result = new ProcessException(msg, r);
             return result;
             }
 
-        public static ProcessException BuildForDataError(RunProcessParameters p, RunProcessResult r)
+        public static ProcessException BuildForDataError(RunProcessResult r)
             {
             XmlElement root = r.Response.DocumentElement;
             if (root == null)
@@ -50,7 +50,7 @@ namespace FacadeFor3e
             GatherDataErrors(element, string.Empty, errors);
             
             var msg = new StringBuilder();
-            msg.AppendFormat("There are problems with the data supplied to the {0} process.", p.ProcessName);
+            msg.Append("There are problems with the data supplied to the process.");
             if (errors.Count == 0)
                 msg.Append(" No further details are available.");
             else
@@ -64,7 +64,7 @@ namespace FacadeFor3e
                     msg.AppendLine();
                     }
                 }
-            var result = new ProcessException(msg.ToString(), p, r, errors);
+            var result = new ProcessException(msg.ToString(), r, errors);
             return result;
             }
 

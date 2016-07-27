@@ -33,14 +33,26 @@ namespace FacadeFor3e
             get { return this._processName; }
             }
 
+        public static string BuildProcessNameSpace(string processName)
+            {
+            string result = string.Format(@"http://elite.com/schemas/transaction/process/write/{0}", processName);
+            return result;
+            }
+
+        public static string BuildObjectNameSpace(string objectName)
+            {
+            string result = string.Format(@"http://elite.com/schemas/transaction/object/write/{0}", objectName);
+            return result;
+            }
+
         /// <summary>
         /// Outputs this process
         /// </summary>
         /// <param name="writer">An XMLWriter to output to</param>
         protected internal override void Render(XmlWriter writer)
             {
-            string ns0 = string.Format("http://elite.com/schemas/transaction/process/write/{0}", this.ProcessName);
-            string ns1 = string.Format("http://elite.com/schemas/transaction/object/write/{0}", this.Name);
+            string ns0 = BuildProcessNameSpace(this.ProcessName);
+            string ns1 = BuildObjectNameSpace(this.Name);
 
             writer.WriteStartDocument();
             writer.WriteStartElement(this._processName, ns0);
