@@ -16,6 +16,14 @@ namespace FacadeFor3e
 
         private TransactionServiceSoapClient _transactionServiceSoapClient;
 
+        public static XmlDocument GetData([NotNull] XmlDocument xmlDoc, WindowsIdentity accountToImpersonate, string endpointName)
+            {
+            if (xmlDoc == null)
+                throw new ArgumentNullException("xmlDoc");
+            var result = GetData(xmlDoc.OuterXml, accountToImpersonate, endpointName);
+            return result;
+            }
+
         public static XmlDocument GetData(string xoql, WindowsIdentity accountToImpersonate, string endpointName)
             {
             using (var getArchetypeData = new GetArchetypeData())
@@ -26,6 +34,14 @@ namespace FacadeFor3e
                 var result = getArchetypeData.GetData(xoql);
                 return result;
                 }
+            }
+
+        public XmlDocument GetData([NotNull] XmlDocument xmlDoc)
+            {
+            if (xmlDoc == null)
+                throw new ArgumentNullException("xmlDoc");
+            var result = GetData(xmlDoc.OuterXml);
+            return result;
             }
 
         public XmlDocument GetData(string xoql)
