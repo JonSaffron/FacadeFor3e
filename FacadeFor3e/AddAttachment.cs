@@ -42,7 +42,7 @@ namespace FacadeFor3e
                 {
                 if (value != null && (value.Length > 128 || value.Length != value.TrimEnd().Length))
                     throw new ArgumentOutOfRangeException("value");
-                this.SyncId = value;
+                this._syncId = value;
                 }
             }
 
@@ -149,7 +149,7 @@ namespace FacadeFor3e
             System.Diagnostics.Trace.WriteLine(string.Format("Completed - {0:N} total bytes", totalBytes));
             }
 
-        [NotNullAttribute]
+        [NotNull]
         private static string GetCurrentWindowsIdentity()
             {
             string result;
