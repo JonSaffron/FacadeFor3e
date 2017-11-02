@@ -70,7 +70,7 @@ namespace FacadeFor3e
             var result = new List<string>();
             foreach (XmlElement node in keys.ChildNodes)
                 {
-                result.Add(node.InnerText);
+                result.Add(node.GetAttribute("KeyValue"));
                 }
             return result;
             }
