@@ -55,7 +55,7 @@ namespace FacadeFor3e
         public static string ExecuteProcess(Process process, WindowsIdentity wi = null, string endpointName = null)
             {
             if (process == null)
-                throw new ArgumentNullException("process");
+                throw new ArgumentNullException(nameof(process));
             ValidateProcess(process);
             bool getKey = process.Operations.Count == 1 && process.Operations[0] is OperationAdd;
 
@@ -76,7 +76,7 @@ namespace FacadeFor3e
         public RunProcessResult Execute(Process process)
             {
             if (process == null)
-                throw new ArgumentNullException("process");
+                throw new ArgumentNullException(nameof(process));
             ValidateProcess(process);
 
             var request = process.GenerateCommand();
@@ -87,7 +87,7 @@ namespace FacadeFor3e
         public RunProcessResult Execute(XmlDocument request)
             {
             if (request == null)
-                throw new ArgumentNullException("request");
+                throw new ArgumentNullException(nameof(request));
 
             string response = CallTransactionService(request);
 
@@ -190,7 +190,7 @@ namespace FacadeFor3e
 
             var ts = GetSoapClient();
 
-            using (this.AccountToImpersonate != null ? this.AccountToImpersonate.Impersonate() : null)
+            using (AccountToImpersonate?.Impersonate())
                 {
                 OutputToConsoleDetailsOfTheJob(request, ts);    
 
