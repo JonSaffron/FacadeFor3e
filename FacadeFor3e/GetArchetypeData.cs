@@ -56,7 +56,7 @@ namespace FacadeFor3e
                     {
                     var response = ts.GetArchetypeData(xoql);
                     var xmlDoc = new XmlDocument();
-                    xmlDoc.LoadXml(response);
+                    xmlDoc.LoadXml(response ?? "<Data />");
                     return xmlDoc;
                     }
                 catch (EndpointNotFoundException ex)
