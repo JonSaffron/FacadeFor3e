@@ -17,27 +17,9 @@ namespace FacadeFor3e
     [PublicAPI]
     public class RunProcess : IDisposable
         {
-        /// <summary>
-        /// Gets or sets the account to impersonate during the process
-        /// </summary>
-        public WindowsIdentity AccountToImpersonate { get; set; }
-
-        /// <summary>
-        /// Gets or sets the endpoint to use to connect to the 3e server
-        /// </summary>
-        public string EndpointName { get; set; }
-
-        /// <summary>
-        /// Gets or sets whether to throw an exception if the process doesn't complete
-        /// </summary>
-        public bool ThrowExceptionIfProcessDoesNotComplete { get; set; }
-
-        /// <summary>
-        /// Gets or sets whether to return the primary keys of the top-level records remaining in the worklist when the process finishes
-        /// </summary>
-        public bool GetKeys { get; set; }
-
         private TransactionServiceSoapClient _transactionServiceSoapClient;
+        private string _endpointName;
+        private EndpointAddress _endpointAddress;
 
         public RunProcess()
             {
@@ -137,6 +119,49 @@ namespace FacadeFor3e
             return r;
             }
 
+        /// <summary>
+        /// Gets or sets the account to impersonate during the process
+        /// </summary>
+        public WindowsIdentity AccountToImpersonate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the endpoint to use to connect to the 3e server
+        /// </summary>
+        public string EndpointName
+            {
+            get => this._endpointName;
+            set
+                {
+                if (this._transactionServiceSoapClient != null && this._endpointName != value)
+                    throw new InvalidOperationException("Cannot change EndpointName.");
+                this._endpointName = value; 
+                }
+            }
+
+        /// <summary>
+        /// Gets or sets the endpoint address to use to connect dynamically to a 3e server
+        /// </summary>
+        public EndpointAddress EndpointAddress
+            {
+            get => this._endpointAddress;
+            set
+                {
+                if (this._transactionServiceSoapClient != null && this._endpointAddress != value)
+                    throw new InvalidOperationException("Cannot change EndpointAddress.");
+                this._endpointAddress = value;
+                }
+            }
+
+        /// <summary>
+        /// Gets or sets whether to throw an exception if the process doesn't complete
+        /// </summary>
+        public bool ThrowExceptionIfProcessDoesNotComplete { get; set; }
+
+        /// <summary>
+        /// Gets or sets whether to return the primary keys of the top-level records remaining in the worklist when the process finishes
+        /// </summary>
+        public bool GetKeys { get; set; }
+
         private static void ValidateProcess(Process process)
             {
             if (!process.Operations.Any())
@@ -171,19 +196,6 @@ namespace FacadeFor3e
             return result;
             }
 
-        private TransactionServiceSoapClient GetSoapClient()
-            {
-            var result = this._transactionServiceSoapClient;
-            if (result == null)
-                {
-                result = string.IsNullOrWhiteSpace(this.EndpointName) ? new TransactionServiceSoapClient() : new TransactionServiceSoapClient(this.EndpointName);
-                if (result.ClientCredentials != null)
-                    result.ClientCredentials.Windows.AllowedImpersonationLevel = TokenImpersonationLevel.Identification;
-                this._transactionServiceSoapClient = result;
-                }
-            return result;
-            }
-
         private string CallTransactionService(XmlDocument request)
             {
             string result;
@@ -213,6 +225,33 @@ namespace FacadeFor3e
             return result;
             }
 
+        [NotNull] private TransactionServiceSoapClient GetSoapClient()
+            {
+            var result = this._transactionServiceSoapClient;
+            if (result == null)
+                {
+                if (!string.IsNullOrWhiteSpace(this.EndpointName) && this.EndpointAddress != null)
+                    {
+                    result = new TransactionServiceSoapClient(this.EndpointName, this.EndpointAddress);
+                    }
+                else if (!string.IsNullOrWhiteSpace(this.EndpointName))
+                    {
+                    result = new TransactionServiceSoapClient(this.EndpointName);
+                    }
+                else
+                    {
+                    result = new TransactionServiceSoapClient();
+                    }
+
+                if (result.ClientCredentials != null)
+                    result.ClientCredentials.Windows.AllowedImpersonationLevel = TokenImpersonationLevel.Identification;
+
+                this._transactionServiceSoapClient = result;
+                }
+
+            return result;
+            }
+
         private void OutputToConsoleDetailsOfTheJob(XmlDocument request, TransactionServiceSoapClient ts)
             {
             var sb = new StringBuilder();
@@ -221,7 +260,7 @@ namespace FacadeFor3e
             sb.AppendLine();
             sb.AppendFormat("\tURL: {0}", ts.Endpoint.Address);
             sb.AppendLine();
-            sb.AppendFormat("\tIdentity: {0}", this.AccountToImpersonate == null ? GetCurrentWindowsIdentity() : string.Format("Impersonating {0}", this.AccountToImpersonate.Name));
+            sb.AppendFormat("\tIdentity: {0}", this.AccountToImpersonate == null ? GetCurrentWindowsIdentity() : $"Impersonating {this.AccountToImpersonate.Name}");
             sb.AppendLine();
             sb.Append(request.PrettyPrintXml());
             Trace.WriteLine(sb.ToString());
