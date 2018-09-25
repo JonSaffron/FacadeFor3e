@@ -11,7 +11,7 @@ namespace FacadeFor3e.Examples
             {
             DateTime today = DateTime.Today;
 
-            var p = Process.NewMatterProcess();
+            var p = new Process("Matter_Srv", "Matter");
             var a = p.AddOperation();
             a.AddAttribute("IsAutoNumbering", true);
             a.AddAttribute("OpenDate", today);
@@ -77,13 +77,13 @@ namespace FacadeFor3e.Examples
 
             a.AddAttribute("OpenTkpr", fd["OpenTkpr"]);
 
-            int newMatterIndex = int.Parse(RunProcessIn3e(p));
+            int newMatterIndex = int.Parse(RunProcessIn3E(p));
             return newMatterIndex;
             }
 
 	    public static void MatterOpen(int matter, string alternativeMatterNumber, bool useTimeType, string billingGroup, string ptaGroup = null)
             {
-            var p = Process.NewMatterProcess();
+            var p = new Process("Matter_Srv", "Matter");
             var e = p.EditOperation(matter);
             e.AddAttribute("MattStatus", "OP");     // set status to open
             e.AddAttribute("OpenDate", DateTime.Today);     // reset open date
@@ -119,10 +119,10 @@ namespace FacadeFor3e.Examples
                 b.AddAttribute("BillingGroup", billingGroup);
                 }
 
-	        RunProcessIn3e(p);
+	        RunProcessIn3E(p);
             }
 
-        private static string RunProcessIn3e(Process p)
+        private static string RunProcessIn3E(Process p)
             {
             // get the identity of the person using your website (this works when using windows authentication)
             var wi = (WindowsIdentity) HttpContext.Current.User.Identity;

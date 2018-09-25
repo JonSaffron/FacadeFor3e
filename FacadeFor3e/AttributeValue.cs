@@ -11,17 +11,13 @@ namespace FacadeFor3e
     [PublicAPI]
     public class AttributeValue
         {
-        private readonly string _attributeName;
-        private readonly object _originalValue;
-        private readonly string _stringValue;
-
         private AttributeValue(string name)
             {
             if (name == null)
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException("The name parameter must specify a valid attribute name.");
-            this._attributeName = name;
+            this.Name = name;
             }
 
         /// <summary>
@@ -31,8 +27,8 @@ namespace FacadeFor3e
         /// <param name="value">The value to assign</param>
         public AttributeValue(string name, string value = null) : this(name)
             {
-            this._originalValue = value;
-            this._stringValue = value.To3eString();
+            this.Value = value;
+            this.OutputValue = value.To3eString();
             }
 
         /// <summary>
@@ -42,8 +38,8 @@ namespace FacadeFor3e
         /// <param name="value">The value to assign</param>
         public AttributeValue(string name, bool value) : this(name)
             {
-            this._originalValue = value;
-            this._stringValue = value.To3eString();
+            this.Value = value;
+            this.OutputValue = value.To3eString();
             }
 
         /// <summary>
@@ -53,8 +49,8 @@ namespace FacadeFor3e
         /// <param name="value">The value to assign</param>
         public AttributeValue(string name, int? value) : this(name)
             {
-            this._originalValue = value;
-            this._stringValue = value.To3eString();
+            this.Value = value;
+            this.OutputValue = value.To3eString();
             }
 
         /// <summary>
@@ -64,8 +60,8 @@ namespace FacadeFor3e
         /// <param name="value">The value to assign</param>
         public AttributeValue(string name, decimal? value) : this(name)
             {
-            this._originalValue = value;
-            this._stringValue = value.To3eString();
+            this.Value = value;
+            this.OutputValue = value.To3eString();
             }
 
         /// <summary>
@@ -75,8 +71,8 @@ namespace FacadeFor3e
         /// <param name="value">The value to assign</param>
         public AttributeValue(string name, DateTime? value) : this(name)
             {
-            this._originalValue = value;
-            this._stringValue = value.To3eString();
+            this.Value = value;
+            this.OutputValue = value.To3eString();
             }
 
         /// <summary>
@@ -86,33 +82,24 @@ namespace FacadeFor3e
         /// <param name="value">The value to assign</param>
         public AttributeValue(string name, Guid? value) : this(name)
             {
-            this._originalValue = value;
-            this._stringValue = value.To3eString();
+            this.Value = value;
+            this.OutputValue = value.To3eString();
             }
 
         /// <summary>
         /// Gets the name of the attribute
         /// </summary>
-        public string Name
-            {
-            get { return this._attributeName; }
-            }
+        public string Name { get; }
 
         /// <summary>
         /// Gets the value to assign to the attribute
         /// </summary>
-        public object Value
-            {
-            get { return this._originalValue; }
-            }
+        public object Value { get; }
 
         /// <summary>
         /// Gets the representation of the attribute value that will used in the call to the transaction service
         /// </summary>
-        public string OutputValue
-            {
-            get { return this._stringValue; }
-            }
+        public string OutputValue { get; }
 
         /// <summary>
         /// Outputs this attribute
@@ -120,8 +107,8 @@ namespace FacadeFor3e
         /// <param name="writer">An XMLWriter to output to</param>
         protected internal virtual void Render(XmlWriter writer)
             {
-            writer.WriteStartElement(this._attributeName);
-            writer.WriteValue(this._stringValue);
+            writer.WriteStartElement(this.Name);
+            writer.WriteValue(this.OutputValue);
             writer.WriteEndElement();
             }
 

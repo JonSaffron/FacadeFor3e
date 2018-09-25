@@ -11,18 +11,15 @@ namespace FacadeFor3e
     [PublicAPI]
     public class DataObject
         {
-        private readonly string _objectName;
         private readonly List<OperationBase> _operations;
 
         /// <summary>
         /// Constructs a new data object
         /// </summary>
         /// <param name="objectName">Name of the object to be affected</param>
-        public DataObject(string objectName)
+        public DataObject([NotNull] string objectName)
             {
-            if (objectName == null)
-                throw new ArgumentNullException("objectName");
-            this._objectName = objectName;
+            this.Name = objectName ?? throw new ArgumentNullException(nameof(objectName));
 
             this._operations =  new List<OperationBase>();
             }
@@ -30,18 +27,12 @@ namespace FacadeFor3e
         /// <summary>
         /// Gets the name of the object affected
         /// </summary>
-        public string Name
-            {
-            get { return this._objectName; }
-            }
+        public string Name { get; }
 
         /// <summary>
         /// Gets the operations to be performed
         /// </summary>
-        public IList<OperationBase> Operations
-            {
-            get { return this._operations; }
-            }
+        public IList<OperationBase> Operations => this._operations;
 
         /// <summary>
         /// Output the object
@@ -49,10 +40,10 @@ namespace FacadeFor3e
         /// <param name="writer">An XMLWriter to output to</param>
         protected internal virtual void Render(XmlWriter writer)
             {
-            writer.WriteStartElement(this._objectName);
+            writer.WriteStartElement(this.Name);
             foreach (OperationBase o in this._operations)
                 {
-                o.Render(writer, this._objectName);
+                o.Render(writer, this.Name);
                 }
             writer.WriteEndElement();
             }

@@ -24,18 +24,12 @@ namespace FacadeFor3e
         /// <summary>
         /// Gets the attributes to set with this operation
         /// </summary>
-        public ICollection<AttributeValue> Attributes
-            {
-            get { return this._attributes; }
-            }
+        public ICollection<AttributeValue> Attributes => this._attributes;
 
         /// <summary>
         /// Gets the collection of children
         /// </summary>
-        public ICollection<DataObject> Children
-            {
-            get { return this._children; }
-            }
+        public ICollection<DataObject> Children => this._children;
 
         /// <summary>
         /// Appends a new attribute to the operation

@@ -25,23 +25,23 @@ namespace FacadeFor3e
 
         public int ChunkSize
             {
-            get { return this._chunkSize; }
+            get => this._chunkSize;
             set
                 {
                 const int oneMegabyte = 1024 * 1024;
                 if (value <= 0 || value > oneMegabyte)
-                    throw new ArgumentOutOfRangeException("value");
+                    throw new ArgumentOutOfRangeException(nameof(value));
                 this._chunkSize = value;
                 }
             }
 
         public string SyncId
             {
-            get { return this._syncId; }
+            get => this._syncId;
             set
                 {
                 if (value != null && (value.Length > 128 || value.Length != value.TrimEnd().Length))
-                    throw new ArgumentOutOfRangeException("value");
+                    throw new ArgumentOutOfRangeException(nameof(value));
                 this._syncId = value;
                 }
             }
@@ -71,7 +71,7 @@ namespace FacadeFor3e
 
         private string GetOrGenerateSyncId()
             {
-            var result = this.SyncId ?? string.Format("Attachment upload {0} at {1:yyyy-MMM-dd hh:mm:ss}", _countOfUploads, DateTime.Now);
+            var result = this.SyncId ?? $"Attachment upload {_countOfUploads} at {DateTime.Now:yyyy-MMM-dd hh:mm:ss}";
             return result;
             }
 
@@ -92,7 +92,7 @@ namespace FacadeFor3e
             {
             var ts = GetSoapClient();
 
-            using (this.AccountToImpersonate != null ? this.AccountToImpersonate.Impersonate() : null)
+            using (AccountToImpersonate?.Impersonate())
                 {
                 OutputToConsoleDetailsOfTheJob(archetypeId, itemId, originalFileName, ts);    
 
@@ -119,7 +119,7 @@ namespace FacadeFor3e
             sb.AppendFormat("For {0}.{0}ID = {1}", archetypeId, itemId);
             sb.AppendFormat("\tURL: {0}", ts.Endpoint.Address);
             sb.AppendLine();
-            sb.AppendFormat("\tIdentity: {0}", this.AccountToImpersonate == null ? GetCurrentWindowsIdentity() : string.Format("Impersonating {0}", AccountToImpersonate.Name));
+            sb.AppendFormat("\tIdentity: {0}", this.AccountToImpersonate == null ? GetCurrentWindowsIdentity() : $"Impersonating {AccountToImpersonate.Name}");
             sb.AppendLine();
             System.Diagnostics.Trace.WriteLine(sb.ToString());
             }
@@ -137,16 +137,16 @@ namespace FacadeFor3e
                 Buffer.BlockCopy(fileContent, offset, buffer, 0, chunkLength);
                 if (offset == 0)
                     {
-                    System.Diagnostics.Trace.WriteLine(string.Format("Sending initial content - {0:N} bytes", chunkLength));
+                    System.Diagnostics.Trace.WriteLine($"Sending initial content - {chunkLength:N} bytes");
                     ts.SendAttachment(itemId, archetypeId, syncId, originalFileName, buffer, offset, chunkLength, totalBytes);
                     }
                 else
                     {
-                    System.Diagnostics.Trace.WriteLine(string.Format("Sending additional content - {0:N} bytes at {1:N}", chunkLength, offset));
+                    System.Diagnostics.Trace.WriteLine($"Sending additional content - {chunkLength:N} bytes at {offset:N}");
                     ts.SendAttachmentChunk(syncId, originalFileName, buffer, offset, chunkLength, totalBytes);
                     }
                 }
-            System.Diagnostics.Trace.WriteLine(string.Format("Completed - {0:N} total bytes", totalBytes));
+            System.Diagnostics.Trace.WriteLine($"Completed - {totalBytes:N} total bytes");
             }
 
         [NotNull]

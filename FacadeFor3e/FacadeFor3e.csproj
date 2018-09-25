@@ -47,8 +47,9 @@
     <Compile Include="ChildCollection.cs" />
     <Compile Include="CommonLibrary.cs" />
     <Compile Include="DataObject.cs" />
+    <Compile Include="Declarations.cs" />
     <Compile Include="EditByPosition.cs" />
-    <Compile Include="EdityKeyField.cs" />
+    <Compile Include="EditByKeyField.cs" />
     <Compile Include="EditByKey.cs" />
     <Compile Include="EditByAlias.cs" />
     <Compile Include="DeleteByAlias.cs" />

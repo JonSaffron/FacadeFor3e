@@ -33,6 +33,7 @@ namespace FacadeFor3e.Examples
 
             using (var tt = new TrustTransfer())
                 {
+                // ReSharper disable once UnusedVariable
                 int trustTransferIndex = tt.PerformTrustTransfer(ttp);
                 }
             }

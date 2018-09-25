@@ -3,6 +3,7 @@ using System.Configuration;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace FacadeFor3e.Examples
@@ -18,6 +19,7 @@ namespace FacadeFor3e.Examples
         [DllImport("advapi32.dll", CharSet=CharSet.Auto, SetLastError=true)]
         static extern bool DuplicateToken(IntPtr hToken, SecurityImpersonationLevel impersonationLevel,  ref IntPtr hNewToken);
 
+        [SuppressMessage("ReSharper", "UnusedMember.Local")]
         enum LogonSessionType : uint
             {
             Interactive = 2,
@@ -31,6 +33,8 @@ namespace FacadeFor3e.Examples
             CachedInteractive = 11
             }
 
+        [SuppressMessage("ReSharper", "UnusedMember.Local")]
+        [SuppressMessage("ReSharper", "InconsistentNaming")]
         enum LogonProvider : uint
             {
             Default = 0, // default for platform (use this!)
@@ -39,6 +43,7 @@ namespace FacadeFor3e.Examples
             WinNT50      // negotiates Kerb or NTLM
             }
 
+        [SuppressMessage("ReSharper", "UnusedMember.Local")]
         enum SecurityImpersonationLevel : uint
             {
             SecurityAnonymous,

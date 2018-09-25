@@ -13,8 +13,6 @@ namespace FacadeFor3e
     /// </remarks>
     public class EditByKeyField : EditByKey
         {
-        private readonly string _keyField;
-
         /// <summary>
         /// Constructs a Edit operation
         /// </summary>
@@ -24,7 +22,7 @@ namespace FacadeFor3e
             {
             if (string.IsNullOrWhiteSpace(keyField))
                 throw new ArgumentException("The keyField parameter must specify a valid attribute name.");
-            this._keyField = keyField;
+            this.KeyField = keyField;
             }
 
         /// <summary>
@@ -36,7 +34,7 @@ namespace FacadeFor3e
             {
             if (string.IsNullOrWhiteSpace(keyField))
                 throw new ArgumentException("The keyField parameter must specify a valid attribute name.");
-            this._keyField = keyField;
+            this.KeyField = keyField;
             }
 
         /// <summary>
@@ -48,7 +46,7 @@ namespace FacadeFor3e
             {
             if (string.IsNullOrWhiteSpace(keyField))
                 throw new ArgumentException("The keyField parameter must specify a valid attribute name.");
-            this._keyField = keyField;
+            this.KeyField = keyField;
             }
 
         /// <summary>
@@ -60,7 +58,7 @@ namespace FacadeFor3e
             {
             if (string.IsNullOrWhiteSpace(keyField))
                 throw new ArgumentException("The keyField parameter must specify a valid attribute name.");
-            this._keyField = keyField;
+            this.KeyField = keyField;
             }
 
         /// <summary>
@@ -72,7 +70,7 @@ namespace FacadeFor3e
             {
             if (string.IsNullOrWhiteSpace(keyField))
                 throw new ArgumentException("The keyField parameter must specify a valid attribute name.");
-            this._keyField = keyField;
+            this.KeyField = keyField;
             }
 
         /// <summary>
@@ -84,16 +82,13 @@ namespace FacadeFor3e
             {
             if (string.IsNullOrWhiteSpace(keyField))
                 throw new ArgumentException("The keyField parameter must specify a valid attribute name.");
-            this._keyField = keyField;
+            this.KeyField = keyField;
             }
 
         /// <summary>
         /// Gets the value to assign to the attribute
         /// </summary>
-        public string KeyField
-            {
-            get { return this._keyField; }
-            }
+        public string KeyField { get; }
 
         protected override void RenderKey(XmlWriter writer)
             {

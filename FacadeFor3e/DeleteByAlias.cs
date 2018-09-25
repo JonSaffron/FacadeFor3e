@@ -12,8 +12,6 @@ namespace FacadeFor3e
     /// </remarks>
     public class DeleteByAlias : DeleteByKey
         {
-        private readonly string _aliasField;
-
         /// <summary>
         /// Constructs a Delete operation
         /// </summary>
@@ -23,7 +21,7 @@ namespace FacadeFor3e
             {
             if (string.IsNullOrWhiteSpace(aliasField))
                 throw new ArgumentException("The aliasField parameter must specify a valid attribute name.");
-            this._aliasField = aliasField;
+            this.AliasField = aliasField;
             }
 
         /// <summary>
@@ -35,7 +33,7 @@ namespace FacadeFor3e
             {
             if (string.IsNullOrWhiteSpace(aliasField))
                 throw new ArgumentException("The aliasField parameter must specify a valid attribute name.");
-            this._aliasField = aliasField;
+            this.AliasField = aliasField;
             }
 
         /// <summary>
@@ -47,7 +45,7 @@ namespace FacadeFor3e
             {
             if (string.IsNullOrWhiteSpace(aliasField))
                 throw new ArgumentException("The aliasField parameter must specify a valid attribute name.");
-            this._aliasField = aliasField;
+            this.AliasField = aliasField;
             }
 
         /// <summary>
@@ -59,7 +57,7 @@ namespace FacadeFor3e
             {
             if (string.IsNullOrWhiteSpace(aliasField))
                 throw new ArgumentException("The aliasField parameter must specify a valid attribute name.");
-            this._aliasField = aliasField;
+            this.AliasField = aliasField;
             }
 
         /// <summary>
@@ -71,14 +69,14 @@ namespace FacadeFor3e
             {
             if (string.IsNullOrWhiteSpace(aliasField))
                 throw new ArgumentException("The aliasField parameter must specify a valid attribute name.");
-            this._aliasField = aliasField;
+            this.AliasField = aliasField;
             }
 
-        public string AliasField
-            {
-            get { return this._aliasField; }
-            }
-        
+        /// <summary>
+        /// Gets the alias field name.
+        /// </summary>
+        public string AliasField { get; }
+
         protected override void RenderKey(XmlWriter writer)
             {
             writer.WriteAttributeString("KeyValue", this.OutputValue);

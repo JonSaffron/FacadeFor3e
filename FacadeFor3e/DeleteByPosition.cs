@@ -15,7 +15,7 @@ namespace FacadeFor3e
         public DeleteByPosition(int position)
             {
             if (position < 0)
-                throw new ArgumentOutOfRangeException("position");
+                throw new ArgumentOutOfRangeException(nameof(position));
             this._position = position;
             }
 

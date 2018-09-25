@@ -11,28 +11,28 @@ namespace FacadeFor3e
         public AttributeRelationshipByAlias(string name, string aliasField, string value) : base(name, value)
             {
             if (string.IsNullOrWhiteSpace("aliasField"))
-                throw new ArgumentException("An aliasField must be a valid attribute name.", "aliasField");
+                throw new ArgumentException("An aliasField must be a valid attribute name.", nameof(aliasField));
             this._aliasField = aliasField;
             }
 
         public AttributeRelationshipByAlias(string name, string aliasField, DateTime value) : base(name, value)
             {
             if (string.IsNullOrWhiteSpace("aliasField"))
-                throw new ArgumentException("An aliasField must be a valid attribute name.", "aliasField");
+                throw new ArgumentException("An aliasField must be a valid attribute name.", nameof(aliasField));
             this._aliasField = aliasField;
             }
 
         public AttributeRelationshipByAlias(string name, string aliasField, decimal value) : base(name, value)
             {
             if (string.IsNullOrWhiteSpace("aliasField"))
-                throw new ArgumentException("An aliasField must be a valid attribute name.", "aliasField");
+                throw new ArgumentException("An aliasField must be a valid attribute name.", nameof(aliasField));
             this._aliasField = aliasField;
             }
 
         public AttributeRelationshipByAlias(string name, string aliasField, int value) : base(name, value)
             {
             if (string.IsNullOrWhiteSpace("aliasField"))
-                throw new ArgumentException("An aliasField must be a valid attribute name.", "aliasField");
+                throw new ArgumentException("An aliasField must be a valid attribute name.", nameof(aliasField));
             this._aliasField = aliasField;
             }
 

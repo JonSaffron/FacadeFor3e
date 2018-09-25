@@ -19,7 +19,7 @@ namespace FacadeFor3e
         public static XmlDocument GetData([NotNull] XmlDocument xmlDoc, WindowsIdentity accountToImpersonate, string endpointName)
             {
             if (xmlDoc == null)
-                throw new ArgumentNullException("xmlDoc");
+                throw new ArgumentNullException(nameof(xmlDoc));
             var result = GetData(xmlDoc.OuterXml, accountToImpersonate, endpointName);
             return result;
             }
@@ -39,7 +39,7 @@ namespace FacadeFor3e
         public XmlDocument GetData([NotNull] XmlDocument xmlDoc)
             {
             if (xmlDoc == null)
-                throw new ArgumentNullException("xmlDoc");
+                throw new ArgumentNullException(nameof(xmlDoc));
             var result = GetData(xmlDoc.OuterXml);
             return result;
             }
@@ -48,7 +48,7 @@ namespace FacadeFor3e
             {
             var ts = GetSoapClient();
 
-            using (this.AccountToImpersonate != null ? this.AccountToImpersonate.Impersonate() : null)
+            using (AccountToImpersonate?.Impersonate())
                 {
                 OutputToConsoleDetailsOfTheJob(xoql, ts);
 
@@ -77,7 +77,7 @@ namespace FacadeFor3e
             sb.AppendLine();
             sb.AppendFormat("\tURL: {0}", ts.Endpoint.Address);
             sb.AppendLine();
-            sb.AppendFormat("\tIdentity: {0}", this.AccountToImpersonate == null ? GetCurrentWindowsIdentity() : string.Format("Impersonating {0}", AccountToImpersonate.Name));
+            sb.AppendFormat("\tIdentity: {0}", this.AccountToImpersonate == null ? GetCurrentWindowsIdentity() : $"Impersonating {AccountToImpersonate.Name}");
             sb.AppendLine();
             System.Diagnostics.Trace.WriteLine(sb.ToString());
             }

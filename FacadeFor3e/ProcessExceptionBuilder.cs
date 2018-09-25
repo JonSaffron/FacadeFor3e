@@ -68,9 +68,9 @@ namespace FacadeFor3e
             return result;
             }
 
-        private static void AddDataErrors(XmlElement atts, string objectName, ICollection<string> errors)
+        private static void AddDataErrors(XmlElement attributes, string objectName, ICollection<string> errors)
             {
-            foreach (XmlElement c in atts.ChildNodes)
+            foreach (XmlElement c in attributes.ChildNodes)
                 {
                 string attributeName = c.GetAttribute("ID");
                 string value = c.GetAttribute("V");
@@ -84,7 +84,7 @@ namespace FacadeFor3e
                     }
                 if (string.IsNullOrWhiteSpace(error))
                     error = "(unknown error)";
-                string msg = string.Format("{0} (error caused when setting {1}.{2} to '{3}')", error, objectName, attributeName, value);
+                string msg = $"{error} (error caused when setting {objectName}.{attributeName} to '{value}')";
                 errors.Add(msg);
                 }
             }

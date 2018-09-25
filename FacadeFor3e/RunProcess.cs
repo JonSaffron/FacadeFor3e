@@ -166,7 +166,7 @@ namespace FacadeFor3e
             {
             if (!process.Operations.Any())
                 {
-                throw new InvalidOperationException("There are no operations to carry out for process " + process.ProcessName);
+                throw new InvalidOperationException("There are no operations to carry out for process " + process.ProcessCode);
                 }
             if (process.Operations.OfType<DeleteByPosition>().Any() || process.Operations.OfType<DeleteByKeyField>().Any()
                 || process.Operations.OfType<EditByPosition>().Any() || process.Operations.OfType<EditByKeyField>().Any())

@@ -8,36 +8,26 @@ namespace FacadeFor3e
     [PublicAPI]
     public class RunProcessResult
         {
-        private readonly XmlDocument _request;
-        private readonly XmlDocument _response;
-        
-
         internal RunProcessResult(XmlDocument request, XmlDocument response)
             {
-            if (request == null || request.DocumentElement == null)
-                throw new ArgumentException("Invalid request.", "request");
-            if (response == null || response.DocumentElement == null)
-                throw new ArgumentException("Invalid response.", "response");
+            if (request?.DocumentElement == null)
+                throw new ArgumentException("Invalid request.", nameof(request));
+            if (response?.DocumentElement == null)
+                throw new ArgumentException("Invalid response.", nameof(response));
 
-            this._request = request;
-            this._response = response;
+            this.Request = request;
+            this.Response = response;
             }
 
         /// <summary>
         /// Gets the request sent to 3e
         /// </summary>
-        public XmlDocument Request
-            {
-            get { return this._request; }
-            }
+        public XmlDocument Request { get; }
 
         /// <summary>
-        /// Gets the repsonse from 3e
+        /// Gets the response from 3e
         /// </summary>
-        public XmlDocument Response
-            {
-            get { return this._response; }
-            }
+        public XmlDocument Response { get; }
 
         public Guid ProcessId
             {
@@ -55,7 +45,7 @@ namespace FacadeFor3e
                 {
                 // ReSharper disable once PossibleNullReferenceException
                 var nextMessage = this.Response.DocumentElement.SelectSingleNode("MESSAGE");
-                var result = nextMessage == null ? null : nextMessage.InnerText;
+                var result = nextMessage?.InnerText;
                 return result;
                 }
             }
