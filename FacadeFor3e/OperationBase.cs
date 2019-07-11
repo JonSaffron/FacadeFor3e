@@ -11,7 +11,7 @@ namespace FacadeFor3e
         /// Output the operation
         /// </summary>
         /// <param name="writer">An XMLWriter to output to</param>
-        /// <param name="objectName">The name of the parent data object</param>
-        protected internal abstract void Render(XmlWriter writer, string objectName);
+        /// <param name="objectSuperclassName">The name of the parent data object for when SubClass is not specified</param>
+        protected internal abstract void Render(XmlWriter writer, string objectSuperclassName);
         }
     }
