@@ -19,6 +19,23 @@ namespace FacadeFor3e
         public Guid? ModelRowId { get; set; }
 
         /// <summary>
+        /// The name of the subclass of object to create
+        /// </summary>
+        /// <remarks>If null, this defaults to the parent data object</remarks>
+        public string SubClass { get; set; }
+
+        /// <summary>
+        /// Creates a new Add operation for the specified subclass
+        /// </summary>
+        /// <param name="subClass">The name of the subclass of object to create</param>
+        /// <returns>An Add operation</returns>
+        public static OperationAdd AddSubclass(string subClass)
+            {
+            var result = new OperationAdd { SubClass = subClass };
+            return result;
+            }
+
+        /// <summary>
         /// Creates a new Add operation using a template
         /// </summary>
         /// <param name="modelId">The ID of the template to use</param>
@@ -48,7 +65,7 @@ namespace FacadeFor3e
         protected internal override void Render(XmlWriter writer, string objectName)
             {
             writer.WriteStartElement("Add");
-            writer.WriteStartElement(objectName);
+            writer.WriteStartElement(this.SubClass ?? objectName);
 
             RenderAttributes(writer);
             RenderChildren(writer);

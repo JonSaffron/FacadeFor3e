@@ -252,6 +252,28 @@ namespace FacadeFor3e
             return result;
             }
 
+        private BasicHttpBinding BuildBinding()
+            {
+            var result = new BasicHttpBinding
+                {
+                CloseTimeout = TimeSpan.FromMinutes(1),
+                OpenTimeout = TimeSpan.FromMinutes(1),
+                SendTimeout = TimeSpan.FromMinutes(1),
+                ReceiveTimeout = TimeSpan.FromMinutes(10),
+                AllowCookies = false,
+                BypassProxyOnLocal = false,
+                HostNameComparisonMode = HostNameComparisonMode.StrongWildcard,
+                MessageEncoding = WSMessageEncoding.Text,
+                TextEncoding = Encoding.UTF8,
+                TransferMode = TransferMode.Buffered,
+                UseDefaultWebProxy = true
+                };
+            // for https, add 
+            //result.Security.Mode = BasicHttpSecurityMode.Transport;
+
+            return result;
+            }
+
         private void OutputToConsoleDetailsOfTheJob(XmlDocument request, TransactionServiceSoapClient ts)
             {
             var sb = new StringBuilder();
