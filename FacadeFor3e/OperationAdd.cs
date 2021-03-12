@@ -19,12 +19,6 @@ namespace FacadeFor3e
         public Guid? ModelRowId { get; set; }
 
         /// <summary>
-        /// The subclass of object to create
-        /// </summary>
-        /// <remarks>If null, this defaults to the parent data object</remarks>
-        public string SubClass { get; set; }
-
-        /// <summary>
         /// Creates a new Add operation for the specified subclass
         /// </summary>
         /// <param name="subClass">The name of the subclass of object to create</param>

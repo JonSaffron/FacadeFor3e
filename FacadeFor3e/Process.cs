@@ -147,6 +147,7 @@ namespace FacadeFor3e
         public XmlDocument GenerateCommand()
             {
             var xmlDoc = new XmlDocument();
+            // ReSharper disable once PossibleNullReferenceException
             using (XmlWriter w = xmlDoc.CreateNavigator().AppendChild())
                 {
                 Render(w);

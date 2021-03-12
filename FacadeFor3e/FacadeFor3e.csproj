@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\FacadeFor3e.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,8 +32,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="JetBrains.Annotations, Version=2020.1.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
-      <HintPath>..\packages\JetBrains.Annotations.2020.1.0\lib\net20\JetBrains.Annotations.dll</HintPath>
+    <Reference Include="JetBrains.Annotations, Version=2020.3.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>..\packages\JetBrains.Annotations.2020.3.0\lib\net20\JetBrains.Annotations.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Runtime.Serialization" />
@@ -41,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddAttachment.cs" />
+    <Compile Include="AttributeBase.cs" />
     <Compile Include="AttributeCollection.cs" />
     <Compile Include="AttributeRelationship.cs" />
     <Compile Include="AttributeValue.cs" />
@@ -48,20 +50,17 @@
     <Compile Include="CommonLibrary.cs" />
     <Compile Include="DataObject.cs" />
     <Compile Include="Declarations.cs" />
-    <Compile Include="EditByPosition.cs" />
-    <Compile Include="EditByKeyField.cs" />
-    <Compile Include="EditByKey.cs" />
-    <Compile Include="EditByAlias.cs" />
-    <Compile Include="DeleteByAlias.cs" />
-    <Compile Include="DeleteByKey.cs" />
-    <Compile Include="DeleteByKeyField.cs" />
-    <Compile Include="DeleteByPosition.cs" />
+    <Compile Include="DeleteOperation.cs" />
+    <Compile Include="EditOperation.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="GetArchetypeData.cs" />
+    <Compile Include="IdentifyByAlias.cs" />
+    <Compile Include="IdentifyByPosition.cs" />
+    <Compile Include="IdentifyByPrimaryKey.cs" />
+    <Compile Include="IdentifyByValue.cs" />
+    <Compile Include="IKeySpecification.cs" />
     <Compile Include="OperationAdd.cs" />
     <Compile Include="OperationBase.cs" />
-    <Compile Include="OperationDelete.cs" />
-    <Compile Include="OperationEdit.cs" />
     <Compile Include="OperationWithAttributesBase.cs" />
     <Compile Include="Process.cs" />
     <Compile Include="ProcessException.cs" />

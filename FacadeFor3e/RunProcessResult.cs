@@ -54,15 +54,14 @@ namespace FacadeFor3e
             {
             var keys = this.Response.SelectSingleNode("ProcessExecutionResults/Keys");
             if (keys == null)
-                // The presence of the Keys node is dependant only upon whether ReturnInfoType.Keys was specified when calling ExecuteProcess 
+                // The presence of the Keys node is dependent only upon whether ReturnInfoType.Keys was specified when calling ExecuteProcess 
                 throw new InvalidOperationException("Key information was not requested.");
-        
-            var result = new List<string>();
+
             foreach (XmlElement node in keys.ChildNodes)
                 {
-                result.Add(node.GetAttribute("KeyValue"));
+                string result = node.GetAttribute("KeyValue");
+                yield return result;
                 }
-            return result;
             }
         }
     }

@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 namespace FacadeFor3e
     {
     /// <summary>
-    /// A Edit operation on a row that is identified by a value matched to the primary key
+    /// An Edit operation on a row that is identified by a value matched to the primary key
     /// </summary>
     public class EditByKey : OperationEdit
         {
@@ -70,7 +70,7 @@ namespace FacadeFor3e
             }
 
         /// <summary>
-        /// Gets the value to assign to the attribute
+        /// Gets the value to search for
         /// </summary>
         public object KeyValue { get; }
 

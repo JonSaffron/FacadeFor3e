@@ -8,6 +8,12 @@ namespace FacadeFor3e
     public abstract class OperationBase
         {
         /// <summary>
+        /// The subclass of object to create
+        /// </summary>
+        /// <remarks>If null, this defaults to the parent data object</remarks>
+        public string SubClass { get; set; }
+
+        /// <summary>
         /// Output the operation
         /// </summary>
         /// <param name="writer">An XMLWriter to output to</param>

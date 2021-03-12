@@ -4,11 +4,13 @@ using System.Xml;
 namespace FacadeFor3e
     {
     /// <summary>
-    /// A delete operation on a row that is identified by a unique value such as Matter.Number
+    /// A Delete operation on a row that is identified by a unique value such as Matter.Number
     /// </summary>
     /// <remarks>
-    /// The AliasField indicates which attribute of the underlying archetype will be queried
-    /// The KeyValue indicates the unique value to look for. An exception will be raised if the value is found not to be unique.
+    /// This operation can be used to target a record by an attribute that isn't the primary key,
+    /// as long as the attribute value is unique within the archetype. This would often be the
+    /// the attribute marked as the alias in the archetype design.
+    /// If the value matches multiple rows then the operation will fail.
     /// </remarks>
     public class DeleteByAlias : DeleteByKey
         {
@@ -73,7 +75,7 @@ namespace FacadeFor3e
             }
 
         /// <summary>
-        /// Gets the alias field name.
+        /// Gets the id of the attribute to query
         /// </summary>
         public string AliasField { get; }
 

@@ -4,12 +4,12 @@ using System.Xml;
 namespace FacadeFor3e
     {
     /// <summary>
-    /// A Edit operation on a row that is identified by a value matched within the child collection
+    /// An Edit operation on a row that is identified by a value matched within the child collection
     /// to the specified field such as MattDate.EffStart
     /// </summary>
     /// <remarks>
-    /// The KeyField indicates which attribute of the child collection object will be queried
-    /// The KeyValue indicates the value to look for. The first row in the collection that matches will be returned.
+    /// This is similar to the EditByAlias operation, except it only looks at rows included
+    /// in the child collection rather than at all the rows in the archetype.
     /// </remarks>
     public class EditByKeyField : EditByKey
         {
@@ -86,7 +86,7 @@ namespace FacadeFor3e
             }
 
         /// <summary>
-        /// Gets the value to assign to the attribute
+        /// Gets the id of the attribute to search
         /// </summary>
         public string KeyField { get; }
 

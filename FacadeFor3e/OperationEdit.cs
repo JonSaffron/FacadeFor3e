@@ -13,11 +13,11 @@ namespace FacadeFor3e
         /// Outputs this operation
         /// </summary>
         /// <param name="writer">An XMLWriter to output to</param>
-        /// <param name="objectName">The name of the parent data object</param>
-        protected internal override void Render(XmlWriter writer, string objectName)
+        /// <param name="objectSuperclassName">The name of the parent data object for when SubClass is not specified</param>
+        protected internal override void Render(XmlWriter writer, string objectSuperclassName)
             {
             writer.WriteStartElement("Edit");
-            writer.WriteStartElement(objectName);
+            writer.WriteStartElement(this.SubClass ?? objectSuperclassName);
 
             RenderKey(writer);
 

@@ -12,24 +12,24 @@ namespace FacadeFor3e
     public class GetArchetypeData: IDisposable
         {
         public WindowsIdentity AccountToImpersonate { get; set; }
-        public string EndpointName { get; set; }
+        public Uri Endpoint { get; set; }
 
         private TransactionServiceSoapClient _transactionServiceSoapClient;
 
-        public static XmlDocument GetData([NotNull] XmlDocument xmlDoc, WindowsIdentity accountToImpersonate, string endpointName)
+        public static XmlDocument GetData([NotNull] XmlDocument xmlDoc, Uri endpoint, WindowsIdentity accountToImpersonate)
             {
             if (xmlDoc == null)
                 throw new ArgumentNullException(nameof(xmlDoc));
-            var result = GetData(xmlDoc.OuterXml, accountToImpersonate, endpointName);
+            var result = GetData(xmlDoc.OuterXml, endpoint, accountToImpersonate);
             return result;
             }
 
-        public static XmlDocument GetData(string xoql, WindowsIdentity accountToImpersonate, string endpointName)
+        public static XmlDocument GetData(string xoql, Uri endpoint, WindowsIdentity accountToImpersonate)
             {
             using (var getArchetypeData = new GetArchetypeData())
                 {
                 getArchetypeData.AccountToImpersonate = accountToImpersonate;
-                getArchetypeData.EndpointName = endpointName;
+                getArchetypeData.Endpoint = endpoint;
 
                 var result = getArchetypeData.GetData(xoql);
                 return result;
@@ -96,7 +96,9 @@ namespace FacadeFor3e
             var result = this._transactionServiceSoapClient;
             if (result == null)
                 {
-                result = string.IsNullOrWhiteSpace(this.EndpointName) ? new TransactionServiceSoapClient() : new TransactionServiceSoapClient(this.EndpointName);
+                var binding = CommonLibrary.BuildBinding();
+                var endpointAddress = new EndpointAddress(this.Endpoint);
+                result = new TransactionServiceSoapClient(binding, endpointAddress);
                 if (result.ClientCredentials != null)
                     result.ClientCredentials.Windows.AllowedImpersonationLevel = TokenImpersonationLevel.Identification;
                 this._transactionServiceSoapClient = result;

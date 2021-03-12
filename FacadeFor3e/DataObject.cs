@@ -87,6 +87,22 @@ namespace FacadeFor3e
 
 ///// Delete operations
 
+        public DeleteOperation DeleteOperation(IKeySpecification keySpecification, string subClass = null)
+            {
+            var o = new DeleteOperation(keySpecification, subClass);
+            this._operations.Add(o);
+            return o;
+            }
+
+        public EditOperation EditOperation(IKeySpecification keySpecification, string subClass = null)
+            {
+            var o = new EditOperation(keySpecification, subClass);
+            this._operations.Add(o);
+            return o;
+            }
+
+/*
+
         /// <summary>
         /// Creates a Delete operation
         /// </summary>
@@ -508,5 +524,5 @@ namespace FacadeFor3e
             this._operations.Add(o);
             return o;
             }
-        }
+*/        }
     }

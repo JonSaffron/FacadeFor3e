@@ -70,7 +70,7 @@ namespace FacadeFor3e
             }
 
         /// <summary>
-        /// Gets the value to assign to the attribute
+        /// Gets the value to search for
         /// </summary>
         public object KeyValue { get; }
 

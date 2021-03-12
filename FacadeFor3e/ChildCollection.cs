@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace FacadeFor3e
     {
-    class ChildObjectCollection : Collection<DataObject>
+    internal class ChildObjectCollection : Collection<DataObject>
         {
         protected override void InsertItem(int index, DataObject item)
             {

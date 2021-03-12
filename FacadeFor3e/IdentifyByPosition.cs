@@ -4,26 +4,22 @@ using System.Xml;
 
 namespace FacadeFor3e
     {
-    /// <summary>
-    /// A Delete operation on a record identified by its position in a collection
-    /// </summary>
-    /// <remarks>Not usable at the top level</remarks>
-    public class DeleteByPosition : OperationDelete
+    public class IdentifyByPosition : IKeySpecification
         {
         private readonly int _position;
 
         /// <summary>
-        /// Constructs a Delete operation
+        /// Identifies a row by its position in the collection
         /// </summary>
         /// <param name="position">Zero based record number</param>
-        public DeleteByPosition(int position)
+        public IdentifyByPosition(int position)
             {
             if (position < 0)
                 throw new ArgumentOutOfRangeException(nameof(position));
             this._position = position;
             }
 
-        protected override void RenderKey(XmlWriter writer)
+        public void RenderKey(XmlWriter writer)
             {
             writer.WriteAttributeString("Position", this._position.ToString(CultureInfo.InvariantCulture));
             }

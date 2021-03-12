@@ -4,6 +4,10 @@ using System.Xml;
 
 namespace FacadeFor3e
     {
+    /// <summary>
+    /// An Edit operation on a record identified by its position in a collection
+    /// </summary>
+    /// <remarks>Not usable at the top level</remarks>
     public class EditByPosition : OperationEdit
         {
         private readonly int _position;

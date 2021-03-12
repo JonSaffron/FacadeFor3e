@@ -46,6 +46,7 @@
     <Compile Include="OpenNewMatter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StructuralTest.cs" />
     <Compile Include="TrustTransfer.cs" />
   </ItemGroup>
   <ItemGroup>
