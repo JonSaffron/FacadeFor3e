@@ -1,0 +1,1580 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>FacadeFor3e</name>
+    </assembly>
+    <members>
+        <member name="T:FacadeFor3e.CommonLibrary">
+            <summary>
+            Utility methods
+            </summary>
+        </member>
+        <member name="M:FacadeFor3e.CommonLibrary.PrettyPrintXml(System.Xml.XmlDocument)">
+            <summary>
+            Outputs an XML document as a formatted string for easy reading
+            </summary>
+            <param name="xmlDoc">Specifies the XML document to process</param>
+            <returns>A string containing the text in the XML document specified with appropriate indentation</returns>
+        </member>
+        <member name="M:FacadeFor3e.CommonLibrary.IsValidId(System.String)">
+            <summary>
+            Determines whether a specified string is a valid ID in 3E
+            </summary>
+            <param name="id">The string to check</param>
+            <returns>True if the string can be used as a valid ID in 3E, false otherwise</returns>
+        </member>
+        <member name="T:FacadeFor3e.TransactionService.ReturnInfoType">
+            <remarks/>
+        </member>
+        <member name="F:FacadeFor3e.TransactionService.ReturnInfoType.None">
+            <remarks/>
+        </member>
+        <member name="F:FacadeFor3e.TransactionService.ReturnInfoType.Keys">
+            <remarks/>
+        </member>
+        <member name="F:FacadeFor3e.TransactionService.ReturnInfoType.Timing">
+            <remarks/>
+        </member>
+        <member name="T:FacadeFor3e.TransactionService.DataOutputFormatType">
+            <remarks/>
+        </member>
+        <member name="F:FacadeFor3e.TransactionService.DataOutputFormatType.XML">
+            <remarks/>
+        </member>
+        <member name="F:FacadeFor3e.TransactionService.DataOutputFormatType.Delimited">
+            <remarks/>
+        </member>
+        <member name="T:FacadeFor3e.TransactionService.ResultCode">
+            <remarks/>
+        </member>
+        <member name="F:FacadeFor3e.TransactionService.ResultCode.Failure">
+            <remarks/>
+        </member>
+        <member name="F:FacadeFor3e.TransactionService.ResultCode.Success">
+            <remarks/>
+        </member>
+        <member name="F:FacadeFor3e.TransactionService.ResultCode.StatusUpdate">
+            <remarks/>
+        </member>
+        <member name="T:FacadeFor3e.TransactionService.DataTypeEnum">
+            <remarks/>
+        </member>
+        <member name="F:FacadeFor3e.TransactionService.DataTypeEnum.AUTONUMBER">
+            <remarks/>
+        </member>
+        <member name="F:FacadeFor3e.TransactionService.DataTypeEnum.BOOLEAN">
+            <remarks/>
+        </member>
+        <member name="F:FacadeFor3e.TransactionService.DataTypeEnum.DATE">
+            <remarks/>
+        </member>
+        <member name="F:FacadeFor3e.TransactionService.DataTypeEnum.DATETIME">
+            <remarks/>
+        </member>
+        <member name="F:FacadeFor3e.TransactionService.DataTypeEnum.DECIMAL">
+            <remarks/>
+        </member>
+        <member name="F:FacadeFor3e.TransactionService.DataTypeEnum.EMAIL">
+            <remarks/>
+        </member>
+        <member name="F:FacadeFor3e.TransactionService.DataTypeEnum.FILES">
+            <remarks/>
+        </member>
+        <member name="F:FacadeFor3e.TransactionService.DataTypeEnum.GUID">
+            <remarks/>
+        </member>
+        <member name="F:FacadeFor3e.TransactionService.DataTypeEnum.INTEGER">
+            <remarks/>
+        </member>
+        <member name="F:FacadeFor3e.TransactionService.DataTypeEnum.IMAGE">
+            <remarks/>
+        </member>
+        <member name="F:FacadeFor3e.TransactionService.DataTypeEnum.MONEY">
+            <remarks/>
+        </member>
+        <member name="F:FacadeFor3e.TransactionService.DataTypeEnum.MULTILANGUAGESTRING">
+            <remarks/>
+        </member>
+        <member name="F:FacadeFor3e.TransactionService.DataTypeEnum.NARRATIVE">
+            <remarks/>
+        </member>
+        <member name="F:FacadeFor3e.TransactionService.DataTypeEnum.PREDICATE">
+            <remarks/>
+        </member>
+        <member name="F:FacadeFor3e.TransactionService.DataTypeEnum.RELATIONSHIP">
+            <remarks/>
+        </member>
+        <member name="F:FacadeFor3e.TransactionService.DataTypeEnum.STRING">
+            <remarks/>
+        </member>
+        <member name="F:FacadeFor3e.TransactionService.DataTypeEnum.TEXT">
+            <remarks/>
+        </member>
+        <member name="F:FacadeFor3e.TransactionService.DataTypeEnum.URL">
+            <remarks/>
+        </member>
+        <member name="T:FacadeFor3e.PriorityEnum">
+            <summary>
+            Process priority
+            </summary>
+        </member>
+        <member name="F:FacadeFor3e.PriorityEnum.LOW">
+            <summary>
+            Low priority
+            </summary>
+        </member>
+        <member name="F:FacadeFor3e.PriorityEnum.MEDIUM">
+            <summary>
+            Medium priority
+            </summary>
+        </member>
+        <member name="F:FacadeFor3e.PriorityEnum.HIGH">
+            <summary>
+            High priority
+            </summary>
+        </member>
+        <member name="T:FacadeFor3e.ProcessExecutionRequestTypeEnum">
+            <summary>
+            Indicates how the execution of a 3E application process should be altered 
+            </summary>
+            <remarks>Only place that I can currently see where SuppressChildAutoGeneration would have any effect is the FAAsset object</remarks>
+        </member>
+        <member name="F:FacadeFor3e.ProcessExecutionRequestTypeEnum.Default">
+            <summary>
+             Will leave the original process behavior unaffected and is the expected behavior if this value is not passed.
+            </summary>
+        </member>
+        <member name="F:FacadeFor3e.ProcessExecutionRequestTypeEnum.SaveFirstEndOnNoErrors">
+            <summary>
+            Calls the 3E Save event for the object collection and if there are no validation errors in the data, will exit.
+            If there are errors it will route to the original first step in the process and continue with the defined behavior from that point.
+            </summary>
+        </member>
+        <member name="F:FacadeFor3e.ProcessExecutionRequestTypeEnum.RouteFirstExecuteStandardProcess">
+            <summary>
+            Calls the 3E Save event for the object collection will route to the original first step in the process and continue with the defined behavior from that point
+            whether there are validation errors or not.
+            </summary>
+        </member>
+        <member name="F:FacadeFor3e.ProcessExecutionRequestTypeEnum.Default_SuppressChildAutogeneration">
+            <summary>
+            Leaves the original process behaviour unaffected, but sets the Process.IsRequestingChildObjectAutogenSuppression flag.
+            </summary> 
+        </member>
+        <member name="F:FacadeFor3e.ProcessExecutionRequestTypeEnum.SaveFirstEndOnNoErrors_SuppressChildAutogeneration">
+            <summary>
+            Same as <see cref="F:FacadeFor3e.ProcessExecutionRequestTypeEnum.SaveFirstEndOnNoErrors"/>, but sets the Process.IsRequestingChildObjectAutogenSuppression flag.
+            </summary>
+        </member>
+        <member name="F:FacadeFor3e.ProcessExecutionRequestTypeEnum.RouteFirstExecuteStandardProcess_SuppressChildAutogeneration">
+            <summary>
+            Same as <see cref="F:FacadeFor3e.ProcessExecutionRequestTypeEnum.RouteFirstExecuteStandardProcess"/>, but sets the Process.IsRequestingChildObjectAutogenSuppression flag.
+            </summary>
+        </member>
+        <member name="T:FacadeFor3e.ExecuteProcess">
+            <summary>
+            Connects to the 3E transaction service and allows processes to be run
+            </summary>
+        </member>
+        <member name="M:FacadeFor3e.ExecuteProcess.#ctor(System.Uri)">
+            <summary>
+            Constructs a new ExecuteProcess object without impersonation or user credentials
+            </summary>
+            <param name="endpoint">The url to use to connect to the 3E transaction service</param>
+        </member>
+        <member name="M:FacadeFor3e.ExecuteProcess.#ctor(System.Uri,System.Security.Principal.WindowsIdentity)">
+            <summary>
+            Constructs a new ExecuteProcess object which will impersonate the specified account during calls to the 3E transaction service
+            </summary>
+            <param name="endpoint">The url to use to connect to the 3E transaction service</param>
+            <param name="accountToImpersonate">The account to impersonate</param>
+        </member>
+        <member name="M:FacadeFor3e.ExecuteProcess.#ctor(System.Uri,System.Net.NetworkCredential)">
+            <summary>
+            Constructs a new ExecuteProcess object which will pass the specified credentials during calls to the 3E transaction service
+            </summary>
+            <param name="endpoint">The url to use to connect to the 3E transaction service</param>
+            <param name="networkCredential">The credentials to use when calling the 3E transaction service</param>
+        </member>
+        <member name="M:FacadeFor3e.ExecuteProcess.Execute(FacadeFor3e.ProcessCommandBuilder.ProcessCommand,System.Uri)">
+            <summary>
+            Executes the specified process and (where appropriate) returns the primary key of the record affected
+            </summary>
+            <param name="process">The process to run</param>
+            <param name="endpoint">Specifies the url of the transaction service</param>
+            <returns>For a single Add operation, the primary key of the first record affected, or null otherwise</returns>
+        </member>
+        <member name="M:FacadeFor3e.ExecuteProcess.Execute(FacadeFor3e.ProcessCommandBuilder.ProcessCommand,System.Uri,System.Security.Principal.WindowsIdentity)">
+            <summary>
+            Executes the specified process and (where appropriate) returns the primary key of the record affected
+            </summary>
+            <param name="process">The process to run</param>
+            <param name="endpoint">Specifies the url of the transaction service</param>
+            <param name="accountToImpersonate">The account details to impersonate</param>
+            <returns>For a single Add operation, the primary key of the first record affected, or null otherwise</returns>
+        </member>
+        <member name="M:FacadeFor3e.ExecuteProcess.Execute(FacadeFor3e.ProcessCommandBuilder.ProcessCommand,System.Uri,System.Net.NetworkCredential)">
+            <summary>
+            Executes the specified process and (where appropriate) returns the primary key of the record affected
+            </summary>
+            <param name="process">The process to run</param>
+            <param name="endpoint">Specifies the url of the transaction service</param>
+            <param name="networkCredential">The credentials to use when calling the 3E transaction service</param>
+            <returns>For a single Add operation, the primary key of the first record affected, or null otherwise</returns>
+        </member>
+        <member name="M:FacadeFor3e.ExecuteProcess.Dispose">
+            <summary>
+            Disposes this object
+            </summary>
+        </member>
+        <member name="T:FacadeFor3e.ExecuteProcessException">
+            <summary>
+            Represents an error that occurred during execution of a process
+            </summary>
+        </member>
+        <member name="P:FacadeFor3e.ExecuteProcessException.ExecuteProcessResult">
+            <summary>
+            Where available, this returns an object providing information on the response returned from the Transaction Service 
+            </summary>
+        </member>
+        <member name="M:FacadeFor3e.ExecuteProcessException.#ctor">
+            <summary>
+            Constructs a new ProcessException
+            </summary>
+        </member>
+        <member name="M:FacadeFor3e.ExecuteProcessException.#ctor(System.String)">
+            <summary>
+            Constructs a new ProcessException
+            </summary>
+            <param name="message">The message that describes the error</param>
+        </member>
+        <member name="M:FacadeFor3e.ExecuteProcessException.#ctor(System.Exception)">
+            <summary>
+            Constructs a new ProcessException
+            </summary>
+            <param name="innerException">The exception that is the cause of the current exception, or a null reference if no inner exception is specified</param>
+        </member>
+        <member name="M:FacadeFor3e.ExecuteProcessException.#ctor(System.String,System.Exception)">
+            <summary>
+            Constructs a new ProcessException
+            </summary>
+            <param name="message">The error message that explains the reason for the exception</param>
+            <param name="innerException">The exception that is the cause of the current exception, or a null reference if no inner exception is specified</param>
+        </member>
+        <member name="M:FacadeFor3e.ExecuteProcessException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Constructs a new ProcessException
+            </summary>
+            <param name="info">The SerializationInfo that holds the serialized object data about the exception being thrown</param>
+            <param name="context">The StreamingContext that contains contextual information about the source or destination</param>
+        </member>
+        <member name="M:FacadeFor3e.ExecuteProcessException.#ctor(System.String,FacadeFor3e.ExecuteProcessResult)">
+            <summary>
+            Constructs a new ProcessException
+            </summary>
+            <param name="message">The error message that explains the reason for the exception</param>
+            <param name="executeProcessResult">The run process result</param>
+        </member>
+        <member name="M:FacadeFor3e.ExecuteProcessException.#ctor(System.String,System.Exception,FacadeFor3e.ExecuteProcessResult)">
+            <summary>
+            Constructs a new ProcessException
+            </summary>
+            <param name="message">The error message that explains the reason for the exception</param>
+            <param name="innerException">The exception that is the cause of the current exception, or a null reference if no inner exception is specified</param>
+            <param name="executeProcessResult">The run process result</param>
+        </member>
+        <member name="T:FacadeFor3e.ExecuteProcessResult">
+            <summary>
+            An object that provides information on the request and response received from the Transaction Service
+            </summary>
+        </member>
+        <member name="P:FacadeFor3e.ExecuteProcessResult.Request">
+            <summary>
+            Gets the request sent to 3E
+            </summary>
+        </member>
+        <member name="P:FacadeFor3e.ExecuteProcessResult.Response">
+            <summary>
+            Gets the response from 3E
+            </summary>
+        </member>
+        <member name="P:FacadeFor3e.ExecuteProcessResult.ProcessId">
+            <summary>
+            Gets the process ID that was used to run the request
+            </summary>
+            <remarks>This corresponds to a row in the NxFwkProcessItem table identified by the ProcItemID column</remarks>
+        </member>
+        <member name="P:FacadeFor3e.ExecuteProcessResult.ExecutionResult">
+            <summary>
+            Returns the final state of the process 
+            </summary>
+            <remarks>Can be one of
+                <c>Success</c> (the process completed),
+                <c>Failure</c> (an error occurred), or
+                <c>Interface</c> (the process is still running)</remarks>
+        </member>
+        <member name="P:FacadeFor3e.ExecuteProcessResult.OutputId">
+            <summary>
+            Gets the final output ID the process used before it completed. Only available when the process completed successfully.
+            </summary>
+            <remarks>Sometimes this can be useful to determine what path the process took, and even whether it actually failed when it appeared to succeed.</remarks>
+        </member>
+        <member name="P:FacadeFor3e.ExecuteProcessResult.HasDataError">
+            <summary>
+            Gets whether the response contains any data error details
+            </summary>
+        </member>
+        <member name="P:FacadeFor3e.ExecuteProcessResult.NextMessage">
+            <summary>
+            Returns any notification messages generated by the process
+            </summary>
+        </member>
+        <member name="M:FacadeFor3e.ExecuteProcessResult.GetKeys">
+            <summary>
+            Returns the primary keys of records created by the process.
+            </summary>
+            <returns>An enumerable list of primary keys in string format</returns>
+        </member>
+        <member name="P:FacadeFor3e.ExecuteProcessResult.DataErrors">
+            <summary>
+            Returns a collection of data errors contained in the response from the Transaction Service
+            </summary>
+        </member>
+        <member name="T:FacadeFor3e.ExecuteProcessResult.DataError">
+            <summary>
+            An object representing one or more errors on the specified object or its children
+            </summary>
+        </member>
+        <member name="F:FacadeFor3e.ExecuteProcessResult.DataError.ObjectId">
+            <summary>
+            The id of the object
+            </summary>
+        </member>
+        <member name="F:FacadeFor3e.ExecuteProcessResult.DataError.PrimaryKey">
+            <summary>
+            The primary key of the object (in string format)
+            </summary>
+        </member>
+        <member name="F:FacadeFor3e.ExecuteProcessResult.DataError.RowIndex">
+            <summary>
+            The index of the row in the worklist
+            </summary>
+        </member>
+        <member name="F:FacadeFor3e.ExecuteProcessResult.DataError.ObjectException">
+            <summary>
+            The exception on the object (null if not present)
+            </summary>
+        </member>
+        <member name="P:FacadeFor3e.ExecuteProcessResult.DataError.Children">
+            <summary>
+            Returns errors on child objects
+            </summary>
+        </member>
+        <member name="P:FacadeFor3e.ExecuteProcessResult.DataError.AttributeErrors">
+            <summary>
+            Returns a collection of errors on the object's attributes
+            </summary>
+        </member>
+        <member name="T:FacadeFor3e.ExecuteProcessResult.AttributeError">
+            <summary>
+            An object representing an error encountered while setting an attribute's value
+            </summary>
+        </member>
+        <member name="F:FacadeFor3e.ExecuteProcessResult.AttributeError.AttributeId">
+            <summary>
+            The id of the attribute
+            </summary>
+        </member>
+        <member name="F:FacadeFor3e.ExecuteProcessResult.AttributeError.Value">
+            <summary>
+            The value that the attribute was given
+            </summary>
+        </member>
+        <member name="F:FacadeFor3e.ExecuteProcessResult.AttributeError.Error">
+            <summary>
+            The error message
+            </summary>
+        </member>
+        <member name="M:FacadeFor3e.ExecuteProcessResult.RenderDataErrors(System.Collections.Generic.IEnumerable{FacadeFor3e.ExecuteProcessResult.DataError})">
+            <summary>
+            Generates a string description from a list of <see cref="P:FacadeFor3e.ExecuteProcessResult.DataErrors">DataError</see>
+            </summary>
+            <param name="dataErrors"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FacadeFor3e.ExecuteProcessService">
+            <summary>
+            Executes a <see cref="T:FacadeFor3e.ProcessCommandBuilder.ProcessCommand">ProcessCommand</see>
+            </summary>
+        </member>
+        <member name="F:FacadeFor3e.ExecuteProcessService.TransactionServices">
+            <summary>
+            The TransactionServices object that will interface to 3E
+            </summary>
+        </member>
+        <member name="P:FacadeFor3e.ExecuteProcessService.ThrowExceptionIfDataErrorsFound">
+            <summary>
+            Gets or sets whether to throw an exception if the response contains details of data errors
+            </summary>
+        </member>
+        <member name="P:FacadeFor3e.ExecuteProcessService.ThrowExceptionIfProcessDoesNotComplete">
+            <summary>
+            Gets or sets whether to throw an exception if the process doesn't complete
+            </summary>
+        </member>
+        <member name="P:FacadeFor3e.ExecuteProcessService.GetKeys">
+            <summary>
+            Gets or sets whether to return the primary keys of the top-level records that remain in the process worklist when the process finishes
+            </summary>
+        </member>
+        <member name="M:FacadeFor3e.ExecuteProcessService.#ctor(FacadeFor3e.TransactionServices)">
+            <summary>
+            Constructs a new object for executing a <see cref="T:FacadeFor3e.ProcessCommandBuilder.ProcessCommand">ProcessCommand</see>
+            </summary>
+        </member>
+        <member name="M:FacadeFor3e.ExecuteProcessService.Execute(FacadeFor3e.ProcessCommandBuilder.ProcessCommand)">
+            <summary>
+            Executes the specified ProcessCommand and returns the result
+            </summary>
+            <param name="process">The ProcessCommand object to execute</param>
+            <returns>An <see cref="T:FacadeFor3e.ExecuteProcessResult">ExecuteProcessResult</see> object</returns>
+        </member>
+        <member name="M:FacadeFor3e.ExecuteProcessService.Execute(System.Xml.XmlDocument)">
+            <summary>
+            Executes a process command defined by an XmlDocument and returns the result
+            </summary>
+            <param name="request">The process document to execute</param>
+            <returns>An <see cref="T:FacadeFor3e.ExecuteProcessResult">ExecuteProcessResult</see> object</returns>
+        </member>
+        <member name="T:FacadeFor3e.GetArchetypeData">
+            <summary>
+            An object that runs an XOQL query to return data from the 3E database
+            </summary>
+        </member>
+        <member name="M:FacadeFor3e.GetArchetypeData.GetData(System.Xml.XmlDocument,System.Uri)">
+            <summary>
+            Runs the specified query and returns the results
+            </summary>
+            <param name="xoql">Specifies the query to execute</param>
+            <param name="endpoint">The url to use to connect to the 3E transaction service</param>
+            <returns>An XML representation of the result set</returns>
+            <remarks>The query is run in the context of the account running the process. Row level security will be observed.</remarks>
+        </member>
+        <member name="M:FacadeFor3e.GetArchetypeData.GetData(System.Xml.XmlDocument,System.Uri,System.Security.Principal.WindowsIdentity)">
+            <summary>
+            Runs the specified query and returns the results
+            </summary>
+            <param name="xoql">Specifies the query to execute</param>
+            <param name="endpoint">The url to use to connect to the 3E transaction service</param>
+            <param name="accountToImpersonate">The account to impersonate</param>
+            <returns>An XML representation of the result set</returns>
+            <remarks>The query is run in the context of the account running the process. Row level security will be observed.</remarks>
+        </member>
+        <member name="M:FacadeFor3e.GetArchetypeData.GetData(System.Xml.XmlDocument,System.Uri,System.Net.NetworkCredential)">
+            <summary>
+            Runs the specified query and returns the results
+            </summary>
+            <param name="xoql">Specifies the query to execute</param>
+            <param name="endpoint">The url to use to connect to the 3E transaction service</param>
+            <param name="networkCredential">The credentials to use when calling the 3E transaction service</param>
+            <returns>An XML representation of the result set</returns>
+            <remarks>The query is run in the context of the account running the process. Row level security will be observed.</remarks>
+        </member>
+        <member name="M:FacadeFor3e.GetArchetypeData.GetData(System.Xml.XmlDocument)">
+            <summary>
+            Runs the specified query and returns the results
+            </summary>
+            <param name="xoql">Specifies the query to execute</param>
+            <returns>An XML representation of the result set</returns>
+            <remarks>Row level security will be observed.</remarks>
+        </member>
+        <member name="T:FacadeFor3e.GetOption">
+            <summary>
+            A service to return the value of a system option/override for a user
+            </summary>
+        </member>
+        <member name="M:FacadeFor3e.GetOption.GetBooleanOption(System.String)">
+            <summary>
+            Gets the value of a boolean system option
+            </summary>
+            <param name="optionName">The name of the system option</param>
+            <returns>The value of the specified option</returns>
+        </member>
+        <member name="M:FacadeFor3e.GetOption.GetIntegerOption(System.String)">
+            <summary>
+            Gets the value of an integer system option
+            </summary>
+            <param name="optionName">The name of the system option</param>
+            <returns>The value of the specified option</returns>
+        </member>
+        <member name="M:FacadeFor3e.GetOption.GetDateOption(System.String)">
+            <summary>
+            Gets the value of a date system option
+            </summary>
+            <param name="optionName">The name of the system option</param>
+            <returns>The value of the specified option</returns>
+        </member>
+        <member name="M:FacadeFor3e.GetOption.GetStringOption(System.String)">
+            <summary>
+            Gets the value of a string system option
+            </summary>
+            <param name="optionName">The name of the system option</param>
+            <returns>The value of the specified option</returns>
+        </member>
+        <member name="M:FacadeFor3e.GetOption.GetTimeSpanOption(System.String)">
+            <summary>
+            Gets the value of a TimeSpan system option
+            </summary>
+            <param name="optionName">The name of the system option</param>
+            <returns>The value of the specified option</returns>
+        </member>
+        <member name="M:FacadeFor3e.GetOption.GetListOption(System.String)">
+            <summary>
+            Gets the value of a list/enumerated system option
+            </summary>
+            <param name="optionName">The name of the system option</param>
+            <returns>The value of the specified option</returns>
+        </member>
+        <member name="M:FacadeFor3e.GetOption.GetOptionRaw(System.String,FacadeFor3e.TransactionService.DataTypeEnum)">
+            <summary>
+            Gets the value of a system option
+            </summary>
+            <param name="optionName">The name of the system option</param>
+            <param name="optionType">The type of the system option</param>
+            <returns>The value of the specified option</returns>
+            <remarks>Only certain values for optionType are valid</remarks>
+        </member>
+        <member name="T:FacadeFor3e.GetServiceCulture">
+            <summary>
+            A service to return the culture in use by the transaction service
+            </summary>
+        </member>
+        <member name="M:FacadeFor3e.GetServiceCulture.Get">
+            <summary>
+            Gets the service culture in use by the transaction service
+            </summary>
+            <returns>A CultureInfo object</returns>
+        </member>
+        <member name="T:FacadeFor3e.ProcessCommandBuilder.AddOperation">
+            <summary>
+            Defines an operation to add a record
+            </summary>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.AddOperation.#ctor">
+            <summary>
+            Creates a new Add operation
+            </summary>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.AddOperation.#ctor(System.String)">
+            <summary>
+            Creates a new Add operation for the specified subclass
+            </summary>
+            <param name="subClass">The id of the subclass of object to create</param>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.AddOperation.Render(System.Xml.XmlWriter,System.String)">
+            <summary>
+            Outputs this operation
+            </summary>
+            <param name="writer">An XMLWriter to output to</param>
+            <param name="objectSuperclassName">The name of the parent data object for when SubClass is not specified</param>
+        </member>
+        <member name="T:FacadeFor3e.ProcessCommandBuilder.IAttribute">
+            <summary>
+            An untyped 3E attribute value
+            </summary>
+        </member>
+        <member name="P:FacadeFor3e.ProcessCommandBuilder.IAttribute.Value">
+            <summary>
+            Gets the untyped attribute value
+            </summary>
+        </member>
+        <member name="T:FacadeFor3e.ProcessCommandBuilder.DecimalAttribute">
+            <summary>
+            A 3E decimal attribute value
+            </summary>
+        </member>
+        <member name="F:FacadeFor3e.ProcessCommandBuilder.DecimalAttribute.Value">
+            <summary>
+            Gets/sets the value of this attribute
+            </summary>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.DecimalAttribute.#ctor(System.Nullable{System.Decimal})">
+            <summary>
+            Constructs a new 3E decimal attribute value
+            </summary>
+            <param name="value">The initial value of the attribute</param>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.DecimalAttribute.ToString">
+            <inheritdoc />
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.DecimalAttribute.op_Implicit(System.Decimal)~FacadeFor3e.ProcessCommandBuilder.DecimalAttribute">
+            <summary>
+            Implicitly converts a decimal value to a DecimalAttribute
+            </summary>
+            <param name="value">The decimal value to convert</param>
+        </member>
+        <member name="P:FacadeFor3e.ProcessCommandBuilder.DecimalAttribute.FacadeFor3e#ProcessCommandBuilder#IAttribute#Value">
+            <inheritdoc />
+        </member>
+        <member name="T:FacadeFor3e.ProcessCommandBuilder.IntAttribute">
+            <summary>
+            A 3E integer attribute value
+            </summary>
+        </member>
+        <member name="F:FacadeFor3e.ProcessCommandBuilder.IntAttribute.Value">
+            <summary>
+            Gets/sets the value of this attribute
+            </summary>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.IntAttribute.#ctor(System.Nullable{System.Int32})">
+            <summary>
+            Constructs a new 3E integer attribute value
+            </summary>
+            <param name="value">The initial value of the attribute</param>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.IntAttribute.ToString">
+            <inheritdoc />
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.IntAttribute.op_Implicit(System.Int32)~FacadeFor3e.ProcessCommandBuilder.IntAttribute">
+            <summary>
+            Implicitly converts an integer value to a IntAttribute
+            </summary>
+            <param name="value">The integer value to convert</param>
+        </member>
+        <member name="P:FacadeFor3e.ProcessCommandBuilder.IntAttribute.FacadeFor3e#ProcessCommandBuilder#IAttribute#Value">
+            <inheritdoc />
+        </member>
+        <member name="T:FacadeFor3e.ProcessCommandBuilder.StringAttribute">
+            <summary>
+            A 3E string attribute value
+            </summary>
+        </member>
+        <member name="F:FacadeFor3e.ProcessCommandBuilder.StringAttribute.Value">
+            <summary>
+            Gets/sets the value of this attribute
+            </summary>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.StringAttribute.#ctor(System.String)">
+            <summary>
+            Constructs a new 3E string attribute value
+            </summary>
+            <param name="value">The initial value of the attribute</param>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.StringAttribute.ToString">
+            <inheritdoc />
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.StringAttribute.op_Implicit(System.String)~FacadeFor3e.ProcessCommandBuilder.StringAttribute">
+            <summary>
+            Implicitly converts a string value to a StringAttribute
+            </summary>
+            <param name="value">The string value to convert</param>
+        </member>
+        <member name="P:FacadeFor3e.ProcessCommandBuilder.StringAttribute.FacadeFor3e#ProcessCommandBuilder#IAttribute#Value">
+            <inheritdoc />
+        </member>
+        <member name="T:FacadeFor3e.ProcessCommandBuilder.GuidAttribute">
+            <summary>
+            A 3E guid attribute value
+            </summary>
+        </member>
+        <member name="F:FacadeFor3e.ProcessCommandBuilder.GuidAttribute.Value">
+            <summary>
+            Gets/sets the value of this attribute
+            </summary>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.GuidAttribute.#ctor(System.Nullable{System.Guid})">
+            <summary>
+            Constructs a new 3E guid attribute value
+            </summary>
+            <param name="value">The initial value of the attribute</param>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.GuidAttribute.ToString">
+            <inheritdoc />
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.GuidAttribute.op_Implicit(System.Guid)~FacadeFor3e.ProcessCommandBuilder.GuidAttribute">
+            <summary>
+            Implicitly converts a guid value to a GuidAttribute
+            </summary>
+            <param name="value">The guid value to convert</param>
+        </member>
+        <member name="P:FacadeFor3e.ProcessCommandBuilder.GuidAttribute.FacadeFor3e#ProcessCommandBuilder#IAttribute#Value">
+            <inheritdoc />
+        </member>
+        <member name="T:FacadeFor3e.ProcessCommandBuilder.DateAttribute">
+            <summary>
+            A 3E date attribute value
+            </summary>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.DateAttribute.#ctor(System.Nullable{System.DateTime})">
+            <summary>
+            Constructs a new 3E date attribute value
+            </summary>
+            <param name="value">The initial value of the attribute</param>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.DateAttribute.#ctor(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Constructs a new 3E date attribute value
+            </summary>
+            <param name="year">The year</param>
+            <param name="month">The month within the year</param>
+            <param name="day">The day within the month</param>
+        </member>
+        <member name="P:FacadeFor3e.ProcessCommandBuilder.DateAttribute.Value">
+            <summary>
+            Gets/sets the value of this attribute
+            </summary>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.DateAttribute.ToString">
+            <inheritdoc />
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.DateAttribute.op_Implicit(System.DateTime)~FacadeFor3e.ProcessCommandBuilder.DateAttribute">
+            <summary>
+            Implicitly converts a date value to a DateAttribute
+            </summary>
+            <param name="value">The date value to convert</param>
+        </member>
+        <member name="P:FacadeFor3e.ProcessCommandBuilder.DateAttribute.FacadeFor3e#ProcessCommandBuilder#IAttribute#Value">
+            <inheritdoc />
+        </member>
+        <member name="T:FacadeFor3e.ProcessCommandBuilder.DateTimeAttribute">
+            <summary>
+            A 3E datetime attribute value
+            </summary>
+        </member>
+        <member name="F:FacadeFor3e.ProcessCommandBuilder.DateTimeAttribute.Value">
+            <summary>
+            Gets/sets the value of this attribute
+            </summary>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.DateTimeAttribute.#ctor(System.Nullable{System.DateTime})">
+            <summary>
+            Constructs a new 3E datetime attribute value
+            </summary>
+            <param name="value">The initial value of the attribute</param>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.DateTimeAttribute.#ctor(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Constructs a new 3E date attribute value
+            </summary>
+            <param name="year">The year</param>
+            <param name="month">The month within the year</param>
+            <param name="day">The day within the month</param>
+            <param name="hour">The hour within the day</param>
+            <param name="minute">The minute within the hour</param>
+            <param name="second">The second within the minute</param>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.DateTimeAttribute.ToString">
+            <inheritdoc />
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.DateTimeAttribute.op_Implicit(System.DateTime)~FacadeFor3e.ProcessCommandBuilder.DateTimeAttribute">
+            <summary>
+            Implicitly converts a datetime value to a DateTimeAttribute
+            </summary>
+            <param name="value">The datetime value to convert</param>
+        </member>
+        <member name="P:FacadeFor3e.ProcessCommandBuilder.DateTimeAttribute.FacadeFor3e#ProcessCommandBuilder#IAttribute#Value">
+            <inheritdoc />
+        </member>
+        <member name="T:FacadeFor3e.ProcessCommandBuilder.BoolAttribute">
+            <summary>
+            A 3E Boolean attribute value
+            </summary>
+        </member>
+        <member name="F:FacadeFor3e.ProcessCommandBuilder.BoolAttribute.Value">
+            <summary>
+            Gets/sets the value of this attribute
+            </summary>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.BoolAttribute.#ctor(System.Boolean)">
+            <summary>
+            Constructs a new 3E Boolean attribute value
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.BoolAttribute.ToString">
+            <inheritdoc />
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.BoolAttribute.op_Implicit(System.Boolean)~FacadeFor3e.ProcessCommandBuilder.BoolAttribute">
+            <summary>
+            Implicitly converts a Boolean value to a BooleanAttribute
+            </summary>
+            <param name="value">The Boolean value to convert</param>
+        </member>
+        <member name="P:FacadeFor3e.ProcessCommandBuilder.BoolAttribute.FacadeFor3e#ProcessCommandBuilder#IAttribute#Value">
+            <inheritdoc />
+        </member>
+        <member name="T:FacadeFor3e.ProcessCommandBuilder.AttributeCollection">
+            <summary>
+            A collection of <see cref="T:FacadeFor3e.ProcessCommandBuilder.NamedAttributeValue"/> objects
+            </summary>
+        </member>
+        <member name="P:FacadeFor3e.ProcessCommandBuilder.AttributeCollection.Item(System.String)">
+            <summary>
+            Gets the attribute with the specified name
+            </summary>
+            <param name="name">The name of the attribute to retrieve</param>
+            <returns>The attribute with the specified name. If the specified name is not found, a <exception cref="T:System.Collections.Generic.KeyNotFoundException">KeyNotFoundException</exception> is thrown.</returns>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.AttributeCollection.TryGetValue(System.String,FacadeFor3e.ProcessCommandBuilder.NamedAttributeValue@)">
+            <summary>
+            Gets the attribute with the specified name
+            </summary>
+            <param name="name">The name of the attribute to retrieve</param>
+            <param name="namedAttribute">When the method returns, contains the attribute with the specified name if the name is found, otherwise null.</param>
+            <returns>True if the attribute specified was found, otherwise false.</returns>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.AttributeCollection.InsertItem(System.Int32,FacadeFor3e.ProcessCommandBuilder.NamedAttributeValue)">
+            <inheritdoc />
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.AttributeCollection.SetItem(System.Int32,FacadeFor3e.ProcessCommandBuilder.NamedAttributeValue)">
+            <inheritdoc />
+        </member>
+        <member name="T:FacadeFor3e.ProcessCommandBuilder.ChildObjectCollection">
+            <summary>
+            A collection of DataObject objects that are children of another DataObject
+            </summary>
+        </member>
+        <member name="P:FacadeFor3e.ProcessCommandBuilder.ChildObjectCollection.Item(System.String)">
+            <summary>
+            Gets the DataObject with the specified name
+            </summary>
+            <param name="name">The name of the DataObject to retrieve</param>
+            <returns>The DataObject with the specified name. If the specified name is not found, a <exception cref="T:System.Collections.Generic.KeyNotFoundException">KeyNotFoundException</exception> is thrown.</returns>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.ChildObjectCollection.TryGetValue(System.String,FacadeFor3e.ProcessCommandBuilder.DataObject@)">
+            <summary>
+            Gets the DataObject with the specified name
+            </summary>
+            <param name="name">The name of the DataObject to retrieve</param>
+            <param name="dataObject">When the method returns, contains the DataObject with the specified name if the name is found, otherwise null.</param>
+            <returns>True if the DataObject specified was found, otherwise false.</returns>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.ChildObjectCollection.InsertItem(System.Int32,FacadeFor3e.ProcessCommandBuilder.DataObject)">
+            <inheritdoc />
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.ChildObjectCollection.SetItem(System.Int32,FacadeFor3e.ProcessCommandBuilder.DataObject)">
+            <inheritdoc />
+        </member>
+        <member name="T:FacadeFor3e.ProcessCommandBuilder.DataObject">
+            <summary>
+            Describes which object is to be updated and what operations to perform
+            </summary>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.DataObject.#ctor(System.String)">
+            <summary>
+            Constructs a new DataObject
+            </summary>
+            <param name="objectName">The name of the 3E object</param>
+        </member>
+        <member name="P:FacadeFor3e.ProcessCommandBuilder.DataObject.ObjectName">
+            <summary>
+            Gets the name of the 3E object
+            </summary>
+        </member>
+        <member name="P:FacadeFor3e.ProcessCommandBuilder.DataObject.Operations">
+            <summary>
+            Gets the operations to be performed
+            </summary>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.DataObject.Render(System.Xml.XmlWriter)">
+            <summary>
+            Output the object
+            </summary>
+            <param name="writer">An XMLWriter to output to</param>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.DataObject.AddRecord">
+            <summary>
+            Creates and appends an operation to create a new record 
+            </summary>
+            <returns>An <see cref="T:FacadeFor3e.ProcessCommandBuilder.AddOperation">AddOperation</see></returns>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.DataObject.DeleteRecord(FacadeFor3e.ProcessCommandBuilder.IdentifyBase)">
+            <summary>
+            Creates and appends an operation to delete a specific record
+            </summary>
+            <param name="keySpecification">Specifies the record to delete</param>
+            <returns>A <see cref="T:FacadeFor3e.ProcessCommandBuilder.DeleteOperation">DeleteOperation</see></returns>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.DataObject.EditRecord(FacadeFor3e.ProcessCommandBuilder.IdentifyBase)">
+            <summary>
+            Creates and appends an operation to update a specific record
+            </summary>
+            <param name="keySpecification">Specifies the record to update</param>
+            <returns>An <see cref="T:FacadeFor3e.ProcessCommandBuilder.EditOperation">EditOperation</see></returns>
+        </member>
+        <member name="T:FacadeFor3e.ProcessCommandBuilder.DeleteOperation">
+            <summary>
+            Defines an operation to delete a record
+            </summary>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.DeleteOperation.#ctor(FacadeFor3e.ProcessCommandBuilder.IdentifyBase)">
+            <summary>
+            Creates a new Delete operation
+            </summary>
+            <param name="keySpecification">Defines which row should be deleted</param>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.DeleteOperation.#ctor(FacadeFor3e.ProcessCommandBuilder.IdentifyBase,System.String)">
+            <summary>
+            Creates a new Delete operation
+            </summary>
+            <param name="keySpecification">Defines which row should be edited</param>
+            <param name="subClass">The id of the subclass of object to delete</param>
+        </member>
+        <member name="P:FacadeFor3e.ProcessCommandBuilder.DeleteOperation.KeySpecification">
+            <summary>
+            Gets or sets the specification of which row to edit
+            </summary>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.DeleteOperation.Render(System.Xml.XmlWriter,System.String)">
+            <summary>
+            Outputs this operation
+            </summary>
+            <param name="writer">An XMLWriter to output to</param>
+            <param name="objectSuperclassName">The name of the parent data object for when SubClass is not specified</param>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.DeleteOperation.ByPrimaryKey(System.Int32)">
+            <summary>
+            Returns a DeleteOperation object upon a row identified by primary key
+            </summary>
+            <param name="primaryKey">Specifies the primary key</param>
+            <returns>A DeleteOperation object that targets a row by primary key</returns>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.DeleteOperation.ByPrimaryKey(System.Guid)">
+            <summary>
+            Returns a DeleteOperation object upon a row identified by primary key
+            </summary>
+            <param name="primaryKey">Specifies the primary key</param>
+            <returns>A DeleteOperation object that targets a row by primary key</returns>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.DeleteOperation.ByPrimaryKey(System.String)">
+            <summary>
+            Returns a DeleteOperation object upon a row identified by primary key
+            </summary>
+            <param name="primaryKey">Specifies the primary key</param>
+            <returns>A DeleteOperation object that targets a row by primary key</returns>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.DeleteOperation.ByUniqueAlias(System.String,System.String)">
+            <summary>
+            Returns a DeleteOperation object upon a row identified by a unique value found on the specified attribute
+            </summary>
+            <param name="alias">Specifies the attribute that contains the value to search for</param>
+            <param name="value">Specifies the value to search for</param>
+            <returns>A DeleteOperation object that targets a row by primary key</returns>
+        </member>
+        <member name="T:FacadeFor3e.ProcessCommandBuilder.EditOperation">
+            <summary>
+            Defines an operation to edit a record
+            </summary>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.EditOperation.#ctor(FacadeFor3e.ProcessCommandBuilder.IdentifyBase)">
+            <summary>
+            Creates a new Edit operation
+            </summary>
+            <param name="keySpecification">Defines which row should be edited</param>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.EditOperation.#ctor(FacadeFor3e.ProcessCommandBuilder.IdentifyBase,System.String)">
+            <summary>
+            Creates a new Edit operation
+            </summary>
+            <param name="keySpecification">Defines which row should be edited</param>
+            <param name="subClass">The id of the subclass of object to edit</param>
+        </member>
+        <member name="P:FacadeFor3e.ProcessCommandBuilder.EditOperation.KeySpecification">
+            <summary>
+            Gets or sets the specification of which row to edit
+            </summary>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.EditOperation.Render(System.Xml.XmlWriter,System.String)">
+            <summary>
+            Outputs this operation
+            </summary>
+            <param name="writer">An XMLWriter to output to</param>
+            <param name="objectSuperclassName">The name of the parent data object for when SubClass is not specified</param>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.EditOperation.ByPrimaryKey(System.Int32)">
+            <summary>
+            Returns an EditOperation object upon a row identified by primary key
+            </summary>
+            <param name="primaryKey">Specifies the primary key</param>
+            <returns>An EditOperation object that targets a row by primary key</returns>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.EditOperation.ByPrimaryKey(System.Guid)">
+            <summary>
+            Returns an EditOperation object upon a row identified by primary key
+            </summary>
+            <param name="primaryKey">Specifies the primary key</param>
+            <returns>An EditOperation object that targets a row by primary key</returns>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.EditOperation.ByPrimaryKey(System.String)">
+            <summary>
+            Returns an EditOperation object upon a row identified by primary key
+            </summary>
+            <param name="primaryKey">Specifies the primary key</param>
+            <returns>An EditOperation object that targets a row by primary key</returns>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.EditOperation.ByUniqueAlias(System.String,System.String)">
+            <summary>
+            Returns an EditOperation object upon a row identified by a unique value found on the specified attribute
+            </summary>
+            <param name="alias">Specifies the attribute that contains the value to search for</param>
+            <param name="value">Specifies the value to search for</param>
+            <returns>An EditOperation object that targets a row by primary key</returns>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.EditOperation.ByPosition(System.Int32)">
+            <summary>
+            Returns an EditOperation object upon a row in a child collection identified by its position
+            </summary>
+            <param name="position">Specifies the row's position in the child collection</param>
+            <returns>An EditOperation object that targets a row by its position in a child collection</returns>
+        </member>
+        <member name="T:FacadeFor3e.ProcessCommandBuilder.IdentifyBase">
+            <summary>
+            Provides a way to identify a row
+            </summary>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.IdentifyBase.RenderKey(System.Xml.XmlWriter)">
+            <summary>
+            Writes the key specification text
+            </summary>
+            <param name="writer">Specifies the object to write to</param>
+        </member>
+        <member name="T:FacadeFor3e.ProcessCommandBuilder.IdentifyByAlias">
+            <summary>
+            Identifies a row by a unique value which may not be the primary key such as Matter.Number
+            </summary>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.IdentifyByAlias.#ctor(System.String,FacadeFor3e.ProcessCommandBuilder.IAttribute)">
+            <summary>
+            Constructs an identifier for a row in a child collection
+            </summary>
+            <param name="aliasField">The name of the attribute that contains the value to search for</param>
+            <param name="keyValue">The value within the collection to search for</param>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.IdentifyByAlias.#ctor(System.String,System.String)">
+            <summary>
+            Constructs an identifier for a row in a child collection
+            </summary>
+            <param name="aliasField">The name of the attribute that contains the value to search for</param>
+            <param name="keyValue">The value within the collection to search for</param>
+        </member>
+        <member name="P:FacadeFor3e.ProcessCommandBuilder.IdentifyByAlias.AliasField">
+            <summary>
+            Gets or sets the id of the attribute that is checked for a matching value
+            </summary>
+        </member>
+        <member name="P:FacadeFor3e.ProcessCommandBuilder.IdentifyByAlias.KeyValue">
+            <summary>
+            Gets or sets the value that is being looked for
+            </summary>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.IdentifyByAlias.RenderKey(System.Xml.XmlWriter)">
+            <inheritdoc />
+        </member>
+        <member name="T:FacadeFor3e.ProcessCommandBuilder.IdentifyByPosition">
+            <summary>
+            Identifies a row by its position in the collection
+            </summary>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.IdentifyByPosition.#ctor(System.Int32)">
+            <summary>
+            Constructs an identifier for a specific row in a child collection
+            </summary>
+            <param name="position">Zero based record number</param>
+        </member>
+        <member name="P:FacadeFor3e.ProcessCommandBuilder.IdentifyByPosition.Position">
+            <summary>
+            Gets or sets the position in the child collection
+            </summary>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.IdentifyByPosition.RenderKey(System.Xml.XmlWriter)">
+            <inheritdoc />
+        </member>
+        <member name="T:FacadeFor3e.ProcessCommandBuilder.IdentifyByPrimaryKey">
+            <summary>
+            Identifies a record by its primary key
+            </summary>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.IdentifyByPrimaryKey.#ctor(FacadeFor3e.ProcessCommandBuilder.IAttribute)">
+            <summary>
+            Constructs an identifier for a specific row in a table by its primary key
+            </summary>
+            <param name="keyValue">Primary key value</param>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.IdentifyByPrimaryKey.#ctor(System.Int32)">
+            <summary>
+            Constructs an identifier for a specific row in a table by its primary key
+            </summary>
+            <param name="keyValue">Primary key value</param>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.IdentifyByPrimaryKey.#ctor(System.Guid)">
+            <summary>
+            Constructs an identifier for a specific row in a table by its primary key
+            </summary>
+            <param name="keyValue">Primary key value</param>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.IdentifyByPrimaryKey.#ctor(System.String)">
+            <summary>
+            Constructs an identifier for a specific row in a table by its primary key
+            </summary>
+            <param name="keyValue">Primary key value</param>
+        </member>
+        <member name="P:FacadeFor3e.ProcessCommandBuilder.IdentifyByPrimaryKey.KeyValue">
+            <summary>
+            Gets the value to search for
+            </summary>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.IdentifyByPrimaryKey.RenderKey(System.Xml.XmlWriter)">
+            <inheritdoc />
+        </member>
+        <member name="T:FacadeFor3e.ProcessCommandBuilder.IdentifyByValue">
+            <summary>
+            Identifies a record within a child collection.
+            The value should be unique within the child collection, but doesn't have to be unique in the table,
+            for example you can identify a particular MattDate record within a matter by its EffStart value,
+            or identify the default Site in a Relate record by the IsDefault value.
+            </summary>
+        </member>
+        <member name="P:FacadeFor3e.ProcessCommandBuilder.IdentifyByValue.KeyField">
+            <summary>
+            Gets or sets the id of the attribute that is checked for a matching value
+            </summary>
+        </member>
+        <member name="P:FacadeFor3e.ProcessCommandBuilder.IdentifyByValue.KeyValue">
+            <summary>
+            Gets or sets the value that is being looked for
+            </summary>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.IdentifyByValue.#ctor(System.String,FacadeFor3e.ProcessCommandBuilder.IAttribute)">
+            <summary>
+            Constructs an identifier for a row in a child collection
+            </summary>
+            <param name="attributeName">The name of the attribute that contains the value to search for</param>
+            <param name="attributeValue">The value within the child collection to search for</param>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.IdentifyByValue.RenderKey(System.Xml.XmlWriter)">
+            <inheritdoc />
+        </member>
+        <member name="T:FacadeFor3e.ProcessCommandBuilder.NamedAttributeValue">
+            <summary>
+            A named attribute value
+            </summary>
+        </member>
+        <member name="P:FacadeFor3e.ProcessCommandBuilder.NamedAttributeValue.Name">
+            <summary>
+            The attribute name
+            </summary>
+        </member>
+        <member name="P:FacadeFor3e.ProcessCommandBuilder.NamedAttributeValue.Attribute">
+            <summary>
+            The attribute value
+            </summary>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.NamedAttributeValue.#ctor(System.String,FacadeFor3e.ProcessCommandBuilder.IAttribute)">
+            <summary>
+            Constructs a new NamedAttributeValue object
+            </summary>
+            <param name="name">The name to give the attribute</param>
+            <param name="attribute">The value to give the attribute</param>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.NamedAttributeValue.Render(System.Xml.XmlWriter)">
+            <summary>
+            Outputs the attribute as XML
+            </summary>
+            <param name="writer">The XmlWriter to output to</param>
+        </member>
+        <member name="T:FacadeFor3e.ProcessCommandBuilder.AliasAttribute">
+            <summary>
+            An attribute with a value from an alias
+            </summary>
+        </member>
+        <member name="P:FacadeFor3e.ProcessCommandBuilder.AliasAttribute.Alias">
+            <summary>
+            The alias attribute name
+            </summary>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.AliasAttribute.#ctor(System.String,System.String,FacadeFor3e.ProcessCommandBuilder.IAttribute)">
+            <summary>
+            Constructs a new AliasAttribute object
+            </summary>
+            <param name="name">The name to give the attribute</param>
+            <param name="alias">The name of the attribute that contains the value to search for</param>
+            <param name="attribute">The value within the collection to search for</param>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.AliasAttribute.Render(System.Xml.XmlWriter)">
+            <summary>
+            Outputs the attribute as XML
+            </summary>
+            <param name="writer">The XmlWriter to output to</param>
+        </member>
+        <member name="T:FacadeFor3e.ProcessCommandBuilder.OperationBase">
+            <summary>
+            Defines the interface for an operation upon an object
+            </summary>
+        </member>
+        <member name="P:FacadeFor3e.ProcessCommandBuilder.OperationBase.SubClass">
+            <summary>
+            The subclass of object to create
+            </summary>
+            <remarks>If null, this defaults to the parent data object</remarks>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.OperationBase.Render(System.Xml.XmlWriter,System.String)">
+            <summary>
+            Output the operation
+            </summary>
+            <param name="writer">An XMLWriter to output to</param>
+            <param name="objectSuperclassName">The name of the parent data object for when SubClass is not specified</param>
+        </member>
+        <member name="T:FacadeFor3e.ProcessCommandBuilder.OperationCollection">
+            <summary>
+            A collection of Operations
+            </summary>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.OperationCollection.InsertItem(System.Int32,FacadeFor3e.ProcessCommandBuilder.OperationBase)">
+            <inheritdoc />
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.OperationCollection.SetItem(System.Int32,FacadeFor3e.ProcessCommandBuilder.OperationBase)">
+            <inheritdoc />
+        </member>
+        <member name="T:FacadeFor3e.ProcessCommandBuilder.OperationWithAttributesBase">
+            <summary>
+            Defines the interface for an operation upon an object which requires a collection of attributes
+            </summary>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.OperationWithAttributesBase.#ctor">
+            <summary>
+            Constructs a new OperationWithAttributesBase object
+            </summary>
+        </member>
+        <member name="P:FacadeFor3e.ProcessCommandBuilder.OperationWithAttributesBase.Attributes">
+            <summary>
+            Gets the attributes to set with this operation
+            </summary>
+        </member>
+        <member name="P:FacadeFor3e.ProcessCommandBuilder.OperationWithAttributesBase.Children">
+            <summary>
+            Gets the collection of children
+            </summary>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.OperationWithAttributesBase.AddAttribute(System.String,System.String)">
+            <summary>
+            Appends a new attribute to the operation
+            </summary>
+            <param name="name">The column name</param>
+            <param name="value">The value to assign</param>
+            <returns>A reference to this operation object</returns>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.OperationWithAttributesBase.AddAttribute(System.String,System.Boolean)">
+            <summary>
+            Appends a new attribute to the operation
+            </summary>
+            <param name="name">The column name</param>
+            <param name="value">The value to assign</param>
+            <returns>A reference to this operation object</returns>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.OperationWithAttributesBase.AddAttribute(System.String,System.Nullable{System.Int32})">
+            <summary>
+            Appends a new attribute to the operation
+            </summary>
+            <param name="name">The column name</param>
+            <param name="value">The value to assign</param>
+            <returns>A reference to this operation object</returns>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.OperationWithAttributesBase.AddAttribute(System.String,System.Nullable{System.Decimal})">
+            <summary>
+            Appends a new attribute to the operation
+            </summary>
+            <param name="name">The column name</param>
+            <param name="value">The value to assign</param>
+            <returns>A reference to this operation object</returns>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.OperationWithAttributesBase.AddDateAttribute(System.String,System.Nullable{System.DateTime})">
+            <summary>
+            Appends a new attribute to the operation
+            </summary>
+            <param name="name">The column name</param>
+            <param name="value">The value to assign</param>
+            <returns>A reference to this operation object</returns>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.OperationWithAttributesBase.AddDateTimeAttribute(System.String,System.Nullable{System.DateTime})">
+            <summary>
+            Appends a new attribute to the operation
+            </summary>
+            <param name="name">The column name</param>
+            <param name="value">The value to assign</param>
+            <returns>A reference to this operation object</returns>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.OperationWithAttributesBase.AddAttribute(System.String,System.Guid)">
+            <summary>
+            Appends a new attribute to the operation
+            </summary>
+            <param name="name">The column name</param>
+            <param name="value">The value to assign</param>
+            <returns>A reference to this operation object</returns>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.OperationWithAttributesBase.AddAliasedAttribute(System.String,System.String,System.String)">
+            <summary>
+            Appends a new attribute to the operation
+            </summary>
+            <param name="name">The column name</param>
+            <param name="alias">The name of the alias column in a foreign key relationship</param>
+            <param name="value">The value to assign</param>
+            <returns>A reference to this operation object</returns>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.OperationWithAttributesBase.AddChild(System.String)">
+            <summary>
+            Appends a new child object. Children must be added in the correct order. Check the 3E object schemas in TE_3E_Share\(instance)\Inetpub\XML\Object\Schema\Write
+            </summary>
+            <param name="name">The name of the related child object</param>
+            <returns>The new DataObject</returns>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.OperationWithAttributesBase.RenderAttributes(System.Xml.XmlWriter)">
+            <summary>
+            Outputs this operation's attributes
+            </summary>
+            <param name="writer">An XMLWriter to output to</param>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.OperationWithAttributesBase.RenderChildren(System.Xml.XmlWriter)">
+            <summary>
+            Outputs this operation's children
+            </summary>
+            <param name="writer">An XMLWriter to output to</param>
+        </member>
+        <member name="T:FacadeFor3e.ProcessCommandBuilder.ProcessCommand">
+            <summary>
+            Defines a process for performing one or more operations on an object
+            </summary>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.ProcessCommand.#ctor(System.String,System.String)">
+            <summary>
+            Constructs a new process
+            </summary>
+            <param name="processCode">Specifies the process to run</param>
+            <param name="objectName">Name of the object to affect</param>
+        </member>
+        <member name="P:FacadeFor3e.ProcessCommandBuilder.ProcessCommand.ProcessCode">
+            <summary>
+            Returns the process code.
+            </summary>
+        </member>
+        <member name="P:FacadeFor3e.ProcessCommandBuilder.ProcessCommand.ProcessName">
+            <summary>
+            Sets or returns the process name displayed in a user's action list.
+            </summary>
+            <remarks>Value is stored in NxFwkProcessItem.Name</remarks>
+        </member>
+        <member name="P:FacadeFor3e.ProcessCommandBuilder.ProcessCommand.Description">
+            <summary>
+            Sets or returns the process description displayed in a user's action list.
+            </summary>
+            <remarks>Value is stored in NxFwkProcessItem.Description</remarks>
+        </member>
+        <member name="P:FacadeFor3e.ProcessCommandBuilder.ProcessCommand.Priority">
+            <summary>
+            Sets or returns the process priority.
+            </summary>
+            <remarks>Value is stored in NxFwkProcessItem.Priority</remarks>
+        </member>
+        <member name="P:FacadeFor3e.ProcessCommandBuilder.ProcessCommand.OperatingUnit">
+            <summary>
+            Gets or returns the Operating Unit to use whilst running the process.
+            Setting this can be useful when adding zero vouchers. Its front-end equivalent is the Operating Unit setting in a process's Folder fields.
+            </summary>
+            <remarks>Value is stored in NxFwkProcessItem.Unit</remarks>
+        </member>
+        <member name="P:FacadeFor3e.ProcessCommandBuilder.ProcessCommand.CheckSum">
+            <summary>
+            Gets or returns the process CheckSum.
+            </summary>
+            <remarks>Value is stored in NxFwkProcessItem.CheckSum</remarks>
+        </member>
+        <member name="P:FacadeFor3e.ProcessCommandBuilder.ProcessCommand.ProxyUser">
+            <summary>
+            Gets or sets the proxy user.
+            </summary>
+        </member>
+        <member name="P:FacadeFor3e.ProcessCommandBuilder.ProcessCommand.ProxyUserId">
+            <summary>
+            Gets or sets the proxy user id.
+            </summary>
+        </member>
+        <member name="P:FacadeFor3e.ProcessCommandBuilder.ProcessCommand.ProcessRequestType">
+            <summary>
+            Gets or sets how the execution of the process should be altered from the default.
+            </summary>
+        </member>
+        <member name="P:FacadeFor3e.ProcessCommandBuilder.ProcessCommand.ProcessAutomationRoleAfterFirstStep">
+            <summary>
+            Gets or sets the user role to use for the first step when ProcessRequestType is not set to Default.
+            </summary>
+        </member>
+        <member name="P:FacadeFor3e.ProcessCommandBuilder.ProcessCommand.ProcessRequestSignature">
+            <summary>
+            Validates request is coming from an authorized external application.
+            </summary>
+        </member>
+        <member name="P:FacadeFor3e.ProcessCommandBuilder.ProcessCommand.ProcessNameSpace">
+            <summary>
+            Generates the namespace required for the process
+            </summary>
+            <returns>The namespace that applies for the specified process</returns>
+        </member>
+        <member name="P:FacadeFor3e.ProcessCommandBuilder.ProcessCommand.ObjectNameSpace">
+            <summary>
+            Generates the namespace required for the object
+            </summary>
+            <returns>The namespace that applies for the specified object</returns>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.ProcessCommand.Render(System.Xml.XmlWriter)">
+            <summary>
+            Outputs this process
+            </summary>
+            <param name="writer">An XMLWriter to output to</param>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.ProcessCommand.RenderProcessAttributes(System.Xml.XmlWriter)">
+            <summary>
+            Outputs the optional attributes of the ProcessCommand
+            </summary>
+            <param name="writer">An XMLWriter to output to</param>
+        </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.ProcessCommand.GenerateCommand">
+            <summary>
+            Generate the XML instructions to pass to 3E
+            </summary>
+            <returns>The transaction to be carried out</returns>
+        </member>
+        <member name="T:FacadeFor3e.ProxyIdentityProvider">
+            <summary>
+            Creates a WindowsIdentity object that can be used for impersonation
+            </summary>
+        </member>
+        <member name="M:FacadeFor3e.ProxyIdentityProvider.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Constructs a new ProxyIdentityProvider with the specified credentials
+            </summary>
+            <param name="username">Specifies the username of the account</param>
+            <param name="domain">Specifies the domain where the account is defined</param>
+            <param name="password">Specifies the password for the account</param>
+        </member>
+        <member name="M:FacadeFor3e.ProxyIdentityProvider.GetWindowsIdentity">
+            <summary>
+            Gets the WindowsIdentity for the specified credentials
+            </summary>
+            <returns>A WindowsIdentity object that can be used for impersonation if the credentials are valid. A Win32Exception will be thrown otherwise.</returns>
+        </member>
+        <member name="M:FacadeFor3e.ProxyIdentityProvider.Dispose">
+            <summary>
+            Disposes the resources associated with this object
+            </summary>
+        </member>
+        <member name="T:FacadeFor3e.SendAttachment">
+            <summary>
+            Allows a file to be added to a specified record, such as an engagement letter to a client record
+            </summary>
+        </member>
+        <member name="M:FacadeFor3e.SendAttachment.#ctor(FacadeFor3e.TransactionServices,System.Int32)">
+            <summary>
+            Constructs a new object to add attachments to a specified record
+            </summary>
+            <param name="transactionServices">The TransactionServices object to use to connect with 3E</param>
+            <param name="chunkSize">The size in bytes of the chunks to transfer the file in</param>
+        </member>
+        <member name="P:FacadeFor3e.SendAttachment.ChunkSize">
+            <summary>
+            Get or sets the size in bytes of each chunk used to transfer files to 3E
+            </summary>
+        </member>
+        <member name="P:FacadeFor3e.SendAttachment.SyncId">
+            <summary>
+            Gets or sets a string used to identify a file transfer operation
+            </summary>
+        </member>
+        <member name="M:FacadeFor3e.SendAttachment.AttachNewFile(System.String,System.Guid,System.String,System.Byte[])">
+            <summary>
+            Attaches a new file to the specified record
+            </summary>
+            <param name="archetypeId">The name of the archetype to attach the file to. The archetype must support attachments.</param>
+            <param name="itemId">The ID of the record to attach the file to</param>
+            <param name="originalFileName">The name to give the file attachment</param>
+            <param name="fileContent">The file contents</param>
+        </member>
+        <member name="T:FacadeFor3e.TransactionServices">
+            <summary>
+            Connects to the 3E transaction service and provides access to selected services
+            </summary>
+        </member>
+        <member name="P:FacadeFor3e.TransactionServices.NetworkCredential">
+            <summary>
+            The credentials being passed when calling the 3E transaction service
+            </summary>
+        </member>
+        <member name="P:FacadeFor3e.TransactionServices.AccountToImpersonate">
+            <summary>
+            The WindowsIdentity being impersonated during calls to the 3E transaction service
+            </summary>
+        </member>
+        <member name="P:FacadeFor3e.TransactionServices.Endpoint">
+            <summary>
+            The url to use to connect to the 3E transaction service 
+            </summary>
+        </member>
+        <member name="M:FacadeFor3e.TransactionServices.#ctor(System.Uri)">
+            <summary>
+            Constructs a new TransactionServices object without impersonation or user credentials
+            </summary>
+            <param name="endpoint">The url to use to connect to the 3E transaction service</param>
+        </member>
+        <member name="M:FacadeFor3e.TransactionServices.#ctor(System.Uri,System.Security.Principal.WindowsIdentity)">
+            <summary>
+            Constructs a new TransactionServices object which will impersonate the specified account during calls to the 3E transaction service
+            </summary>
+            <param name="endpoint">The url to use to connect to the 3E transaction service</param>
+            <param name="accountToImpersonate">The account to impersonate</param>
+        </member>
+        <member name="M:FacadeFor3e.TransactionServices.#ctor(System.Uri,System.Net.NetworkCredential)">
+            <summary>
+            Constructs a new TransactionServices object which will pass the specified credentials during calls to the transaction service
+            </summary>
+            <param name="endpoint">The url to use to connect to the 3E transaction service</param>
+            <param name="networkCredential">The credentials to use when calling the 3E transaction service</param>
+        </member>
+        <member name="M:FacadeFor3e.TransactionServices.GetArchetypeData(System.Xml.XmlDocument)">
+            <summary>
+            Runs the specified query against the 3E database
+            </summary>
+            <param name="xoql">Specifies the query to run</param>
+            <returns>An XML representation of the resulting data</returns>
+            <remarks>The query is run in the context of the user so row level security will be applied</remarks>
+        </member>
+        <member name="P:FacadeFor3e.TransactionServices.GetOption">
+            <summary>
+            Gets an object that allows system options/overrides to be interrogated
+            </summary>
+        </member>
+        <member name="M:FacadeFor3e.TransactionServices.GetServiceCulture">
+            <summary>
+            Gets the culture in use by the 3E Transaction Service
+            </summary>
+            <returns>A CultureInfo object</returns>
+        </member>
+        <member name="P:FacadeFor3e.TransactionServices.ExecuteProcess">
+            <summary>
+            Gets an object that allows a specified process to be run to add, edit and delete records
+            </summary>
+        </member>
+        <member name="P:FacadeFor3e.TransactionServices.SendAttachment">
+            <summary>
+            Gets an objects that allows attachments to be added to records
+            </summary>
+        </member>
+        <member name="P:FacadeFor3e.TransactionServices.IsImpersonating">
+            <summary>
+            Gets whether or not impersonation is being used during calls to the 3E transaction service
+            </summary>
+        </member>
+        <member name="M:FacadeFor3e.TransactionServices.Dispose">
+            <summary>
+            Disposes this object
+            </summary>
+        </member>
+    </members>
+</doc>

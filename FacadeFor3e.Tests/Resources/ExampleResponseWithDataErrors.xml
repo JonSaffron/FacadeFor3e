@@ -1,0 +1,53 @@
+﻿<ProcessExecutionResults Process="ProfMaster_ndt" Result="Success" OutputId="Failure" Records="1" User="Jon Saffron" Name="Proforma Edit (ndt)" ProcessItemId="3f032f59-bc39-420c-b7dc-248536beb3ad">
+  <Keys>
+    <Proforma KeyValue="516557" />
+  </Keys>
+  <TimingInfo>
+    <ProcessCreation>00:00:00.0468730</ProcessCreation>
+    <DataCollectionCreation>00:00:01.1876069</DataCollectionCreation>
+    <ProcessRun>00:00:00.4375344</ProcessRun>
+    <WriteResults>00:00:00</WriteResults>
+    <TotalTime>00:00:01.6720143</TotalTime>
+  </TimingInfo>
+  <DATA_ERRORS>
+    <Proforma>
+      <ROW ID="516557" Idx="3">
+        <NxAttachment />
+        <ProfMatter />
+        <OriginalInvoice_ccc />
+        <ProfDetailTime>
+          <ROW ID="61932954" Idx="88">
+            <ATTS>
+              <ATT ID="WorkTimekeeper" V="-2">
+                <E>Error in the application.-Fee-Earner must exist, be active as of WorkDate and allowed for Time Entry. Current user must also be allowed to enter time for Fee-Earner</E>
+              </ATT>
+            </ATTS>
+          </ROW>
+        </ProfDetailTime>
+        <ProfDetailChrg />
+        <ProfDetailCost>
+          <ROW ID="61933093" Idx="7">
+            <E>sample exception</E>
+            <ATTS>
+              <ATT ID="WorkTimekeeper" V="-187">
+                <E>Error in the application.-Fee-Earner must exist, be active as of WorkDate and allowed for Disbursement Entry. </E>
+              </ATT>
+x            </ATTS>
+          </ROW>
+        </ProfDetailCost>
+        <ProfAdjust />
+        <ProfTotal />
+        <ProfPayor />
+        <ProfTrust />
+        <ProfUnallocated />
+        <ProfBOA />
+        <ProfTemplateOption />
+        <ProfPresParagraph />
+        <ProfMasterDate />
+        <ProfTaxArticle />
+        <ProfPayorLayer />
+        <ProfEBillValRunUnbound />
+      </ROW>
+    </Proforma>
+  </DATA_ERRORS>
+</ProcessExecutionResults>

@@ -1,0 +1,9 @@
+﻿<ProcessExecutionResults Process="ProfMaster_ndt" Result="Success" OutputId="Success" Records="1" User="Jon Saffron" Name="Proforma Edit (Nth Degree)" ProcessItemId="84647d6b-a173-4e10-a271-7e42394ef600">
+	<TimingInfo>
+		<ProcessCreation>00:00:00.2364574</ProcessCreation>
+		<DataCollectionCreation>00:00:04.7170214</DataCollectionCreation>
+		<ProcessRun>00:00:09.4814444</ProcessRun>
+		<WriteResults>00:00:00.0001367</WriteResults>
+		<TotalTime>00:00:14.4350599</TotalTime>
+	</TimingInfo>
+</ProcessExecutionResults>

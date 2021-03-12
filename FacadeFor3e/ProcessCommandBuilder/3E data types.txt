@@ -1,0 +1,21 @@
+﻿keys for a archetype can be of types: 
+	int 
+	string 
+	guid 
+	date 
+	datetime
+
+other base attribute data types: 
+	decimal  
+	bool 
+
+other types that build on the base types: 
+	email (string)
+	money (decimal)
+	text (string)
+	url (string)
+	pred (string)
+	multlangstring (string)
+	autonum (integer)
+	image (string?)
+	narrative (string)

@@ -1,0 +1,62 @@
+﻿<ProcessExecutionResults Result="Failure" Message="Error attempting to read data.">
+	<MAIN>
+		<ERROR Context="">
+			<MESSAGE>
+				An error occurred in the Framework: The element 'Attributes' in namespace 'http://elite.com/schemas/transaction/object/write/Proforma' has invalid child element 'ProfStatusx' in namespace 'http://elite.com/schemas/transaction/object/write/Proforma'. List of possible elements expected: 'ProfIndex, ProfDate, BillingGroup, TimeStart, TimeEnd, CostStart, CostEnd, ChargeStart, ChargeEnd, ProfStatus, ProfStatusCap, InvMaster, InvDate, DueDate, Currency, CurrDate, InvNumber, CrNoteNumber, TaxInvNumber, Site, ReasonType, IsAdjust, BillTkpr, RspTkpr, SpvTkpr, CollTkpr, TranDate, PostDate, MsgLog, LeadMatter, Language, InvNarrative, IsExcludeFromGroup, BillingOffice, VatRegistration, BillingContact, Disposition, InternalComments, GLDate, ProformaTemplate, WarningMsg, DueDays, ContactInfo, CreditNoteDate, AuthTimekeeper, CostReasonType, ChrgReasonType, TotAmt, FeeAmt, HCoAmt, SCoAmt, BOAAmt, TaxAmt, IntAmt, OthAmt, UnitCurrRate, FirmCurrRate, BillTemplate, FromTaxArea, ToTaxArea, TaxDate, IsSkipEvents, TaxReportID1, TaxReportID2, CoverLetterNarrative, CreditNoteIndex, Rpt1CurrRate, Rpt2CurrRate, Rpt3CurrRate, IsOutsideProcess, OutsideProcessDesc, IsJustBilled, PrevInvMaster, OrigTaxInvNumber, IsLayer, IsLayerAmount, IsTaxbyMultipayor, OldCurrency, MattOverDescription, IsMultiMatter, IsMultipayorBy....
+			</MESSAGE>
+			<ERROR Context="">
+				<MESSAGE>Error attempting to read data.</MESSAGE>
+				<ERROR Context="">
+					<MESSAGE>The element 'Attributes' in namespace 'http://elite.com/schemas/transaction/object/write/Proforma' has invalid child element 'ProfStatusx' in namespace 'http://elite.com/schemas/transaction/object/write/Proforma'. List of possible elements expected: 'ProfIndex, ProfDate, BillingGroup, TimeStart, TimeEnd, CostStart, CostEnd, ChargeStart, ChargeEnd, ProfStatus, ProfStatusCap, InvMaster, InvDate, DueDate, Currency, CurrDate, InvNumber, CrNoteNumber, TaxInvNumber, Site, ReasonType, IsAdjust, BillTkpr, RspTkpr, SpvTkpr, CollTkpr, TranDate, PostDate, MsgLog, LeadMatter, Language, InvNarrative, IsExcludeFromGroup, BillingOffice, VatRegistration, BillingContact, Disposition, InternalComments, GLDate, ProformaTemplate, WarningMsg, DueDays, ContactInfo, CreditNoteDate, AuthTimekeeper, CostReasonType, ChrgReasonType, TotAmt, FeeAmt, HCoAmt, SCoAmt, BOAAmt, TaxAmt, IntAmt, OthAmt, UnitCurrRate, FirmCurrRate, BillTemplate, FromTaxArea, ToTaxArea, TaxDate, IsSkipEvents, TaxReportID1, TaxReportID2, CoverLetterNarrative, CreditNoteIndex, Rpt1CurrRate, Rpt2CurrRate, Rpt3CurrRate, IsOutsideProcess, OutsideProcessDesc, IsJustBilled, PrevInvMaster, OrigTaxInvNumber, IsLayer, IsLayerAmount, IsTaxbyMultipayor, OldCurrency, MattOverDescription, IsMultiMatter, IsMultipayorBy....</MESSAGE>
+					<SOURCE>System.Xml</SOURCE>
+					<STACKTRACE>
+						<ITEM>
+							<METHOD>System.Xml.Schema.XmlSchemaValidator.SendValidationEvent(ValidationEventHandler eventHandler, Object sender, XmlSchemaValidationException e, XmlSeverityType severity)</METHOD>
+						</ITEM>
+						<ITEM>
+							<METHOD>System.Xml.Schema.XmlSchemaValidator.ValidateElementContext(XmlQualifiedName elementName, Boolean&amp; invalidElementInContext)</METHOD>
+						</ITEM>
+						<ITEM>
+							<METHOD>System.Xml.Schema.XmlSchemaValidator.ValidateElement(String localName, String namespaceUri, XmlSchemaInfo schemaInfo, String xsiType, String xsiNil, String xsiSchemaLocation, String xsiNoNamespaceSchemaLocation)</METHOD>
+						</ITEM>
+						<ITEM>
+							<METHOD>System.Xml.XsdValidatingReader.ProcessElementEvent()</METHOD>
+						</ITEM>
+						<ITEM>
+							<METHOD>System.Xml.XsdValidatingReader.Read()</METHOD>
+						</ITEM>
+						<ITEM>
+							<METHOD>System.Xml.XmlReader.MoveToContent()</METHOD>
+						</ITEM>
+						<ITEM>
+							<METHOD>System.Xml.XmlReader.IsStartElement()</METHOD>
+						</ITEM>
+						<ITEM>
+							<METHOD>NextGen.Framework.Managers.ObjectMgr.XMLReader.ReadData(XmlReader xvr, ReaderStack stack, IDataObjectCollection doc)</METHOD>
+						</ITEM>
+						<ITEM>
+							<SOURCE>E:\Builds\1298\3EProject\Build-Fwk-CI-rel_2.8.1.0\Sources\Framework\WebUI\PageBase\ServiceExecuteProcess.vb</SOURCE>
+							<LINE>145</LINE>
+							<METHOD>NextGen.Framework.WebUI.ServiceExecuteProcess.ExecuteProcessInternal(String xml, String username, ReturnInfoType returnInfo)</METHOD>
+						</ITEM>
+					</STACKTRACE>
+				</ERROR>
+			</ERROR>
+		</ERROR>
+		<ALL>
+			System.Exception:
+			An error occurred in the Framework: The element 'Attributes' in namespace 'http://elite.com/schemas/transaction/object/write/Proforma' has invalid child element 'ProfStatusx' in namespace 'http://elite.com/schemas/transaction/object/write/Proforma'. List of possible elements expected: 'ProfIndex, ProfDate, BillingGroup, TimeStart, TimeEnd, CostStart, CostEnd, ChargeStart, ChargeEnd, ProfStatus, ProfStatusCap, InvMaster, InvDate, DueDate, Currency, CurrDate, InvNumber, CrNoteNumber, TaxInvNumber, Site, ReasonType, IsAdjust, BillTkpr, RspTkpr, SpvTkpr, CollTkpr, TranDate, PostDate, MsgLog, LeadMatter, Language, InvNarrative, IsExcludeFromGroup, BillingOffice, VatRegistration, BillingContact, Disposition, InternalComments, GLDate, ProformaTemplate, WarningMsg, DueDays, ContactInfo, CreditNoteDate, AuthTimekeeper, CostReasonType, ChrgReasonType, TotAmt, FeeAmt, HCoAmt, SCoAmt, BOAAmt, TaxAmt, IntAmt, OthAmt, UnitCurrRate, FirmCurrRate, BillTemplate, FromTaxArea, ToTaxArea, TaxDate, IsSkipEvents, TaxReportID1, TaxReportID2, CoverLetterNarrative, CreditNoteIndex, Rpt1CurrRate, Rpt2CurrRate, Rpt3CurrRate, IsOutsideProcess, OutsideProcessDesc, IsJustBilled, PrevInvMaster, OrigTaxInvNumber, IsLayer, IsLayerAmount, IsTaxbyMultipayor, OldCurrency, MattOverDescription, IsMultiMatter, IsMultipayorBy.... ---&gt; System.Exception: Error attempting to read data. ---&gt; System.Xml.Schema.XmlSchemaValidationException: The element 'Attributes' in namespace 'http://elite.com/schemas/transaction/object/write/Proforma' has invalid child element 'ProfStatusx' in namespace 'http://elite.com/schemas/transaction/object/write/Proforma'. List of possible elements expected: 'ProfIndex, ProfDate, BillingGroup, TimeStart, TimeEnd, CostStart, CostEnd, ChargeStart, ChargeEnd, ProfStatus, ProfStatusCap, InvMaster, InvDate, DueDate, Currency, CurrDate, InvNumber, CrNoteNumber, TaxInvNumber, Site, ReasonType, IsAdjust, BillTkpr, RspTkpr, SpvTkpr, CollTkpr, TranDate, PostDate, MsgLog, LeadMatter, Language, InvNarrative, IsExcludeFromGroup, BillingOffice, VatRegistration, BillingContact, Disposition, InternalComments, GLDate, ProformaTemplate, WarningMsg, DueDays, ContactInfo, CreditNoteDate, AuthTimekeeper, CostReasonType, ChrgReasonType, TotAmt, FeeAmt, HCoAmt, SCoAmt, BOAAmt, TaxAmt, IntAmt, OthAmt, UnitCurrRate, FirmCurrRate, BillTemplate, FromTaxArea, ToTaxArea, TaxDate, IsSkipEvents, TaxReportID1, TaxReportID2, CoverLetterNarrative, CreditNoteIndex, Rpt1CurrRate, Rpt2CurrRate, Rpt3CurrRate, IsOutsideProcess, OutsideProcessDesc, IsJustBilled, PrevInvMaster, OrigTaxInvNumber, IsLayer, IsLayerAmount, IsTaxbyMultipayor, OldCurrency, MattOverDescription, IsMultiMatter, IsMultipayorBy....
+			at System.Xml.Schema.XmlSchemaValidator.SendValidationEvent(ValidationEventHandler eventHandler, Object sender, XmlSchemaValidationException e, XmlSeverityType severity)
+			at System.Xml.Schema.XmlSchemaValidator.ValidateElementContext(XmlQualifiedName elementName, Boolean&amp; invalidElementInContext)
+			at System.Xml.Schema.XmlSchemaValidator.ValidateElement(String localName, String namespaceUri, XmlSchemaInfo schemaInfo, String xsiType, String xsiNil, String xsiSchemaLocation, String xsiNoNamespaceSchemaLocation)
+			at System.Xml.XsdValidatingReader.ProcessElementEvent()
+			at System.Xml.XsdValidatingReader.Read()
+			at System.Xml.XmlReader.MoveToContent()
+			at System.Xml.XmlReader.IsStartElement()
+			at NextGen.Framework.Managers.ObjectMgr.XMLReader.ReadData(XmlReader xvr, ReaderStack stack, IDataObjectCollection doc)
+			at NextGen.Framework.WebUI.ServiceExecuteProcess.ExecuteProcessInternal(String xml, String username, ReturnInfoType returnInfo) in E:\Builds\1298\3EProject\Build-Fwk-CI-rel_2.8.1.0\Sources\Framework\WebUI\PageBase\ServiceExecuteProcess.vb:line 145
+			--- End of inner exception stack trace ---
+			--- End of inner exception stack trace ---
+		</ALL>
+	</MAIN>
+</ProcessExecutionResults>

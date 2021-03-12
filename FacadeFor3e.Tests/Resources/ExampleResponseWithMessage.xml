@@ -1,0 +1,42 @@
+﻿<ProcessExecutionResults Process="ProfMaster" Result="Interface" StepId="Display" Records="1" User="Jon Saffron" Name="X   Proforma Edit" ProcessItemId="01b86388-1d6c-420f-9b3c-e059635c4af4">
+	<Keys>
+		<Proforma KeyValue="215951" />
+	</Keys>
+	<TimingInfo>
+		<ProcessCreation>00:00:00.2887448</ProcessCreation>
+		<DataCollectionCreation>00:02:05.0831522</DataCollectionCreation>
+		<ProcessRun>00:00:00.2634079</ProcessRun>
+		<WriteResults>00:00:00</WriteResults>
+		<TotalTime>00:02:05.6353049</TotalTime>
+	</TimingInfo>
+	<DATA_ERRORS>
+		<Proforma>
+			<ROW ID="215951" Idx="0">
+				<ATTS>
+					<ATT ID="ProfStatus" V="NewValue">
+						<E>Error in the application.-Closed and InfoOnly statuses are not allowed</E>
+					</ATT>
+				</ATTS>
+				<NxAttachment />
+				<ProfMatter />
+				<OriginalInvoice_ccc />
+				<ProfDetailTime />
+				<ProfDetailChrg />
+				<ProfDetailCost />
+				<ProfAdjust />
+				<ProfTotal />
+				<ProfPayor />
+				<ProfTrust />
+				<ProfUnallocated />
+				<ProfBOA />
+				<ProfTemplateOption />
+				<ProfPresParagraph />
+				<ProfMasterDate />
+				<ProfTaxArticle />
+				<ProfPayorLayer />
+				<ProfEBillValRunUnbound />
+			</ROW>
+		</Proforma>
+	</DATA_ERRORS>
+	<MESSAGE><![CDATA[Proforma 215951 is in use by paperless proformas and cannot be edited here at this moment.]]></MESSAGE>
+</ProcessExecutionResults>

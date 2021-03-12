@@ -1,0 +1,37 @@
+﻿<ProcessExecutionResults Process="ProfMaster" Result="Interface" StepId="Display" Records="1" User="Jon Saffron" Name="X   Proforma Edit" ProcessItemId="7168b5ba-d21e-4133-bffa-41fe81d2046d">
+	<Keys>
+		<Proforma KeyValue="215960" />
+	</Keys>
+	<TimingInfo>
+		<ProcessCreation>00:00:00.2762058</ProcessCreation>
+		<DataCollectionCreation>00:00:28.8805284</DataCollectionCreation>
+		<ProcessRun>00:00:00.3008735</ProcessRun>
+		<WriteResults>00:00:00.0306075</WriteResults>
+		<TotalTime>00:00:29.4882152</TotalTime>
+	</TimingInfo>
+	<DATA_ERRORS>
+		<Proforma>
+			<ROW ID="215960" Idx="0">
+				<E>Error in the application.-Proforma Edit record was modified by [Unknown] since it was opened.  Reopen the record to save changes.</E>
+				<NxAttachment />
+				<ProfMatter />
+				<OriginalInvoice_ccc />
+				<ProfDetailTime />
+				<ProfDetailChrg />
+				<ProfDetailCost />
+				<ProfAdjust />
+				<ProfTotal />
+				<ProfPayor />
+				<ProfTrust />
+				<ProfUnallocated />
+				<ProfBOA />
+				<ProfTemplateOption />
+				<ProfPresParagraph />
+				<ProfMasterDate />
+				<ProfTaxArticle />
+				<ProfPayorLayer />
+				<ProfEBillValRunUnbound />
+			</ROW>
+		</Proforma>
+	</DATA_ERRORS>
+</ProcessExecutionResults>

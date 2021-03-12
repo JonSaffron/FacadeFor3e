@@ -1,0 +1,37 @@
+﻿<ProcessExecutionResults Process="ProfMaster_ndt" Result="Success" OutputId="Success" Records="1" User="Jon Saffron" Name="Proforma Edit (Nth Degree)" ProcessItemId="37c20f6d-680b-4107-a8ee-70a0c2d4616f">
+	<Keys>
+		<Proforma KeyValue="215946" />
+	</Keys>
+	<TimingInfo>
+		<ProcessCreation>00:00:00.3853547</ProcessCreation>
+		<DataCollectionCreation>00:00:08.2564371</DataCollectionCreation>
+		<ProcessRun>00:00:05.0203943</ProcessRun>
+		<WriteResults>00:00:00.0003845</WriteResults>
+		<TotalTime>00:00:13.6625706</TotalTime>
+	</TimingInfo>
+	<DATA_ERRORS>
+		<Proforma>
+			<ROW ID="215946" Idx="0">
+				<E>Error in the application.-Proforma Edit record was modified by Cobra Admin since it was opened.  Reopen the record to save changes.</E>
+				<NxAttachment />
+				<ProfMatter />
+				<OriginalInvoice_ccc />
+				<ProfDetailTime />
+				<ProfDetailChrg />
+				<ProfDetailCost />
+				<ProfAdjust />
+				<ProfTotal />
+				<ProfPayor />
+				<ProfTrust />
+				<ProfUnallocated />
+				<ProfBOA />
+				<ProfTemplateOption />
+				<ProfPresParagraph />
+				<ProfMasterDate />
+				<ProfTaxArticle />
+				<ProfPayorLayer />
+				<ProfEBillValRunUnbound />
+			</ROW>
+		</Proforma>
+	</DATA_ERRORS>
+</ProcessExecutionResults>

@@ -1,115 +1,43 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{92E3A60A-D97F-4140-9D95-2031FA58249B}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FacadeFor3e</RootNamespace>
-    <AssemblyName>FacadeFor3e</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+    <TargetFrameworks>netstandard2.0;net48;net5.0-windows</TargetFrameworks>
+    <PackageId>FacadeFor3E</PackageId>
+    <Authors>FacadeFor3E</Authors>
+    <Product>FacadeFor3E</Product>
+    <Version>2.0.0</Version>
+    <Description>A set of objects that make using the 3E transaction service a little easier.</Description>
+    <Copyright>Copyright © J Saffron Consulting Ltd 2014 - 2022</Copyright>
+    <RepositoryUrl>https://github.com/JonSaffron/FacadeFor3e</RepositoryUrl>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+
+  <PropertyGroup>
+    <LangVersion>8.0</LangVersion>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
+    <DocumentationFile>C:\Development\NthDegreeTo3e\FacadeFor3e\FacadeFor3e.xml</DocumentationFile>
   </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="JetBrains.Annotations, Version=2020.1.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
-      <HintPath>..\packages\JetBrains.Annotations.2020.1.0\lib\net20\JetBrains.Annotations.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.ServiceModel" />
-    <Reference Include="System.Xml" />
+    <PackageReference Include="JetBrains.Annotations" Version="2021.3.0" />
+    <PackageReference Include="System.Security.Principal.Windows" Version="5.0.0" />
+    <PackageReference Include="System.ServiceModel.Duplex" Version="4.4.*" />
+    <PackageReference Include="System.ServiceModel.Http" Version="4.9.0" />
+    <PackageReference Include="System.ServiceModel.NetTcp" Version="4.4.*" />
+    <PackageReference Include="System.ServiceModel.Primitives" Version="4.9.0" />
+    <PackageReference Include="System.ServiceModel.Security" Version="4.4.*" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="AddAttachment.cs" />
-    <Compile Include="AttributeCollection.cs" />
-    <Compile Include="AttributeRelationship.cs" />
-    <Compile Include="AttributeValue.cs" />
-    <Compile Include="ChildCollection.cs" />
-    <Compile Include="CommonLibrary.cs" />
-    <Compile Include="DataObject.cs" />
-    <Compile Include="Declarations.cs" />
-    <Compile Include="EditByPosition.cs" />
-    <Compile Include="EditByKeyField.cs" />
-    <Compile Include="EditByKey.cs" />
-    <Compile Include="EditByAlias.cs" />
-    <Compile Include="DeleteByAlias.cs" />
-    <Compile Include="DeleteByKey.cs" />
-    <Compile Include="DeleteByKeyField.cs" />
-    <Compile Include="DeleteByPosition.cs" />
-    <Compile Include="Extensions.cs" />
-    <Compile Include="GetArchetypeData.cs" />
-    <Compile Include="OperationAdd.cs" />
-    <Compile Include="OperationBase.cs" />
-    <Compile Include="OperationDelete.cs" />
-    <Compile Include="OperationEdit.cs" />
-    <Compile Include="OperationWithAttributesBase.cs" />
-    <Compile Include="Process.cs" />
-    <Compile Include="ProcessException.cs" />
-    <Compile Include="ProcessExceptionBuilder.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RunProcess.cs" />
-    <Compile Include="RunProcessResult.cs" />
-    <Compile Include="Service References\TransactionService\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
+    <WCFMetadata Include="Connected Services" />
   </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-    <None Include="sample.app.config" />
-    <None Include="Service References\TransactionService\FacadeFor3e.TransactionService.ReturnInfoType.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\TransactionService\TransactionService.wsdl" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadataStorage Include="Service References\TransactionService\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\TransactionService\TransactionService.disco" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\TransactionService\configuration91.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\TransactionService\configuration.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\TransactionService\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
+	<ItemGroup>
+		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+			<_Parameter1>FacadeFor3e.Tests</_Parameter1>
+		</AssemblyAttribute>
+	</ItemGroup>
 </Project>
