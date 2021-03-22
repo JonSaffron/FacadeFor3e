@@ -24,7 +24,7 @@ namespace FacadeFor3e
         /// <summary>
         /// Gets the attributes to set with this operation
         /// </summary>
-        public ICollection<AttributeValue> Attributes => this._attributes;
+        public ICollection<NamedAttribute> Attributes => this._attributes;
 
         /// <summary>
         /// Gets the collection of children
@@ -37,11 +37,11 @@ namespace FacadeFor3e
         /// <param name="name">The column name</param>
         /// <param name="value">The value to assign</param>
         /// <returns>The new attribute</returns>
-        public AttributeValue AddAttribute(string name, string value)
+        public OperationWithAttributesBase AddAttribute(string name, string value)
             {
-            var a = new AttributeValue(name, value);
+            var a = new NamedAttributeValue(name, new StringAttribute(name));
             this._attributes.Add(a);
-            return a;
+            return this;
             }
 
         /// <summary>
@@ -50,11 +50,11 @@ namespace FacadeFor3e
         /// <param name="name">The column name</param>
         /// <param name="value">The value to assign</param>
         /// <returns>The new attribute</returns>
-        public AttributeValue AddAttribute(string name, bool value)
+        public OperationWithAttributesBase AddAttribute(string name, bool value)
             {
-            var a = new AttributeValue(name, value);
+            var a = new NamedAttributeValue(name, new BoolAttribute(value));
             this._attributes.Add(a);
-            return a;
+            return this;
             }
 
         /// <summary>
@@ -63,11 +63,11 @@ namespace FacadeFor3e
         /// <param name="name">The column name</param>
         /// <param name="value">The value to assign</param>
         /// <returns>The new attribute</returns>
-        public AttributeValue AddAttribute(string name, int? value)
+        public OperationWithAttributesBase AddAttribute(string name, int? value)
             {
-            var a = new AttributeValue(name, value);
+            var a = new NamedAttributeValue(name, new IntAttribute(value));
             this._attributes.Add(a);
-            return a;
+            return this;
             }
 
         /// <summary>
@@ -76,11 +76,11 @@ namespace FacadeFor3e
         /// <param name="name">The column name</param>
         /// <param name="value">The value to assign</param>
         /// <returns>The new attribute</returns>
-        public AttributeValue AddAttribute(string name, decimal? value)
+        public OperationWithAttributesBase AddAttribute(string name, decimal? value)
             {
-            var a = new AttributeValue(name, value);
+            var a = new NamedAttributeValue(name, new DecimalAttribute(value));
             this._attributes.Add(a);
-            return a;
+            return this;
             }
 
         /// <summary>
@@ -89,11 +89,19 @@ namespace FacadeFor3e
         /// <param name="name">The column name</param>
         /// <param name="value">The value to assign</param>
         /// <returns>The new attribute</returns>
-        public AttributeValue AddAttribute(string name, DateTime? value)
+        public OperationWithAttributesBase AddAttribute(string name, DateTime? value)
             {
-            var a = new AttributeValue(name, value);
+            NamedAttribute a;
+            if (value == null || value.Value.TimeOfDay == TimeSpan.Zero)
+                {
+                a = new NamedAttributeValue(name, new DateAttribute(value));
+                }
+            else
+                {
+                a = new NamedAttributeValue(name, new DateTimeAttribute(value));
+                }
             this._attributes.Add(a);
-            return a;
+            return this;
             }
 
         /// <summary>
@@ -102,25 +110,11 @@ namespace FacadeFor3e
         /// <param name="name">The column name</param>
         /// <param name="value">The value to assign</param>
         /// <returns>The new attribute</returns>
-        public AttributeValue AddAttribute(string name, Guid value)
+        public OperationWithAttributesBase AddAttribute(string name, Guid value)
             {
-            var a = new AttributeValue(name, value);
+            var a = new NamedAttributeValue(name, new GuidAttribute(value));
             this._attributes.Add(a);
-            return a;
-            }
-
-        /// <summary>
-        /// Appends a new attribute to the operation
-        /// </summary>
-        /// <param name="name">The column name</param>
-        /// <param name="alias">The name of the alias column in a foreign key relationship</param>
-        /// <param name="value">The value to assign</param>
-        /// <returns>The new attribute</returns>
-        public AttributeValue AddAttribute(string name, string alias, string value)
-            {
-            var a = new AttributeRelationshipByAlias(name, alias, value);
-            this._attributes.Add(a);
-            return a;
+            return this;
             }
 
         /// <summary>
@@ -130,11 +124,11 @@ namespace FacadeFor3e
         /// <param name="alias">The name of the alias column in a foreign key relationship</param>
         /// <param name="value">The value to assign</param>
         /// <returns>The new attribute</returns>
-        public AttributeValue AddAttribute(string name, string alias, int value)
+        public OperationWithAttributesBase AddAttribute(string name, string alias, string value)
             {
-            var a = new AttributeRelationshipByAlias(name, alias, value);
+            var a = new AliasAttribute(name, alias, new StringAttribute(value));
             this._attributes.Add(a);
-            return a;
+            return this;
             }
 
         /// <summary>
@@ -144,11 +138,11 @@ namespace FacadeFor3e
         /// <param name="alias">The name of the alias column in a foreign key relationship</param>
         /// <param name="value">The value to assign</param>
         /// <returns>The new attribute</returns>
-        public AttributeValue AddAttribute(string name, string alias, decimal value)
+        public OperationWithAttributesBase AddAttribute(string name, string alias, int value)
             {
-            var a = new AttributeRelationshipByAlias(name, alias, value);
+            var a = new AliasAttribute(name, alias, new IntAttribute(value));
             this._attributes.Add(a);
-            return a;
+            return this;
             }
 
         /// <summary>
@@ -158,23 +152,40 @@ namespace FacadeFor3e
         /// <param name="alias">The name of the alias column in a foreign key relationship</param>
         /// <param name="value">The value to assign</param>
         /// <returns>The new attribute</returns>
-        public AttributeValue AddAttribute(string name, string alias, DateTime value)
+        public OperationWithAttributesBase AddAttribute(string name, string alias, decimal value)
             {
-            var a = new AttributeRelationshipByAlias(name, alias, value);
+            var a = new AliasAttribute(name, alias, new DecimalAttribute(value));
             this._attributes.Add(a);
-            return a;
+            return this;
             }
 
         /// <summary>
-        /// Appends a new attribute to the operation with a null value
+        /// Appends a new attribute to the operation
         /// </summary>
         /// <param name="name">The column name</param>
+        /// <param name="alias">The name of the alias column in a foreign key relationship</param>
+        /// <param name="value">The value to assign</param>
         /// <returns>The new attribute</returns>
-        public AttributeValue ClearAttribute(string name)
+        public OperationWithAttributesBase AddAttribute(string name, string alias, DateTime value)
             {
-            var a = new AttributeValue(name);
+            AliasAttribute a;
+            if (value.TimeOfDay == TimeSpan.Zero)
+                {
+                a = new AliasAttribute(name, alias, new DateAttribute(value));
+                }
+            else
+                {
+                a = new AliasAttribute(name, alias, new DateTimeAttribute(value));
+                }
             this._attributes.Add(a);
-            return a;
+            return this;
+            }
+
+        public OperationWithAttributesBase AddNullAttribute(string name)
+            {
+            var a = new NullAttribute(name);
+            this._attributes.Add(a);
+            return this;
             }
 
         /// <summary>
@@ -198,7 +209,7 @@ namespace FacadeFor3e
             if (this.Attributes.Any())
                 {
                 writer.WriteStartElement("Attributes");
-                foreach (AttributeValue a in this.Attributes)
+                foreach (NamedAttribute a in this.Attributes)
                     a.Render(writer);
                 writer.WriteEndElement();
                 }

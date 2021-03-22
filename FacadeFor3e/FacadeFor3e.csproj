@@ -44,8 +44,6 @@
     <Compile Include="AddAttachment.cs" />
     <Compile Include="AttributeBase.cs" />
     <Compile Include="AttributeCollection.cs" />
-    <Compile Include="AttributeRelationship.cs" />
-    <Compile Include="AttributeValue.cs" />
     <Compile Include="ChildCollection.cs" />
     <Compile Include="CommonLibrary.cs" />
     <Compile Include="DataObject.cs" />
@@ -59,7 +57,8 @@
     <Compile Include="IdentifyByPrimaryKey.cs" />
     <Compile Include="IdentifyByValue.cs" />
     <Compile Include="IKeySpecification.cs" />
-    <Compile Include="OperationAdd.cs" />
+    <Compile Include="NamedAttribute.cs" />
+    <Compile Include="AddOperation.cs" />
     <Compile Include="OperationBase.cs" />
     <Compile Include="OperationWithAttributesBase.cs" />
     <Compile Include="Process.cs" />

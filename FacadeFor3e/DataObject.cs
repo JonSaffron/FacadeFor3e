@@ -54,47 +54,23 @@ namespace FacadeFor3e
         /// Creates an Add operation
         /// </summary>
         /// <returns>An Add operation</returns>
-        public OperationAdd AddOperation()
+        public AddOperation Add()
             {
-            var o = new OperationAdd();
-            this._operations.Add(o);
-            return o;
-            }
-
-        /// <summary>
-        /// Creates an Add operation from template data
-        /// </summary>
-        /// <param name="modelId">The ID of the template</param>
-        /// <returns>An Add operation</returns>
-        public OperationAdd AddOperationFromModel(Guid modelId)
-            {
-            var o = OperationAdd.AddFromModel(modelId);
-            this._operations.Add(o);
-            return o;
-            }
-
-        /// <summary>
-        /// Creates an Add operation from an existing row
-        /// </summary>
-        /// <param name="rowId">The ID of the row to clone</param>
-        /// <returns>An Add operation</returns>
-        public OperationAdd AddOperationFromExistingRow(Guid rowId)
-            {
-            var o = OperationAdd.AddModelFromDb(rowId);
+            var o = new AddOperation();
             this._operations.Add(o);
             return o;
             }
 
 ///// Delete operations
 
-        public DeleteOperation DeleteOperation(IKeySpecification keySpecification, string subClass = null)
+        public DeleteOperation Delete(IKeySpecification keySpecification, string subClass = null)
             {
             var o = new DeleteOperation(keySpecification, subClass);
             this._operations.Add(o);
             return o;
             }
 
-        public EditOperation EditOperation(IKeySpecification keySpecification, string subClass = null)
+        public EditOperation Edit(IKeySpecification keySpecification, string subClass = null)
             {
             var o = new EditOperation(keySpecification, subClass);
             this._operations.Add(o);

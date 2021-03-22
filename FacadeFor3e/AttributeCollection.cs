@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using JetBrains.Annotations;
 
 namespace FacadeFor3e
     {
-    public class AttributeCollection : Collection<AttributeValue>
+    public class AttributeCollection : Collection<NamedAttribute>
         {
-         protected override void InsertItem(int index, AttributeValue item)
+         protected override void InsertItem(int index, [NotNull] NamedAttribute item)
             {
             if (item == null)
                 throw new ArgumentNullException(nameof(item));
@@ -15,7 +16,7 @@ namespace FacadeFor3e
             base.InsertItem(index, item);
             }
 
-        protected override void SetItem(int index, AttributeValue item)
+        protected override void SetItem(int index, [NotNull] NamedAttribute item)
             {
             if (item == null)
                 throw new ArgumentNullException(nameof(item));

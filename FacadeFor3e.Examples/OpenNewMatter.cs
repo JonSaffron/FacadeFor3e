@@ -12,17 +12,17 @@ namespace FacadeFor3e.Examples
             DateTime today = DateTime.Today;
 
             var p = new Process("Matter_Srv", "Matter");
-            var a = p.AddOperation();
+            var a = p.Add();
             a.AddAttribute("IsAutoNumbering", true);
             a.AddAttribute("OpenDate", today);
             a.AddAttribute("MattStatus", "PE");     // pending status
 
             // MattDate child must come first. A new matter creates a MattDate record automatically.
-            var md = a.AddChild("MattDate").EditOperation(new IdentifyByPosition(0));
+            var md = a.AddChild("MattDate").Edit(new IdentifyByPosition(0));
             md.AddAttribute("EffStart", today);
 
             // MattRate must come after MattDate. A new matter creates a MattRate record automatically.
-            var rate = a.AddChild("MattRate").EditOperation(new IdentifyByPosition(0));
+            var rate = a.AddChild("MattRate").Edit(new IdentifyByPosition(0));
             rate.AddAttribute("Rate", "HEADLINE");
             rate.AddAttribute("IsActive", true);
 
@@ -84,30 +84,30 @@ namespace FacadeFor3e.Examples
 	    public static void MatterOpen(int matter, string alternativeMatterNumber, bool useTimeType, string billingGroup, string ptaGroup = null)
             {
             var p = new Process("Matter_Srv", "Matter");
-            var e = p.EditOperation(new IdentifyByPrimaryKey<IntAttribute>(matter));
+            var e = p.Edit(new IdentifyByPrimaryKey<IntAttribute>(matter));
             e.AddAttribute("MattStatus", "OP");     // set status to open
             e.AddAttribute("OpenDate", DateTime.Today);     // reset open date
             e.AddAttribute("AltNumber", alternativeMatterNumber);
 
             if (!string.IsNullOrWhiteSpace(ptaGroup))
                 {   // update PTA group
-                var md = e.AddChild("MattDate").EditOperation(new IdentifyByPosition(0));
+                var md = e.AddChild("MattDate").Edit(new IdentifyByPosition(0));
                 md.AddAttribute("PTAGroup" , ptaGroup);
                 }
             
             if (useTimeType)
                 {   // use time type during time capture
                 var c = e.AddChild("MattTimeType");
-                var a = c.AddOperation();
+                var a = c.Add();
                 a.AddAttribute("Description", "Time and travel");
                 a.AddAttribute("IsIncludeList", true);
 
                 var d = a.AddChild("MattTimeTypeDet");
-                var d1 = d.EditOperation(new IdentifyByPosition(0));  // when you add a MattTimeType, you get one detail row too
+                var d1 = d.Edit(new IdentifyByPosition(0));  // when you add a MattTimeType, you get one detail row too
                 d1.AddAttribute("TimeType", "FEES");
                 d1.AddAttribute("IsDefault", true);
                 
-                var d2 = d.AddOperation();              // add a second detail row
+                var d2 = d.Add();              // add a second detail row
                 d2.AddAttribute("TimeType", "TRAVEL");
                 d2.AddAttribute("IsDefault", false);
                 }
@@ -115,7 +115,7 @@ namespace FacadeFor3e.Examples
             if (billingGroup != null)
                 {   // set the billing group
                 var c = e.AddChild("BillingGroupMatter1");
-                var b = c.AddOperation();
+                var b = c.Add();
                 b.AddAttribute("BillingGroup", billingGroup);
                 }
 

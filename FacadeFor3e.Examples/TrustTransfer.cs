@@ -102,14 +102,14 @@ namespace FacadeFor3e.Examples
                 throw new ObjectDisposedException(this.GetType().Name);
 
             var p = new Process("N_WsTrustTransfer", "TrustTransMaster");
-            var a = p.AddOperation();
+            var a = p.Add();
             a.AddAttribute("TrustTransferType", ttp.TrustTransferType);
             a.AddAttribute("AuthorizedBy", ttp.AuthorisedBy);
             a.AddAttribute("DocumentNumber", ttp.DocumentNumber);
             a.AddAttribute("Narrative", ttp.Narrative);
 
             var fromChild = a.AddChild("TrustTransferDetFrom");
-            var from = fromChild.EditOperationByPosition(0);
+            var from = fromChild.Edit(new IdentifyByPosition(0));
             from.AddAttribute("Matter", "Number", ttp.FromMatter);
             from.AddAttribute("BankAcctTrust", "Name", ttp.FromBankAccount);
             from.AddAttribute("TrustIntendedUse", ttp.FromIntendedUse);
@@ -118,7 +118,7 @@ namespace FacadeFor3e.Examples
             from.AddAttribute("Amount", ttp.Amount);
 
             var toChild = a.AddChild("TrustTransferDetTo");
-            var to = toChild.EditOperationByPosition(0);
+            var to = toChild.Edit(new IdentifyByPosition(0));
             to.AddAttribute("Matter", "Number", ttp.ToMatter);
             to.AddAttribute("BankAcctTrust", "Name", ttp.ToBankAccount);
             to.AddAttribute("TrustIntendedUse", ttp.ToIntendedUse);
@@ -126,7 +126,7 @@ namespace FacadeFor3e.Examples
             using (var rp = new RunProcess())
                 {
                 rp.AccountToImpersonate = GetWindowsIdentity();
-                rp.EndpointName = EndpointName;
+                rp.Endpoint = new Uri("http://TE_3E_xxx/WebUi/TransactionService.asmx");
                 rp.GetKeys = true;
                 rp.ThrowExceptionIfProcessDoesNotComplete = true;
  

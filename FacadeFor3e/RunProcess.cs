@@ -38,7 +38,7 @@ namespace FacadeFor3e
             if (process == null)
                 throw new ArgumentNullException(nameof(process));
             ValidateProcess(process);
-            bool getKey = process.Operations.Count == 1 && process.Operations[0] is OperationAdd;
+            bool getKey = process.Operations.Count == 1 && process.Operations[0] is AddOperation;
 
             RunProcessResult runProcessResult;
             using (var rp = new RunProcess())
