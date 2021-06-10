@@ -18,8 +18,7 @@ namespace FacadeFor3e
     public class RunProcess : IDisposable
         {
         private TransactionServiceSoapClient _transactionServiceSoapClient;
-        private string _endpointName;
-        private EndpointAddress _endpointAddress;
+        private Uri _endpoint;
 
         public RunProcess()
             {
@@ -31,10 +30,10 @@ namespace FacadeFor3e
         /// Executes the specified process and (where appropriate) returns the primary key of the record affected
         /// </summary>
         /// <param name="process">The process to run</param>
+        /// <param name="endpoint">Specifies which endpoint </param>
         /// <param name="wi">The account details to impersonate</param>
-        /// <param name="endpointName">Specifies which endpoint </param>
         /// <returns>The primary key of the record affected</returns>
-        public static string ExecuteProcess(Process process, WindowsIdentity wi = null, string endpointName = null)
+        public static string ExecuteProcess(Process process, Uri endpoint, WindowsIdentity wi = null)
             {
             if (process == null)
                 throw new ArgumentNullException(nameof(process));
@@ -45,7 +44,7 @@ namespace FacadeFor3e
             using (var rp = new RunProcess())
                 {
                 rp.AccountToImpersonate = wi;
-                rp.EndpointName = endpointName;
+                rp.Endpoint = endpoint;
                 rp.ThrowExceptionIfProcessDoesNotComplete = true;
 
                 runProcessResult = rp.Execute(process);
@@ -125,30 +124,16 @@ namespace FacadeFor3e
         public WindowsIdentity AccountToImpersonate { get; set; }
 
         /// <summary>
-        /// Gets or sets the endpoint to use to connect to the 3e server
-        /// </summary>
-        public string EndpointName
-            {
-            get => this._endpointName;
-            set
-                {
-                if (this._transactionServiceSoapClient != null && this._endpointName != value)
-                    throw new InvalidOperationException("Cannot change EndpointName.");
-                this._endpointName = value; 
-                }
-            }
-
-        /// <summary>
         /// Gets or sets the endpoint address to use to connect dynamically to a 3e server
         /// </summary>
-        public EndpointAddress EndpointAddress
+        public Uri Endpoint
             {
-            get => this._endpointAddress;
+            get => this._endpoint;
             set
                 {
-                if (this._transactionServiceSoapClient != null && this._endpointAddress != value)
-                    throw new InvalidOperationException("Cannot change EndpointAddress.");
-                this._endpointAddress = value;
+                if (this._transactionServiceSoapClient != null)
+                    throw new InvalidOperationException("Cannot change Endpoint.");
+                this._endpoint = value;
                 }
             }
 
@@ -230,46 +215,15 @@ namespace FacadeFor3e
             var result = this._transactionServiceSoapClient;
             if (result == null)
                 {
-                if (!string.IsNullOrWhiteSpace(this.EndpointName) && this.EndpointAddress != null)
-                    {
-                    result = new TransactionServiceSoapClient(this.EndpointName, this.EndpointAddress);
-                    }
-                else if (!string.IsNullOrWhiteSpace(this.EndpointName))
-                    {
-                    result = new TransactionServiceSoapClient(this.EndpointName);
-                    }
-                else
-                    {
-                    result = new TransactionServiceSoapClient();
-                    }
+                var binding = CommonLibrary.BuildBinding();
+                var endpointAddress = new EndpointAddress(this.Endpoint);
+                result = new TransactionServiceSoapClient(binding, endpointAddress);
 
                 if (result.ClientCredentials != null)
                     result.ClientCredentials.Windows.AllowedImpersonationLevel = TokenImpersonationLevel.Identification;
 
                 this._transactionServiceSoapClient = result;
                 }
-
-            return result;
-            }
-
-        private BasicHttpBinding BuildBinding()
-            {
-            var result = new BasicHttpBinding
-                {
-                CloseTimeout = TimeSpan.FromMinutes(1),
-                OpenTimeout = TimeSpan.FromMinutes(1),
-                SendTimeout = TimeSpan.FromMinutes(1),
-                ReceiveTimeout = TimeSpan.FromMinutes(10),
-                AllowCookies = false,
-                BypassProxyOnLocal = false,
-                HostNameComparisonMode = HostNameComparisonMode.StrongWildcard,
-                MessageEncoding = WSMessageEncoding.Text,
-                TextEncoding = Encoding.UTF8,
-                TransferMode = TransferMode.Buffered,
-                UseDefaultWebProxy = true
-                };
-            // for https, add 
-            //result.Security.Mode = BasicHttpSecurityMode.Transport;
 
             return result;
             }

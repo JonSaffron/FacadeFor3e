@@ -1,5 +1,8 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.IO;
+using System.ServiceModel;
+using System.Text;
 using System.Xml;
 
 namespace FacadeFor3e
@@ -25,5 +28,32 @@ namespace FacadeFor3e
                 }
             return result;
             }
+
+        internal static BasicHttpBinding BuildBinding()
+            {
+            var result = new BasicHttpBinding
+                {
+                CloseTimeout = TimeSpan.FromMinutes(1),
+                OpenTimeout = TimeSpan.FromMinutes(1),
+                SendTimeout = TimeSpan.FromMinutes(1),
+                ReceiveTimeout = TimeSpan.FromMinutes(10),
+                AllowCookies = false,
+                BypassProxyOnLocal = false,
+                HostNameComparisonMode = HostNameComparisonMode.StrongWildcard,
+                MessageEncoding = WSMessageEncoding.Text,
+                TextEncoding = Encoding.UTF8,
+                TransferMode = TransferMode.Buffered,
+                UseDefaultWebProxy = true,
+
+                // specify larger value than default for when large amounts of data needed
+                MaxReceivedMessageSize = 1024 * 1024 * 10
+                };
+
+            result.Security.Mode = BasicHttpSecurityMode.TransportCredentialOnly;
+            result.Security.Transport.ClientCredentialType = HttpClientCredentialType.Windows;
+
+            return result;
+            }
+
         }
     }
