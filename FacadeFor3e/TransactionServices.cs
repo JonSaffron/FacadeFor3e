@@ -32,7 +32,7 @@ namespace FacadeFor3e
         /// </summary>
         public Uri Endpoint { get; }
 
-        private TransactionServiceSoapClient? _transactionServiceSoapClient;
+        private TransactionServiceClient? _transactionServiceSoapClient;
         private ExecuteProcessService? _executeProcess;
         private SendAttachment? _sendAttachment;
 
@@ -65,6 +65,14 @@ namespace FacadeFor3e
             this.NetworkCredential = networkCredential ?? throw new ArgumentNullException(nameof(networkCredential));
             }
 
+        /// <summary>
+        /// Ping service
+        /// </summary>
+        public void Ping()
+            {
+            GetSoapClient().Ping();
+            }
+        
         /// <summary>
         /// Runs the specified query against the 3E database
         /// </summary>
@@ -109,21 +117,20 @@ namespace FacadeFor3e
         /// </summary>
         public bool IsImpersonating => this.AccountToImpersonate != null && this.AccountToImpersonate != WindowsIdentity.GetCurrent();
 
-        internal TransactionServiceSoap GetSoapClient()
+        internal TransactionServiceClient GetSoapClient()
             {
             var result = this._transactionServiceSoapClient;
             if (result == null)
                 {
-                var binding = BuildBinding();
+                bool isSecure = this.Endpoint.Scheme.Equals(Uri.UriSchemeHttps);
+                var binding = BuildBinding(useHttps: isSecure);
                 var endpointAddress = new EndpointAddress(this.Endpoint);
-                result = new TransactionServiceSoapClient(binding, endpointAddress);    // ClientCredentials should be available once endpoint has been provided
+                result = new TransactionServiceClient(binding, endpointAddress);    // ClientCredentials should be available once endpoint has been provided
 
-                if (this.AccountToImpersonate != null)
-                    {
-                    // ReSharper disable PossibleNullReferenceException
-                    result.ClientCredentials!.Windows.AllowedImpersonationLevel = TokenImpersonationLevel.Identification;
-                    // ReSharper restore PossibleNullReferenceException
-                    }
+                // Delegation is required for 3E version 3, earlier versions just needed Identification
+                // ReSharper disable PossibleNullReferenceException
+                result.ClientCredentials!.Windows.AllowedImpersonationLevel = TokenImpersonationLevel.Delegation;
+                // ReSharper restore PossibleNullReferenceException
 
                 if (this.NetworkCredential != null)
                     {
@@ -131,7 +138,6 @@ namespace FacadeFor3e
                     result.ClientCredentials!.Windows.ClientCredential = this.NetworkCredential;
                     // ReSharper restore PossibleNullReferenceException
                     }
-
                 this._transactionServiceSoapClient = result;
                 }
 
@@ -168,7 +174,7 @@ namespace FacadeFor3e
             Trace.WriteLine(sb.ToString());
             }
 
-        private static BasicHttpBinding BuildBinding()
+        private static BasicHttpBinding BuildBinding(bool useHttps)
             {
             var result = new BasicHttpBinding
                 {
@@ -187,7 +193,7 @@ namespace FacadeFor3e
                 MaxReceivedMessageSize = 1024 * 1024 * 10,
                 Security =
                     {
-                    Mode = BasicHttpSecurityMode.TransportCredentialOnly,
+                    Mode = useHttps ? BasicHttpSecurityMode.Transport : BasicHttpSecurityMode.TransportCredentialOnly,
                     Transport =
                         {
                         ClientCredentialType = HttpClientCredentialType.Windows
@@ -218,7 +224,7 @@ namespace FacadeFor3e
             }
 
         // Based on code from https://msdn.microsoft.com/en-us/library/aa355056.aspx "Window Communication Foundation Samples" "Avoiding Problems with the Using Statement"
-        private static void ForceClose(TransactionServiceSoapClient ts)
+        private static void ForceClose(TransactionServiceClient ts)
             {
             try
                 {

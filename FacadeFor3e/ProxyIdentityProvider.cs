@@ -47,7 +47,7 @@ namespace FacadeFor3e
             Default = 0, // default for platform (use this!)
             WinNT35, // sends smoke signals to authority
             WinNT40, // uses NTLM
-            WinNT50 // negotiates Kerb or NTLM
+            WinNT50 // negotiates Kerberos or NTLM
             }
         // ReSharper restore InconsistentNaming
 

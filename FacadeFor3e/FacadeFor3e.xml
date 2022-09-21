@@ -23,96 +23,6 @@
             <param name="id">The string to check</param>
             <returns>True if the string can be used as a valid ID in 3E, false otherwise</returns>
         </member>
-        <member name="T:FacadeFor3e.TransactionService.ReturnInfoType">
-            <remarks/>
-        </member>
-        <member name="F:FacadeFor3e.TransactionService.ReturnInfoType.None">
-            <remarks/>
-        </member>
-        <member name="F:FacadeFor3e.TransactionService.ReturnInfoType.Keys">
-            <remarks/>
-        </member>
-        <member name="F:FacadeFor3e.TransactionService.ReturnInfoType.Timing">
-            <remarks/>
-        </member>
-        <member name="T:FacadeFor3e.TransactionService.DataOutputFormatType">
-            <remarks/>
-        </member>
-        <member name="F:FacadeFor3e.TransactionService.DataOutputFormatType.XML">
-            <remarks/>
-        </member>
-        <member name="F:FacadeFor3e.TransactionService.DataOutputFormatType.Delimited">
-            <remarks/>
-        </member>
-        <member name="T:FacadeFor3e.TransactionService.ResultCode">
-            <remarks/>
-        </member>
-        <member name="F:FacadeFor3e.TransactionService.ResultCode.Failure">
-            <remarks/>
-        </member>
-        <member name="F:FacadeFor3e.TransactionService.ResultCode.Success">
-            <remarks/>
-        </member>
-        <member name="F:FacadeFor3e.TransactionService.ResultCode.StatusUpdate">
-            <remarks/>
-        </member>
-        <member name="T:FacadeFor3e.TransactionService.DataTypeEnum">
-            <remarks/>
-        </member>
-        <member name="F:FacadeFor3e.TransactionService.DataTypeEnum.AUTONUMBER">
-            <remarks/>
-        </member>
-        <member name="F:FacadeFor3e.TransactionService.DataTypeEnum.BOOLEAN">
-            <remarks/>
-        </member>
-        <member name="F:FacadeFor3e.TransactionService.DataTypeEnum.DATE">
-            <remarks/>
-        </member>
-        <member name="F:FacadeFor3e.TransactionService.DataTypeEnum.DATETIME">
-            <remarks/>
-        </member>
-        <member name="F:FacadeFor3e.TransactionService.DataTypeEnum.DECIMAL">
-            <remarks/>
-        </member>
-        <member name="F:FacadeFor3e.TransactionService.DataTypeEnum.EMAIL">
-            <remarks/>
-        </member>
-        <member name="F:FacadeFor3e.TransactionService.DataTypeEnum.FILES">
-            <remarks/>
-        </member>
-        <member name="F:FacadeFor3e.TransactionService.DataTypeEnum.GUID">
-            <remarks/>
-        </member>
-        <member name="F:FacadeFor3e.TransactionService.DataTypeEnum.INTEGER">
-            <remarks/>
-        </member>
-        <member name="F:FacadeFor3e.TransactionService.DataTypeEnum.IMAGE">
-            <remarks/>
-        </member>
-        <member name="F:FacadeFor3e.TransactionService.DataTypeEnum.MONEY">
-            <remarks/>
-        </member>
-        <member name="F:FacadeFor3e.TransactionService.DataTypeEnum.MULTILANGUAGESTRING">
-            <remarks/>
-        </member>
-        <member name="F:FacadeFor3e.TransactionService.DataTypeEnum.NARRATIVE">
-            <remarks/>
-        </member>
-        <member name="F:FacadeFor3e.TransactionService.DataTypeEnum.PREDICATE">
-            <remarks/>
-        </member>
-        <member name="F:FacadeFor3e.TransactionService.DataTypeEnum.RELATIONSHIP">
-            <remarks/>
-        </member>
-        <member name="F:FacadeFor3e.TransactionService.DataTypeEnum.STRING">
-            <remarks/>
-        </member>
-        <member name="F:FacadeFor3e.TransactionService.DataTypeEnum.TEXT">
-            <remarks/>
-        </member>
-        <member name="F:FacadeFor3e.TransactionService.DataTypeEnum.URL">
-            <remarks/>
-        </member>
         <member name="T:FacadeFor3e.PriorityEnum">
             <summary>
             Process priority
@@ -1536,6 +1446,11 @@
             </summary>
             <param name="endpoint">The url to use to connect to the 3E transaction service</param>
             <param name="networkCredential">The credentials to use when calling the 3E transaction service</param>
+        </member>
+        <member name="M:FacadeFor3e.TransactionServices.Ping">
+            <summary>
+            Ping service
+            </summary>
         </member>
         <member name="M:FacadeFor3e.TransactionServices.GetArchetypeData(System.Xml.XmlDocument)">
             <summary>

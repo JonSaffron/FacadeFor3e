@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Security.Principal;
-using FacadeFor3e.TransactionService;
 using JetBrains.Annotations;
 
 namespace FacadeFor3e
@@ -95,14 +94,12 @@ namespace FacadeFor3e
                 if (offset == 0)
                     {
                     System.Diagnostics.Trace.WriteLine($"Sending initial content - {chunkLength:N} bytes");
-                    var request = new SendAttachmentRequest(itemId, archetypeId, syncId, originalFileName, buffer, offset, chunkLength, totalBytes);
-                    ts.SendAttachment(request);
+                    ts.SendAttachment(itemId.ToString(), archetypeId, syncId, originalFileName, buffer, offset, chunkLength, totalBytes);
                     }
                 else
                     {
                     System.Diagnostics.Trace.WriteLine($"Sending additional content - {chunkLength:N} bytes at {offset:N}");
-                    var request = new SendAttachmentChunkRequest(syncId, originalFileName, buffer, offset, chunkLength, totalBytes);
-                    ts.SendAttachmentChunk(request);
+                    ts.SendAttachmentChunk(syncId, originalFileName, buffer, offset, chunkLength, totalBytes);
                     }
                 }
             System.Diagnostics.Trace.WriteLine($"Completed - {totalBytes:N} total bytes");
