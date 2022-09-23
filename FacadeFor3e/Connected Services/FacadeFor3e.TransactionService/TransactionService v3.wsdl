@@ -1,0 +1,1600 @@
+
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:prefix2="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://tempuri.org//ServiceExecuteProcess" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:http="http://schemas.microsoft.com/ws/06/2004/policy/http" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" targetNamespace="http://tempuri.org//ServiceExecuteProcess" name="TransactionService" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org//ServiceExecuteProcess">
+      <s:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <s:import namespace="http://schemas.datacontract.org/2004/07/System" />
+      <s:element name="ExposeEnum">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="processXML" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="returnInfo" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ExposeEnumResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="ExposeEnumResult" type="tns:ReturnInfoType" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetServiceTimeZoneID">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetServiceTimeZoneIDResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetServiceTimeZoneIDResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetServiceCulture">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetServiceCultureResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetServiceCultureResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ExecuteProcess">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="processXML" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="returnInfo" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ExecuteProcessResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ExecuteProcessResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetAppObjectSecurityRights">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="projectXML" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetAppObjectSecurityRightsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetAppObjectSecurityRightsResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CancelAllOpenProcesses">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="userNetworkAlias" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CancelAllOpenProcessesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="CancelAllOpenProcessesResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetArchetypeDataGlobal">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="selectXml" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="outputFormatType" type="tns:DataOutputFormatType" />
+            <s:element minOccurs="0" maxOccurs="1" name="delimiterChar" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="includeHeaders" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetArchetypeDataGlobalResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetArchetypeDataGlobalResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetMetricDataGlobal">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="selectXml" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="metricRunIndex" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="isRunIndexRelative" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="metricGroupID" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="outputFormatType" type="tns:DataOutputFormatType" />
+            <s:element minOccurs="0" maxOccurs="1" name="delimiterChar" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="includeHeaders" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetMetricDataGlobalResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetMetricDataGlobalResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetNamedMetricDataGlobal">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="selectXml" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="metricTableName" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="outputFormatType" type="tns:DataOutputFormatType" />
+            <s:element minOccurs="0" maxOccurs="1" name="delimiterChar" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="includeHeaders" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetNamedMetricDataGlobalResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetNamedMetricDataGlobalResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetFormattedArchetypeData">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="selectXml" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="delimiterChar" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="includeHeaders" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetFormattedArchetypeDataResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetFormattedArchetypeDataResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetArchetypeData">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="selectXml" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetArchetypeDataResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetArchetypeDataResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetFormattedMetricData">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="selectXml" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="metricRunIndex" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="isRunIndexRelative" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="metricGroupID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="delimiterChar" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="includeHeaders" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetFormattedMetricDataResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetFormattedMetricDataResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetMetricData">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="selectXml" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="metricRunIndex" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="isRunIndexRelative" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="metricGroupID" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetMetricDataResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetMetricDataResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetFormattedNamedMetricData">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="selectXml" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="metricTableName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="delimiterChar" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="includeHeaders" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetFormattedNamedMetricDataResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetFormattedNamedMetricDataResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetNamedMetricData">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="selectXml" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="metricTableName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetNamedMetricDataResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetNamedMetricDataResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetArchetypeDataSQL">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="selectXml" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetArchetypeDataSQLResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetArchetypeDataSQLResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetMetricDataSQL">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="selectXml" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="metricRunIndex" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="isRunIndexRelative" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="metricGroupID" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetMetricDataSQLResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetMetricDataSQLResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetNamedMetricDataSQL">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="selectXml" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="metricTableName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetNamedMetricDataSQLResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetNamedMetricDataSQLResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetData">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="reportQueryXML" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDataResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetDataResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDataFromReportLayout">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="reportLayoutId" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDataFromReportLayoutResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetDataFromReportLayoutResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDataFromReportLayoutCrystal">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="reportLayoutId" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDataFromReportLayoutCrystalResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetDataFromReportLayoutCrystalResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSyncIds">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetSyncIdsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" xmlns:q2="http://schemas.microsoft.com/2003/10/Serialization/Arrays" name="GetSyncIdsResult" nillable="true" type="q2:ArrayOfString" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CheckFileHash">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="syncId" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CheckFileHashResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="CheckFileHashResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Ping">
+        <s:complexType />
+      </s:element>
+      <s:element name="PingResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="SendAttachmentChunk">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="syncId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="fileName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="buffer" type="s:base64Binary" />
+            <s:element minOccurs="1" maxOccurs="1" name="offset" type="s:long" />
+            <s:element minOccurs="1" maxOccurs="1" name="bytesRead" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="totalBytes" type="s:long" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendAttachmentChunkResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="SendAttachment">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="itemID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="archetypeID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="syncId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="fileName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="buffer" type="s:base64Binary" />
+            <s:element minOccurs="1" maxOccurs="1" name="offset" type="s:long" />
+            <s:element minOccurs="1" maxOccurs="1" name="bytesRead" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="totalBytes" type="s:long" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendAttachmentResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetQueryResults">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="archID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="metricID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="objectID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="sessionID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="processItemID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="XPath" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="objectData" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="quickFindValue" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="XOQLStatement" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="topRows" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetQueryResultsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetQueryResultsResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetActionsList">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetActionsListResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetActionsListResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDataFromArchetypes">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="paramsXML" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDataFromArchetypesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetDataFromArchetypesResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdatePrintJobStatus">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="printJobId" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="resultCode" type="tns:ResultCode" />
+            <s:element minOccurs="0" maxOccurs="1" name="msg" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdatePrintJobStatusResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UpdatePrintJobStatusResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateSyncItemTag">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="itemIDToSync" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="tag" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateSyncItemTagResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UpdateSyncItemTagResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetOutOfSyncItems">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="LastSyncTime" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Tag" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="FirstRows" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="ExcludeItemIDList" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetOutOfSyncItemsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetOutOfSyncItemsResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DoSpellCheck">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ActionXML" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DoSpellCheckResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="DoSpellCheckResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreateModel">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Model" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="IsGlobal" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="ProcessID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="PIID" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreateModelResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="CreateModelResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="EditModel">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Model" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Action" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="IsGlobal" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="NewModelName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ProcessID" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="EditModelResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="EditModelResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetMappedItem">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ItemID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="SyncMapID" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetMappedItemResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetMappedItemResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetOneNoteMap">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="MapName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ItemID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ArchetypeID" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetOneNoteMapResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetOneNoteMapResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetBusinessObjectMethods">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="businessObject" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetBusinessObjectMethodsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetBusinessObjectMethodsResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="StartProcessWithDefaults">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="defaultsXML" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="StartProcessWithDefaultsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="StartProcessWithDefaultsResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="TEST_GetData">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="reportQueryXML" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="TEST_GetDataResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="TEST_GetDataResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="TEST_GetDataFromReportLayout">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="reportLayoutId" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="TEST_GetDataFromReportLayoutResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="TEST_GetDataFromReportLayoutResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="BuildFromClientXML">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="clientXML" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="BuildFromClientXMLResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="BuildFromClientXMLResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ImageConnectDelete">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="attachmentID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="parentItemID" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ImageConnectDeleteResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ImageConnectDeleteResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetOption">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="optionName" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="optionType" type="tns:DataTypeEnum" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetOptionResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetOptionResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetExpansionCodes">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="codes" type="tns:ArrayOfString" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetExpansionCodesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetExpansionCodesResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfString">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" nillable="true" name="string" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="ReturnInfoType">
+        <s:restriction base="s:string">
+          <s:enumeration value="None" />
+          <s:enumeration value="Keys" />
+          <s:enumeration value="Timing" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="DataOutputFormatType">
+        <s:restriction base="s:string">
+          <s:enumeration value="XML" />
+          <s:enumeration value="Delimited" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="ResultCode">
+        <s:restriction base="s:string">
+          <s:enumeration value="Failure" />
+          <s:enumeration value="Success" />
+          <s:enumeration value="StatusUpdate" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="DataTypeEnum">
+        <s:restriction base="s:string">
+          <s:enumeration value="AUTONUMBER" />
+          <s:enumeration value="BOOLEAN" />
+          <s:enumeration value="DATE" />
+          <s:enumeration value="DATETIME" />
+          <s:enumeration value="DECIMAL" />
+          <s:enumeration value="EMAIL" />
+          <s:enumeration value="FILES" />
+          <s:enumeration value="GUID" />
+          <s:enumeration value="INTEGER" />
+          <s:enumeration value="IMAGE" />
+          <s:enumeration value="MONEY" />
+          <s:enumeration value="MULTILANGUAGESTRING" />
+          <s:enumeration value="NARRATIVE" />
+          <s:enumeration value="PREDICATE" />
+          <s:enumeration value="RELATIONSHIP" />
+          <s:enumeration value="STRING" />
+          <s:enumeration value="TEXT" />
+          <s:enumeration value="URL" />
+        </s:restriction>
+      </s:simpleType>
+    </s:schema>
+    <s:schema xmlns:tns="http://schemas.microsoft.com/2003/10/Serialization/Arrays" elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+      <s:complexType name="ArrayOfString">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" nillable="true" name="string" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="ArrayOfString" nillable="true" type="tns:ArrayOfString" />
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="TransactionService_ExposeEnum_InputMessage">
+    <wsdl:part name="parameters" element="tns:ExposeEnum" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_ExposeEnum_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ExposeEnumResponse" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetServiceTimeZoneID_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetServiceTimeZoneID" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetServiceTimeZoneID_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetServiceTimeZoneIDResponse" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetServiceCulture_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetServiceCulture" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetServiceCulture_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetServiceCultureResponse" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_ExecuteProcess_InputMessage">
+    <wsdl:part name="parameters" element="tns:ExecuteProcess" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_ExecuteProcess_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ExecuteProcessResponse" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetAppObjectSecurityRights_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAppObjectSecurityRights" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetAppObjectSecurityRights_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAppObjectSecurityRightsResponse" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_CancelAllOpenProcesses_InputMessage">
+    <wsdl:part name="parameters" element="tns:CancelAllOpenProcesses" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_CancelAllOpenProcesses_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CancelAllOpenProcessesResponse" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetArchetypeDataGlobal_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetArchetypeDataGlobal" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetArchetypeDataGlobal_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetArchetypeDataGlobalResponse" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetMetricDataGlobal_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetMetricDataGlobal" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetMetricDataGlobal_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetMetricDataGlobalResponse" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetNamedMetricDataGlobal_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetNamedMetricDataGlobal" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetNamedMetricDataGlobal_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetNamedMetricDataGlobalResponse" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetFormattedArchetypeData_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetFormattedArchetypeData" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetFormattedArchetypeData_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetFormattedArchetypeDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetArchetypeData_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetArchetypeData" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetArchetypeData_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetArchetypeDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetFormattedMetricData_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetFormattedMetricData" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetFormattedMetricData_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetFormattedMetricDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetMetricData_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetMetricData" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetMetricData_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetMetricDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetFormattedNamedMetricData_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetFormattedNamedMetricData" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetFormattedNamedMetricData_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetFormattedNamedMetricDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetNamedMetricData_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetNamedMetricData" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetNamedMetricData_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetNamedMetricDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetArchetypeDataSQL_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetArchetypeDataSQL" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetArchetypeDataSQL_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetArchetypeDataSQLResponse" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetMetricDataSQL_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetMetricDataSQL" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetMetricDataSQL_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetMetricDataSQLResponse" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetNamedMetricDataSQL_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetNamedMetricDataSQL" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetNamedMetricDataSQL_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetNamedMetricDataSQLResponse" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetData_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetData" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetData_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetDataFromReportLayout_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetDataFromReportLayout" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetDataFromReportLayout_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetDataFromReportLayoutResponse" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetDataFromReportLayoutCrystal_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetDataFromReportLayoutCrystal" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetDataFromReportLayoutCrystal_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetDataFromReportLayoutCrystalResponse" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetSyncIds_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetSyncIds" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetSyncIds_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetSyncIdsResponse" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_CheckFileHash_InputMessage">
+    <wsdl:part name="parameters" element="tns:CheckFileHash" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_CheckFileHash_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CheckFileHashResponse" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_Ping_InputMessage">
+    <wsdl:part name="parameters" element="tns:Ping" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_Ping_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PingResponse" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_SendAttachmentChunk_InputMessage">
+    <wsdl:part name="parameters" element="tns:SendAttachmentChunk" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_SendAttachmentChunk_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SendAttachmentChunkResponse" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_SendAttachment_InputMessage">
+    <wsdl:part name="parameters" element="tns:SendAttachment" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_SendAttachment_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SendAttachmentResponse" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetQueryResults_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetQueryResults" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetQueryResults_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetQueryResultsResponse" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetActionsList_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetActionsList" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetActionsList_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetActionsListResponse" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetDataFromArchetypes_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetDataFromArchetypes" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetDataFromArchetypes_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetDataFromArchetypesResponse" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_UpdatePrintJobStatus_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdatePrintJobStatus" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_UpdatePrintJobStatus_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdatePrintJobStatusResponse" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_UpdateSyncItemTag_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateSyncItemTag" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_UpdateSyncItemTag_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateSyncItemTagResponse" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetOutOfSyncItems_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetOutOfSyncItems" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetOutOfSyncItems_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetOutOfSyncItemsResponse" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_DoSpellCheck_InputMessage">
+    <wsdl:part name="parameters" element="tns:DoSpellCheck" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_DoSpellCheck_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DoSpellCheckResponse" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_CreateModel_InputMessage">
+    <wsdl:part name="parameters" element="tns:CreateModel" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_CreateModel_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CreateModelResponse" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_EditModel_InputMessage">
+    <wsdl:part name="parameters" element="tns:EditModel" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_EditModel_OutputMessage">
+    <wsdl:part name="parameters" element="tns:EditModelResponse" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetMappedItem_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetMappedItem" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetMappedItem_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetMappedItemResponse" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetOneNoteMap_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetOneNoteMap" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetOneNoteMap_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetOneNoteMapResponse" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetBusinessObjectMethods_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetBusinessObjectMethods" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetBusinessObjectMethods_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetBusinessObjectMethodsResponse" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_StartProcessWithDefaults_InputMessage">
+    <wsdl:part name="parameters" element="tns:StartProcessWithDefaults" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_StartProcessWithDefaults_OutputMessage">
+    <wsdl:part name="parameters" element="tns:StartProcessWithDefaultsResponse" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_TEST_GetData_InputMessage">
+    <wsdl:part name="parameters" element="tns:TEST_GetData" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_TEST_GetData_OutputMessage">
+    <wsdl:part name="parameters" element="tns:TEST_GetDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_TEST_GetDataFromReportLayout_InputMessage">
+    <wsdl:part name="parameters" element="tns:TEST_GetDataFromReportLayout" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_TEST_GetDataFromReportLayout_OutputMessage">
+    <wsdl:part name="parameters" element="tns:TEST_GetDataFromReportLayoutResponse" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_BuildFromClientXML_InputMessage">
+    <wsdl:part name="parameters" element="tns:BuildFromClientXML" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_BuildFromClientXML_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BuildFromClientXMLResponse" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_ImageConnectDelete_InputMessage">
+    <wsdl:part name="parameters" element="tns:ImageConnectDelete" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_ImageConnectDelete_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ImageConnectDeleteResponse" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetOption_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetOption" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetOption_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetOptionResponse" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetExpansionCodes_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetExpansionCodes" />
+  </wsdl:message>
+  <wsdl:message name="TransactionService_GetExpansionCodes_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetExpansionCodesResponse" />
+  </wsdl:message>
+  <wsdl:portType name="TransactionService">
+    <wsdl:operation name="ExposeEnum">
+      <wsdl:input message="tns:TransactionService_ExposeEnum_InputMessage" />
+      <wsdl:output message="tns:TransactionService_ExposeEnum_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetServiceTimeZoneID">
+      <wsdl:input message="tns:TransactionService_GetServiceTimeZoneID_InputMessage" />
+      <wsdl:output message="tns:TransactionService_GetServiceTimeZoneID_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetServiceCulture">
+      <wsdl:input message="tns:TransactionService_GetServiceCulture_InputMessage" />
+      <wsdl:output message="tns:TransactionService_GetServiceCulture_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ExecuteProcess">
+      <wsdl:input message="tns:TransactionService_ExecuteProcess_InputMessage" />
+      <wsdl:output message="tns:TransactionService_ExecuteProcess_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAppObjectSecurityRights">
+      <wsdl:input message="tns:TransactionService_GetAppObjectSecurityRights_InputMessage" />
+      <wsdl:output message="tns:TransactionService_GetAppObjectSecurityRights_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CancelAllOpenProcesses">
+      <wsdl:input message="tns:TransactionService_CancelAllOpenProcesses_InputMessage" />
+      <wsdl:output message="tns:TransactionService_CancelAllOpenProcesses_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetArchetypeDataGlobal">
+      <wsdl:input message="tns:TransactionService_GetArchetypeDataGlobal_InputMessage" />
+      <wsdl:output message="tns:TransactionService_GetArchetypeDataGlobal_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMetricDataGlobal">
+      <wsdl:input message="tns:TransactionService_GetMetricDataGlobal_InputMessage" />
+      <wsdl:output message="tns:TransactionService_GetMetricDataGlobal_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetNamedMetricDataGlobal">
+      <wsdl:input message="tns:TransactionService_GetNamedMetricDataGlobal_InputMessage" />
+      <wsdl:output message="tns:TransactionService_GetNamedMetricDataGlobal_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetFormattedArchetypeData">
+      <wsdl:input message="tns:TransactionService_GetFormattedArchetypeData_InputMessage" />
+      <wsdl:output message="tns:TransactionService_GetFormattedArchetypeData_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetArchetypeData">
+      <wsdl:input message="tns:TransactionService_GetArchetypeData_InputMessage" />
+      <wsdl:output message="tns:TransactionService_GetArchetypeData_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetFormattedMetricData">
+      <wsdl:input message="tns:TransactionService_GetFormattedMetricData_InputMessage" />
+      <wsdl:output message="tns:TransactionService_GetFormattedMetricData_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMetricData">
+      <wsdl:input message="tns:TransactionService_GetMetricData_InputMessage" />
+      <wsdl:output message="tns:TransactionService_GetMetricData_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetFormattedNamedMetricData">
+      <wsdl:input message="tns:TransactionService_GetFormattedNamedMetricData_InputMessage" />
+      <wsdl:output message="tns:TransactionService_GetFormattedNamedMetricData_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetNamedMetricData">
+      <wsdl:input message="tns:TransactionService_GetNamedMetricData_InputMessage" />
+      <wsdl:output message="tns:TransactionService_GetNamedMetricData_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetArchetypeDataSQL">
+      <wsdl:input message="tns:TransactionService_GetArchetypeDataSQL_InputMessage" />
+      <wsdl:output message="tns:TransactionService_GetArchetypeDataSQL_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMetricDataSQL">
+      <wsdl:input message="tns:TransactionService_GetMetricDataSQL_InputMessage" />
+      <wsdl:output message="tns:TransactionService_GetMetricDataSQL_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetNamedMetricDataSQL">
+      <wsdl:input message="tns:TransactionService_GetNamedMetricDataSQL_InputMessage" />
+      <wsdl:output message="tns:TransactionService_GetNamedMetricDataSQL_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetData">
+      <wsdl:input message="tns:TransactionService_GetData_InputMessage" />
+      <wsdl:output message="tns:TransactionService_GetData_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDataFromReportLayout">
+      <wsdl:input message="tns:TransactionService_GetDataFromReportLayout_InputMessage" />
+      <wsdl:output message="tns:TransactionService_GetDataFromReportLayout_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDataFromReportLayoutCrystal">
+      <wsdl:input message="tns:TransactionService_GetDataFromReportLayoutCrystal_InputMessage" />
+      <wsdl:output message="tns:TransactionService_GetDataFromReportLayoutCrystal_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSyncIds">
+      <wsdl:input message="tns:TransactionService_GetSyncIds_InputMessage" />
+      <wsdl:output message="tns:TransactionService_GetSyncIds_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CheckFileHash">
+      <wsdl:input message="tns:TransactionService_CheckFileHash_InputMessage" />
+      <wsdl:output message="tns:TransactionService_CheckFileHash_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="Ping">
+      <wsdl:input message="tns:TransactionService_Ping_InputMessage" />
+      <wsdl:output message="tns:TransactionService_Ping_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SendAttachmentChunk">
+      <wsdl:input message="tns:TransactionService_SendAttachmentChunk_InputMessage" />
+      <wsdl:output message="tns:TransactionService_SendAttachmentChunk_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SendAttachment">
+      <wsdl:input message="tns:TransactionService_SendAttachment_InputMessage" />
+      <wsdl:output message="tns:TransactionService_SendAttachment_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetQueryResults">
+      <wsdl:input message="tns:TransactionService_GetQueryResults_InputMessage" />
+      <wsdl:output message="tns:TransactionService_GetQueryResults_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetActionsList">
+      <wsdl:input message="tns:TransactionService_GetActionsList_InputMessage" />
+      <wsdl:output message="tns:TransactionService_GetActionsList_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDataFromArchetypes">
+      <wsdl:input message="tns:TransactionService_GetDataFromArchetypes_InputMessage" />
+      <wsdl:output message="tns:TransactionService_GetDataFromArchetypes_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdatePrintJobStatus">
+      <wsdl:input message="tns:TransactionService_UpdatePrintJobStatus_InputMessage" />
+      <wsdl:output message="tns:TransactionService_UpdatePrintJobStatus_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateSyncItemTag">
+      <wsdl:input message="tns:TransactionService_UpdateSyncItemTag_InputMessage" />
+      <wsdl:output message="tns:TransactionService_UpdateSyncItemTag_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetOutOfSyncItems">
+      <wsdl:input message="tns:TransactionService_GetOutOfSyncItems_InputMessage" />
+      <wsdl:output message="tns:TransactionService_GetOutOfSyncItems_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DoSpellCheck">
+      <wsdl:input message="tns:TransactionService_DoSpellCheck_InputMessage" />
+      <wsdl:output message="tns:TransactionService_DoSpellCheck_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateModel">
+      <wsdl:input message="tns:TransactionService_CreateModel_InputMessage" />
+      <wsdl:output message="tns:TransactionService_CreateModel_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="EditModel">
+      <wsdl:input message="tns:TransactionService_EditModel_InputMessage" />
+      <wsdl:output message="tns:TransactionService_EditModel_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMappedItem">
+      <wsdl:input message="tns:TransactionService_GetMappedItem_InputMessage" />
+      <wsdl:output message="tns:TransactionService_GetMappedItem_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetOneNoteMap">
+      <wsdl:input message="tns:TransactionService_GetOneNoteMap_InputMessage" />
+      <wsdl:output message="tns:TransactionService_GetOneNoteMap_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBusinessObjectMethods">
+      <wsdl:input message="tns:TransactionService_GetBusinessObjectMethods_InputMessage" />
+      <wsdl:output message="tns:TransactionService_GetBusinessObjectMethods_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="StartProcessWithDefaults">
+      <wsdl:input message="tns:TransactionService_StartProcessWithDefaults_InputMessage" />
+      <wsdl:output message="tns:TransactionService_StartProcessWithDefaults_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="TEST_GetData">
+      <wsdl:input message="tns:TransactionService_TEST_GetData_InputMessage" />
+      <wsdl:output message="tns:TransactionService_TEST_GetData_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="TEST_GetDataFromReportLayout">
+      <wsdl:input message="tns:TransactionService_TEST_GetDataFromReportLayout_InputMessage" />
+      <wsdl:output message="tns:TransactionService_TEST_GetDataFromReportLayout_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BuildFromClientXML">
+      <wsdl:input message="tns:TransactionService_BuildFromClientXML_InputMessage" />
+      <wsdl:output message="tns:TransactionService_BuildFromClientXML_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ImageConnectDelete">
+      <wsdl:input message="tns:TransactionService_ImageConnectDelete_InputMessage" />
+      <wsdl:output message="tns:TransactionService_ImageConnectDelete_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetOption">
+      <wsdl:input message="tns:TransactionService_GetOption_InputMessage" />
+      <wsdl:output message="tns:TransactionService_GetOption_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetExpansionCodes">
+      <wsdl:input message="tns:TransactionService_GetExpansionCodes_InputMessage" />
+      <wsdl:output message="tns:TransactionService_GetExpansionCodes_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="TransactionServiceSoap" type="tns:TransactionService" style="document">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+    <wsdl:operation name="ExposeEnum">
+      <soap:operation soapAction="http://tempuri.org//ServiceExecuteProcess/TransactionService/ExposeEnum" style="document" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetServiceTimeZoneID">
+      <soap:operation soapAction="http://tempuri.org//ServiceExecuteProcess/TransactionService/GetServiceTimeZoneID" style="document" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetServiceCulture">
+      <soap:operation soapAction="http://tempuri.org//ServiceExecuteProcess/TransactionService/GetServiceCulture" style="document" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ExecuteProcess">
+      <soap:operation soapAction="http://tempuri.org//ServiceExecuteProcess/TransactionService/ExecuteProcess" style="document" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAppObjectSecurityRights">
+      <soap:operation soapAction="http://tempuri.org//ServiceExecuteProcess/TransactionService/GetAppObjectSecurityRights" style="document" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CancelAllOpenProcesses">
+      <soap:operation soapAction="http://tempuri.org//ServiceExecuteProcess/TransactionService/CancelAllOpenProcesses" style="document" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetArchetypeDataGlobal">
+      <soap:operation soapAction="http://tempuri.org//ServiceExecuteProcess/TransactionService/GetArchetypeDataGlobal" style="document" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMetricDataGlobal">
+      <soap:operation soapAction="http://tempuri.org//ServiceExecuteProcess/TransactionService/GetMetricDataGlobal" style="document" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetNamedMetricDataGlobal">
+      <soap:operation soapAction="http://tempuri.org//ServiceExecuteProcess/TransactionService/GetNamedMetricDataGlobal" style="document" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetFormattedArchetypeData">
+      <soap:operation soapAction="http://tempuri.org//ServiceExecuteProcess/TransactionService/GetFormattedArchetypeData" style="document" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetArchetypeData">
+      <soap:operation soapAction="http://tempuri.org//ServiceExecuteProcess/TransactionService/GetArchetypeData" style="document" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetFormattedMetricData">
+      <soap:operation soapAction="http://tempuri.org//ServiceExecuteProcess/TransactionService/GetFormattedMetricData" style="document" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMetricData">
+      <soap:operation soapAction="http://tempuri.org//ServiceExecuteProcess/TransactionService/GetMetricData" style="document" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetFormattedNamedMetricData">
+      <soap:operation soapAction="http://tempuri.org//ServiceExecuteProcess/TransactionService/GetFormattedNamedMetricData" style="document" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetNamedMetricData">
+      <soap:operation soapAction="http://tempuri.org//ServiceExecuteProcess/TransactionService/GetNamedMetricData" style="document" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetArchetypeDataSQL">
+      <soap:operation soapAction="http://tempuri.org//ServiceExecuteProcess/TransactionService/GetArchetypeDataSQL" style="document" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMetricDataSQL">
+      <soap:operation soapAction="http://tempuri.org//ServiceExecuteProcess/TransactionService/GetMetricDataSQL" style="document" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetNamedMetricDataSQL">
+      <soap:operation soapAction="http://tempuri.org//ServiceExecuteProcess/TransactionService/GetNamedMetricDataSQL" style="document" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetData">
+      <soap:operation soapAction="http://tempuri.org//ServiceExecuteProcess/TransactionService/GetData" style="document" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDataFromReportLayout">
+      <soap:operation soapAction="http://tempuri.org//ServiceExecuteProcess/TransactionService/GetDataFromReportLayout" style="document" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDataFromReportLayoutCrystal">
+      <soap:operation soapAction="http://tempuri.org//ServiceExecuteProcess/TransactionService/GetDataFromReportLayoutCrystal" style="document" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSyncIds">
+      <soap:operation soapAction="http://tempuri.org//ServiceExecuteProcess/TransactionService/GetSyncIds" style="document" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CheckFileHash">
+      <soap:operation soapAction="http://tempuri.org//ServiceExecuteProcess/TransactionService/CheckFileHash" style="document" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Ping">
+      <soap:operation soapAction="http://tempuri.org//ServiceExecuteProcess/TransactionService/Ping" style="document" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendAttachmentChunk">
+      <soap:operation soapAction="http://tempuri.org//ServiceExecuteProcess/TransactionService/SendAttachmentChunk" style="document" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendAttachment">
+      <soap:operation soapAction="http://tempuri.org//ServiceExecuteProcess/TransactionService/SendAttachment" style="document" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetQueryResults">
+      <soap:operation soapAction="http://tempuri.org//ServiceExecuteProcess/TransactionService/GetQueryResults" style="document" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetActionsList">
+      <soap:operation soapAction="http://tempuri.org//ServiceExecuteProcess/TransactionService/GetActionsList" style="document" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDataFromArchetypes">
+      <soap:operation soapAction="http://tempuri.org//ServiceExecuteProcess/TransactionService/GetDataFromArchetypes" style="document" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdatePrintJobStatus">
+      <soap:operation soapAction="http://tempuri.org//ServiceExecuteProcess/TransactionService/UpdatePrintJobStatus" style="document" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateSyncItemTag">
+      <soap:operation soapAction="http://tempuri.org//ServiceExecuteProcess/TransactionService/UpdateSyncItemTag" style="document" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetOutOfSyncItems">
+      <soap:operation soapAction="http://tempuri.org//ServiceExecuteProcess/TransactionService/GetOutOfSyncItems" style="document" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DoSpellCheck">
+      <soap:operation soapAction="http://tempuri.org//ServiceExecuteProcess/TransactionService/DoSpellCheck" style="document" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateModel">
+      <soap:operation soapAction="http://tempuri.org//ServiceExecuteProcess/TransactionService/CreateModel" style="document" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EditModel">
+      <soap:operation soapAction="http://tempuri.org//ServiceExecuteProcess/TransactionService/EditModel" style="document" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMappedItem">
+      <soap:operation soapAction="http://tempuri.org//ServiceExecuteProcess/TransactionService/GetMappedItem" style="document" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetOneNoteMap">
+      <soap:operation soapAction="http://tempuri.org//ServiceExecuteProcess/TransactionService/GetOneNoteMap" style="document" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBusinessObjectMethods">
+      <soap:operation soapAction="http://tempuri.org//ServiceExecuteProcess/TransactionService/GetBusinessObjectMethods" style="document" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="StartProcessWithDefaults">
+      <soap:operation soapAction="http://tempuri.org//ServiceExecuteProcess/TransactionService/StartProcessWithDefaults" style="document" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TEST_GetData">
+      <soap:operation soapAction="http://tempuri.org//ServiceExecuteProcess/TransactionService/TEST_GetData" style="document" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TEST_GetDataFromReportLayout">
+      <soap:operation soapAction="http://tempuri.org//ServiceExecuteProcess/TransactionService/TEST_GetDataFromReportLayout" style="document" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BuildFromClientXML">
+      <soap:operation soapAction="http://tempuri.org//ServiceExecuteProcess/TransactionService/BuildFromClientXML" style="document" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ImageConnectDelete">
+      <soap:operation soapAction="http://tempuri.org//ServiceExecuteProcess/TransactionService/ImageConnectDelete" style="document" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetOption">
+      <soap:operation soapAction="http://tempuri.org//ServiceExecuteProcess/TransactionService/GetOption" style="document" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetExpansionCodes">
+      <soap:operation soapAction="http://tempuri.org//ServiceExecuteProcess/TransactionService/GetExpansionCodes" style="document" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="TransactionService">
+    <wsdl:port name="TransactionServiceSoap" binding="tns:TransactionServiceSoap">
+      <soap:address location="https://3e-dev.dentons.global/TE_3E_GD_DEV/web/TransactionService.asmx" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
