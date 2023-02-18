@@ -8,7 +8,8 @@ namespace FacadeFor3e.ProcessCommandBuilder
     /// Identifies a record within a child collection.
     /// The value should be unique within the child collection, but doesn't have to be unique in the table,
     /// for example you can identify a particular MattDate record within a matter by its EffStart value,
-    /// or identify the default Site in a Relate record by the IsDefault value.
+    /// or identify the default Site in a Relate record by the IsDefault value. You cannot however combine
+    /// this with an alias, such as Timekeeper Number within a collection of MattPrlfTkpr records.
     /// </summary>
     [PublicAPI]
     public class IdentifyByValue : IdentifyBase

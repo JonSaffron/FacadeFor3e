@@ -32,7 +32,7 @@ namespace FacadeFor3e.ProcessCommandBuilder
         /// <summary>
         /// Gets the operations to be performed
         /// </summary>
-        public IList<OperationBase> Operations => this._operations;
+        public OperationCollection Operations => this._operations;
 
         /// <summary>
         /// Output the object
@@ -53,6 +53,7 @@ namespace FacadeFor3e.ProcessCommandBuilder
         /// Creates and appends an operation to create a new record 
         /// </summary>
         /// <returns>An <see cref="AddOperation">AddOperation</see></returns>
+        [Pure]
         public AddOperation AddRecord()
             {
             var o = new AddOperation();

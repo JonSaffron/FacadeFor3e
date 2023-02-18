@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using JetBrains.Annotations;
 
 namespace FacadeFor3e.ProcessCommandBuilder
@@ -10,6 +12,19 @@ namespace FacadeFor3e.ProcessCommandBuilder
     [PublicAPI]
     public class OperationCollection : Collection<OperationBase>
         {
+        public void AddRange([NotNull] IEnumerable<OperationBase> items)
+            {
+            if (items == null)
+                throw new ArgumentNullException(nameof(items));
+            var itemList = items.ToList();
+            if (itemList.Any(item => item == null))
+                throw new ArgumentOutOfRangeException(nameof(items), "Cannot add a null Operation.");
+            foreach (var item in itemList)
+                {
+                this.Add(item);
+                }
+            }
+
         /// <inheritdoc />
         // ReSharper disable once AnnotationConflictInHierarchy
         protected override void InsertItem(int index, OperationBase item)
