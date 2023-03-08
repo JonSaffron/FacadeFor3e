@@ -93,16 +93,16 @@ namespace FacadeFor3e
                 Buffer.BlockCopy(fileContent, offset, buffer, 0, chunkLength);
                 if (offset == 0)
                     {
-                    System.Diagnostics.Trace.WriteLine($"Sending initial content - {chunkLength:N} bytes");
+                    this._transactionServices.Log.Info($"Sending initial content - {chunkLength:N} bytes");
                     ts.SendAttachment(itemId.ToString(), archetypeId, syncId, originalFileName, buffer, offset, chunkLength, totalBytes);
                     }
                 else
                     {
-                    System.Diagnostics.Trace.WriteLine($"Sending additional content - {chunkLength:N} bytes at {offset:N}");
+                    this._transactionServices.Log.Info($"Sending additional content - {chunkLength:N} bytes at {offset:N}");
                     ts.SendAttachmentChunk(syncId, originalFileName, buffer, offset, chunkLength, totalBytes);
                     }
                 }
-            System.Diagnostics.Trace.WriteLine($"Completed - {totalBytes:N} total bytes");
+            this._transactionServices.Log.Info($"Completed - {totalBytes:N} total bytes");
             }
 
         private void OutputToConsoleDetailsOfTheJob(string archetypeId, Guid itemId, string originalFileName)

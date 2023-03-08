@@ -20,7 +20,9 @@ namespace FacadeFor3e.Tests
             var ex = ExecuteProcessExceptionBuilder.BuildForProcessError(processResult);
 
             Assert.AreSame(processResult, ex.ExecuteProcessResult);
-            Assert.IsTrue(ex.Message.StartsWith("Error attempting to read data. The element 'Attributes' in namespace 'http://elite.com/schemas/transaction/object/write/Proforma' has invalid child element 'ProfStatusx' in namespace 'http://elite.com/schemas/transaction/object/write/Proforma'. List of possible elements expected: 'ProfIndex, ProfDate, "));
+            Assert.IsTrue(ex.Message.Contains("Error attempting to read data."));
+            Assert.IsTrue(ex.Message.Contains("The element 'Attributes' in namespace 'http://elite.com/schemas/transaction/object/write/Proforma' has invalid child element 'ProfStatusx' in namespace 'http://elite.com/schemas/transaction/object/write/Proforma'. List of possible elements expected: 'ProfIndex, ProfDate, "));
+            Assert.IsTrue(ex.Message.Contains("An error occurred while the transaction service populated the data object(s)"));
             }
 
         [Test]

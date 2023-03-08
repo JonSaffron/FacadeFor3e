@@ -1140,6 +1140,13 @@
             A collection of Operations
             </summary>
         </member>
+        <member name="M:FacadeFor3e.ProcessCommandBuilder.OperationCollection.AddRange(System.Collections.Generic.IEnumerable{FacadeFor3e.ProcessCommandBuilder.OperationBase})">
+            <summary>
+            Adds a collection of Operation objects
+            </summary>
+            <param name="items">The collection of Operations to add</param>
+            <remarks>None of the items to be added can be null</remarks>
+        </member>
         <member name="M:FacadeFor3e.ProcessCommandBuilder.OperationCollection.InsertItem(System.Int32,FacadeFor3e.ProcessCommandBuilder.OperationBase)">
             <inheritdoc />
         </member>

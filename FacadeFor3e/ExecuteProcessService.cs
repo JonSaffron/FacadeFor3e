@@ -91,7 +91,7 @@ namespace FacadeFor3e
             var resultsDoc = new XmlDocument();
             resultsDoc.LoadXml(response);
             string responseFormatted = resultsDoc.PrettyPrintXml();
-            Trace.WriteLine(responseFormatted);
+            this.TransactionServices.Log.Info(responseFormatted);
 
             var result = new ExecuteProcessResult(request, resultsDoc);
             if (result.ExecutionResult == "Failure")

@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Globalization;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Xml;
 
@@ -12,28 +13,52 @@ namespace FacadeFor3e
             if (executeProcessResult == null) throw new ArgumentNullException(nameof(executeProcessResult));
             if (executeProcessResult.Response.DocumentElement == null)
                 throw new InvalidOperationException("Response xml is invalid.");
-            XmlElement root = executeProcessResult.Response.DocumentElement;
-            if (root == null)
-                throw new InvalidOperationException();
-            var errorMessageNode = root.SelectSingleNode("MAIN/ERROR") as XmlElement;
-            if (errorMessageNode == null)
-                throw new InvalidOperationException("Cannot identify the process errors node in the output.");
-            do
-                {
-                var e = errorMessageNode.SelectSingleNode("ERROR") as XmlElement;
-                if (e == null)
-                    break;
-                errorMessageNode = e;
-                } while (true);
 
-            errorMessageNode = errorMessageNode.SelectSingleNode("MESSAGE") as XmlElement;
-            string errorMessage = errorMessageNode != null ? errorMessageNode.InnerText : "no further details are available";
-            string message = root.GetAttribute("Message");
-            if (string.IsNullOrEmpty(message))
-                message = "Unknown error";
-            string msg = string.Format(CultureInfo.InvariantCulture, "{0} {1}", message, errorMessage);
+            var errorMessages = GetErrorList(executeProcessResult.Response).ToList();
+            bool isReadDataError = errorMessages[0] == "Error attempting to read data.";
+            if (isReadDataError)
+                {
+                errorMessages.Insert(0, 
+                    "An error occurred while the transaction service populated the data object(s). Among other things this can mean:\r\n"
+                    + "- An invalid attribute was specified that doesn't exist on the object\r\n"
+                    + "- An invalid child object was specified that doesn't exist on the object\r\n"
+                    + "- If multiple child objects were used then the order they were specified in was wrong\r\n"
+                    + "- An exception occurred in an AfterPopulate() handler.\r\n"
+                    + "The actual error returned was:");
+                }
+            string msg = string.Join("\r\n", errorMessages);
             var result = new ExecuteProcessException(msg, executeProcessResult);
             return result;
+            }
+
+        private static IEnumerable<string> GetErrorList(XmlDocument xmlDocument)
+            {
+            var errors = new HashSet<string>();
+            var topExceptionMessage = xmlDocument.DocumentElement!.GetAttribute("Message");
+            errors.Add(topExceptionMessage);
+            yield return topExceptionMessage;
+
+            var errorElement = (XmlElement?) xmlDocument.DocumentElement.SelectSingleNode("MAIN/ERROR");
+            while (errorElement != null)
+                {
+                var message = errorElement.SelectSingleNode("MESSAGE")!.InnerText.Trim();
+                bool isNew = errors.Add(message);
+                if (message.StartsWith("An error occurred in the "))
+                    {
+                    var parts = message.Split(new[] { ':' }, 2);
+                    if (parts.Length == 2)
+                        {
+                        isNew = errors.Add(parts[1].Trim());
+                        }
+                    }
+
+                if (isNew)
+                    {
+                    yield return message;
+                    }
+
+                errorElement = (XmlElement?) errorElement.SelectSingleNode("ERROR");
+                }
             }
 
         internal static ExecuteProcessException BuildForDataError(ExecuteProcessResult executeProcessResult)

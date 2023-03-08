@@ -12,14 +12,18 @@ namespace FacadeFor3e.ProcessCommandBuilder
     [PublicAPI]
     public class OperationCollection : Collection<OperationBase>
         {
-        public void AddRange([NotNull] IEnumerable<OperationBase> items)
+        /// <summary>
+        /// Adds a collection of Operation objects
+        /// </summary>
+        /// <param name="items">The collection of Operations to add</param>
+        /// <remarks>None of the items to be added can be null</remarks>
+        public void AddRange(IEnumerable<OperationBase> items)
             {
             if (items == null)
                 throw new ArgumentNullException(nameof(items));
-            var itemList = items.ToList();
-            if (itemList.Any(item => item == null))
-                throw new ArgumentOutOfRangeException(nameof(items), "Cannot add a null Operation.");
-            foreach (var item in itemList)
+            // ReSharper disable ConditionIsAlwaysTrueOrFalse
+            foreach (var item in items.Where(item => item != null))
+            // ReSharper restore ConditionIsAlwaysTrueOrFalse
                 {
                 this.Add(item);
                 }

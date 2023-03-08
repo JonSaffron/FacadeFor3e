@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Globalization;
 using System.Net;
 using System.Security.Principal;
@@ -8,6 +7,7 @@ using System.Text;
 using System.Xml;
 using FacadeFor3e.TransactionService;
 using JetBrains.Annotations;
+using NLog;
 
 namespace FacadeFor3e
     {
@@ -35,6 +35,8 @@ namespace FacadeFor3e
         private TransactionServiceClient? _transactionServiceSoapClient;
         private ExecuteProcessService? _executeProcess;
         private SendAttachment? _sendAttachment;
+
+        internal readonly Logger Log = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// Constructs a new TransactionServices object without impersonation or user credentials
@@ -171,7 +173,7 @@ namespace FacadeFor3e
                 }
             sb.AppendFormat("\tUser: {0} ({1})", userName, authenticationMethod);
             sb.AppendLine();
-            Trace.WriteLine(sb.ToString());
+            Log.Info(sb.ToString());
             }
 
         private static BasicHttpBinding BuildBinding(bool useHttps)
@@ -221,6 +223,7 @@ namespace FacadeFor3e
                 ForceClose(this._transactionServiceSoapClient);
                 }
             this._transactionServiceSoapClient = null;
+            GC.SuppressFinalize(this);
             }
 
         // Based on code from https://msdn.microsoft.com/en-us/library/aa355056.aspx "Window Communication Foundation Samples" "Avoiding Problems with the Using Statement"

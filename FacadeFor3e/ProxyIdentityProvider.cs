@@ -20,10 +20,10 @@ namespace FacadeFor3e
         private readonly string _domain;
         private readonly string _password;
 
-        [DllImport("advapi32.dll", SetLastError = true)]
+        [DllImport("advapi32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         private static extern bool LogonUser(string principal, string authority, string password, LogonSessionType logonType, LogonProvider logonProvider, out SafeAccessTokenHandle token);
 
-        [DllImport("advapi32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        [DllImport("advapi32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         private static extern bool DuplicateToken(IntPtr hToken, SecurityImpersonationLevel impersonationLevel, out SafeAccessTokenHandle hNewToken);
 
         [UsedImplicitly(ImplicitUseTargetFlags.Members)]
