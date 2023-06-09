@@ -72,7 +72,9 @@ namespace FacadeFor3e
         /// </summary>
         public void Ping()
             {
-            GetSoapClient().Ping();
+            var client = GetSoapClient();
+            LogDetailsOfTheJob("Pinging the transaction service");  // must call GetSoapClient before this line
+            client.Ping();
             }
         
         /// <summary>
@@ -146,7 +148,7 @@ namespace FacadeFor3e
             return result;
             }
 
-        internal void OutputToConsoleDetailsOfTheJob(string jobSpecifics)
+        internal void LogDetailsOfTheJob(string jobSpecifics)
             {
             if (jobSpecifics == null) throw new ArgumentNullException(nameof(jobSpecifics));
             var sb = new StringBuilder();

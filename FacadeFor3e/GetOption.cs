@@ -127,7 +127,7 @@ namespace FacadeFor3e
         private void OutputToConsoleDetailsOfTheJob(string optionName, DataTypeEnum optionType)
             {
             var jobSpecifics = $"Getting option: {optionName} ({optionType})";
-            this._transactionServices.OutputToConsoleDetailsOfTheJob(jobSpecifics);
+            this._transactionServices.LogDetailsOfTheJob(jobSpecifics);
             }
         }
     }

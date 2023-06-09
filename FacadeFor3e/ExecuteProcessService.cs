@@ -172,7 +172,7 @@ namespace FacadeFor3e
         private void OutputToConsoleDetailsOfTheJob(XmlDocument request)
             {
             string jobSpecifics = $"Executing 3E process {request.DocumentElement?.LocalName}";
-            this.TransactionServices.OutputToConsoleDetailsOfTheJob(jobSpecifics);
+            this.TransactionServices.LogDetailsOfTheJob(jobSpecifics);
             }
         }
     }

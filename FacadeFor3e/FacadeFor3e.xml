@@ -1412,7 +1412,7 @@
             </summary>
             <param name="archetypeId">The name of the archetype to attach the file to. The archetype must support attachments.</param>
             <param name="itemId">The ID of the record to attach the file to</param>
-            <param name="originalFileName">The name to give the file attachment</param>
+            <param name="fileTitle">The name to give the file attachment</param>
             <param name="fileContent">The file contents</param>
         </member>
         <member name="T:FacadeFor3e.TransactionServices">

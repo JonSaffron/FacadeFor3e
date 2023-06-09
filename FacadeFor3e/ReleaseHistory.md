@@ -1,4 +1,8 @@
-﻿2.0.3
+﻿2.1.0
+-----
+Improve functionality for attaching files (this is a change to the interface)
+
+2.0.3
 -----
 Allow a nullable guid attribute to be added to operation
 XML documentation file should now be included in the nuget package

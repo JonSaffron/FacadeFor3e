@@ -122,7 +122,7 @@ namespace FacadeFor3e
             XmlElement? arch = (XmlElement?) xoql.SelectSingleNode("ns:SELECT/ns:OQL_CONTEXT/ns:NODEMAP[@ID='Node#1']", xnm);
             var archetype = arch?.GetAttribute("QueryID");
             var jobSpecifics = $"Getting data for {archetype ?? "unknown"}";
-            this._transactionServices.OutputToConsoleDetailsOfTheJob(jobSpecifics);
+            this._transactionServices.LogDetailsOfTheJob(jobSpecifics);
             }
         }
     }

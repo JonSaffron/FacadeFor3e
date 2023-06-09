@@ -107,3 +107,27 @@ SOAPAction header values (only needed by original transaction service)
 
 bad: http://tempuri.org//ServiceExecuteProcess/TransactionService/GetArchetypeData.
 ok : http://tempuri.org//ServiceExecuteProcess/Ping
+
+
+-----
+
+Data Types for archetypes:
+
+DataType				Derives From	Can Be Primary Key?			Can Be Alias?
+---------------------------------------------------------------------------------
+AutoNumber				Integer					Yes						 No
+Boolean											 No						 No
+Date					DateTime				Yes						Yes
+DateTime										Yes						Yes
+Decimal											 No						Yes
+Email					String					Yes						Yes
+Guid											Yes						 No
+Integer											Yes						Yes
+Image					String					 No						Yes
+Money					Decimal					 No						Yes
+MultiLanguageString		String					 No						Yes
+Narrative				String					 No						 No
+Predicate				String					 No						 No
+String											Yes						Yes
+Text					String					 No						 No
+URL						String					Yes						Yes

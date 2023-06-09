@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.Security.Principal;
+using System.ServiceModel;
 using JetBrains.Annotations;
 
 namespace FacadeFor3e
@@ -21,7 +23,8 @@ namespace FacadeFor3e
         /// </summary>
         /// <param name="transactionServices">The TransactionServices object to use to connect with 3E</param>
         /// <param name="chunkSize">The size in bytes of the chunks to transfer the file in</param>
-        public SendAttachment(TransactionServices transactionServices, int chunkSize = 32 * 1024) // 32kb sized chunks by default
+        /// <remarks>If you are attaching larger files, you should increase the chunkSize to make the transfer more reliable</remarks>
+        public SendAttachment(TransactionServices transactionServices, int chunkSize = 64 * 1024) // 64kb sized chunks by default
             {
             this._transactionServices = transactionServices ?? throw new ArgumentNullException(nameof(transactionServices));
             this.ChunkSize = chunkSize;
@@ -30,6 +33,7 @@ namespace FacadeFor3e
         /// <summary>
         /// Get or sets the size in bytes of each chunk used to transfer files to 3E
         /// </summary>
+        /// <remarks>To attach larger files, use a larger ChunkSize</remarks>
         public int ChunkSize
             {
             get => this._chunkSize;
@@ -60,60 +64,135 @@ namespace FacadeFor3e
         /// </summary>
         /// <param name="archetypeId">The name of the archetype to attach the file to. The archetype must support attachments.</param>
         /// <param name="itemId">The ID of the record to attach the file to</param>
-        /// <param name="originalFileName">The name to give the file attachment</param>
+        /// <param name="fileTitle">The name to give the file attachment</param>
         /// <param name="fileContent">The file contents</param>
-        public void AttachNewFile(string archetypeId, Guid itemId, string originalFileName, byte[] fileContent)
+        /// <param name="fileLength">The length of the file being attached. This parameter can be left unspecified if the stream supports seeking.</param>
+        public void AttachNewFile(string archetypeId, Guid itemId, string fileTitle, Stream fileContent, long? fileLength = null)
             {
-            void Action() => CallTransactionService(archetypeId, itemId, originalFileName, fileContent);
-            if (this._transactionServices.IsImpersonating)
-                {
-                // ReSharper disable AssignNullToNotNullAttribute
-                WindowsIdentity.RunImpersonated(this._transactionServices.AccountToImpersonate!.AccessToken, Action);
-                // ReSharper restore AssignNullToNotNullAttribute
-                }
-            else
-                {
-                Action();
-                }
-            }
+            if (archetypeId == null) throw new ArgumentNullException(nameof(archetypeId));
+            if (fileTitle == null) throw new ArgumentNullException(nameof(fileTitle));
+            if (fileContent == null) throw new ArgumentNullException(nameof(fileContent));
 
-        private void CallTransactionService(string archetypeId, Guid itemId, string originalFileName, byte[] fileContent)
-            {
-            var ts = this._transactionServices.GetSoapClient();
-            OutputToConsoleDetailsOfTheJob(archetypeId, itemId, originalFileName);    
+            if (fileLength == null)
+                {
+                if (!fileContent.CanSeek)
+                    throw new InvalidOperationException("Cannot seek within the stream - please specify a value for the totalFileLength parameter.");
+                fileLength = fileContent.Length;
+                }
 
-            int totalBytes = fileContent.GetLength(0);
-            _countOfUploads += 1;
+            if (fileContent.CanSeek && fileContent.Position != 0)
+                {
+                fileContent.Seek(0, SeekOrigin.Begin);
+                }
+
+            OutputToConsoleDetailsOfTheJob(archetypeId, itemId, fileTitle, fileLength.Value);
+
             string syncId = GetOrGenerateSyncId();
-            var buffer = new byte[this._chunkSize];
-            for (int offset = 0; offset < totalBytes; offset += this._chunkSize)
+            int chunkSize = this.ChunkSize;
+            long totalChunksNeeded = (fileLength.Value + chunkSize - 1) / chunkSize;
+            for (long i = 0; i < totalChunksNeeded; i++)
                 {
-                int chunkLength = Math.Min(totalBytes - offset, this._chunkSize);
+                long offset = i * chunkSize;
+                int chunkLength = (int) Math.Min(fileLength.Value - offset, chunkSize);
+                var buffer = new byte[chunkLength];
 
-                Buffer.BlockCopy(fileContent, offset, buffer, 0, chunkLength);
-                if (offset == 0)
+                int positionInBuffer = 0;
+                do
                     {
-                    this._transactionServices.LogForDebug($"Sending initial content - {chunkLength:N} bytes");
-                    ts.SendAttachment(itemId.ToString(), archetypeId, syncId, originalFileName, buffer, offset, chunkLength, totalBytes);
+                    int bytesToRead = chunkLength - positionInBuffer;
+                    int bytesRead = fileContent.Read(buffer, positionInBuffer, bytesToRead);
+                    if (bytesRead == 0)
+                        throw new InvalidOperationException("Unexpected end of stream encountered.");
+                    positionInBuffer += bytesRead;
+                    } while (positionInBuffer < chunkLength);
+
+                Action action;
+                if (i == 0)
+                    {
+                    action = () => CallTransactionServiceForStartOfTransfer(syncId, archetypeId, itemId, fileTitle, buffer, fileLength.Value);
                     }
                 else
                     {
-                    this._transactionServices.LogForDebug($"Sending additional content - {chunkLength:N} bytes at {offset:N}");
-                    ts.SendAttachmentChunk(syncId, originalFileName, buffer, offset, chunkLength, totalBytes);
+                    System.Threading.Thread.Sleep(250); // Slight delay to allow 3E to finish writing the last chunk
+                    action = () => CallTransactionServiceForContinuingTransfer(syncId, fileTitle, buffer, offset, fileLength.Value);
+                    }
+                
+                this._transactionServices.LogForDebug($"- Chunk {i + 1:D0} of {totalChunksNeeded:D0}");
+                if (this._transactionServices.IsImpersonating)
+                    {
+                    // ReSharper disable AssignNullToNotNullAttribute
+                    WindowsIdentity.RunImpersonated(this._transactionServices.AccountToImpersonate!.AccessToken, action);
+                    // ReSharper restore AssignNullToNotNullAttribute
+                    }
+                else
+                    {
+                    action();
                     }
                 }
-            this._transactionServices.LogForDebug($"Completed - {totalBytes:N} total bytes");
+            this._transactionServices.LogForDebug($"{fileTitle} successfully attached");
             }
 
-        private void OutputToConsoleDetailsOfTheJob(string archetypeId, Guid itemId, string originalFileName)
+        private void CallTransactionServiceForStartOfTransfer(string syncId, string archetypeId, Guid itemId, string fileTitle, byte[] data, long totalFileLength)
             {
-            var jobSpecifics = $"Adding attachment '{originalFileName}' to {archetypeId} with id {itemId}";
-            this._transactionServices.OutputToConsoleDetailsOfTheJob(jobSpecifics);
+            var ts = this._transactionServices.GetSoapClient();
+            int chunkLength = data.GetLength(0);
+            this._transactionServices.LogForDebug($"  sending {(chunkLength == totalFileLength ? "all" : "initial")} content - {chunkLength:N0} bytes");
+
+            int retry = 0;
+
+        retryLoop:
+
+            try
+                {
+                ts.SendAttachment(itemId.ToString(), archetypeId, syncId, fileTitle, data, 0, chunkLength, totalFileLength);
+                }
+            catch (FaultException ex) when (ex.Message.StartsWith("Failed to write file") && retry < 5)
+                {
+                this._transactionServices.LogForDebug($"Failed to write attachment chunk: {ex.Message}");
+                this._transactionServices.LogForDebug($"Waiting and retrying");
+                retry++;
+                System.Threading.Thread.Sleep(retry * 1000);
+                goto retryLoop;
+                }
+            }
+
+        private void CallTransactionServiceForContinuingTransfer(string syncId, string fileTitle, byte[] data, long offset, long totalFileLength)
+            {
+            var ts = this._transactionServices.GetSoapClient();
+            int chunkLength = data.GetLength(0);
+            bool isFinalChunk = (chunkLength + offset) == totalFileLength;
+            this._transactionServices.LogForDebug($"  sending {(isFinalChunk ? "final" : "additional")} content - {chunkLength:N0} bytes at {offset:N0}");
+            
+            int retry = 0;
+
+        retryLoop:
+
+            try
+                {
+                ts.SendAttachmentChunk(syncId, fileTitle, data, offset, chunkLength, totalFileLength);
+                }
+            catch (FaultException ex) when (ex.Message.StartsWith("Failed to write file") && retry < 5)
+                {
+                this._transactionServices.LogForDebug($"Failed to write attachment chunk: {ex.Message}");
+                this._transactionServices.LogForDebug($"Waiting and retrying");
+                retry++;
+                System.Threading.Thread.Sleep(retry * 1000);
+                goto retryLoop;
+                }
+            }
+
+        private void OutputToConsoleDetailsOfTheJob(string archetypeId, Guid itemId, string fileTitle, long fileLength)
+            {
+            var jobSpecifics = $"Attaching '{fileTitle}' ({fileLength >> 10}KB) to {archetypeId} with id {itemId}";
+            this._transactionServices.LogDetailsOfTheJob(jobSpecifics);
             }
 
         private string GetOrGenerateSyncId()
             {
-            var result = this.SyncId ?? $"Attachment upload {_countOfUploads} at {DateTime.Now:yyyy-MMM-dd hh:mm:ss}";
+            if (this.SyncId != null)
+                return this.SyncId;
+            _countOfUploads++;
+            var result = $"Upload {_countOfUploads} at {DateTime.Now:yyyy-MMM-dd hh:mm:ss} by FacadeFor3E";
             return result;
             }
         }

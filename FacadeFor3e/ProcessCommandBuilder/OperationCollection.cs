@@ -21,12 +21,12 @@ namespace FacadeFor3e.ProcessCommandBuilder
             {
             if (items == null)
                 throw new ArgumentNullException(nameof(items));
-            // ReSharper disable ConditionIsAlwaysTrueOrFalse
-            foreach (var item in items.Where(item => item != null))
-            // ReSharper restore ConditionIsAlwaysTrueOrFalse
-                {
-                this.Add(item);
-                }
+            var itemList = items.ToList();
+            // ReSharper disable ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+            if (itemList.Any(item => item == null))
+                // ReSharper restore ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+                throw new ArgumentException("Cannot add a null value to the collection.");
+            itemList.ForEach(this.Add);
             }
 
         /// <inheritdoc />

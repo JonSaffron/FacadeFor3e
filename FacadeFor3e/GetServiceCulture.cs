@@ -52,7 +52,7 @@ namespace FacadeFor3e
         private void OutputToConsoleDetailsOfTheJob()
             {
             var jobSpecifics = $"Getting service culture";
-            this._transactionServices.OutputToConsoleDetailsOfTheJob(jobSpecifics);
+            this._transactionServices.LogDetailsOfTheJob(jobSpecifics);
             }
         }
     }
