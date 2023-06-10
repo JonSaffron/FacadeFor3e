@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net48;net5.0-windows</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net48;net6.0-windows</TargetFrameworks>
     <PackageId>FacadeFor3E</PackageId>
-    <Authors>FacadeFor3E</Authors>
+    <Authors>J Saffron Consulting</Authors>
     <Product>FacadeFor3E</Product>
-    <Version>2.0.0</Version>
-    <Description>A set of objects that make using the 3E transaction service a little easier.</Description>
-    <Copyright>Copyright © J Saffron Consulting Ltd 2014 - 2022</Copyright>
+    <Version>2.0.1</Version>
+    <Description>A library that makes using the 3E transaction service a little easier.</Description>
+    <Copyright>Copyright © J Saffron Consulting Ltd 2014 - 2023</Copyright>
     <RepositoryUrl>https://github.com/JonSaffron/FacadeFor3e</RepositoryUrl>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
   </PropertyGroup>
@@ -15,6 +15,14 @@
   <PropertyGroup>
     <LangVersion>8.0</LangVersion>
     <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>A library to help you build apps that use Elite 3E</Title>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageTags>Elite;3E;TransactionService</PackageTags>
+    <AssemblyVersion>$(VersionPrefix)</AssemblyVersion>
+    <FileVersion>$(VersionPrefix)</FileVersion>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
@@ -22,10 +30,20 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="2022.3.1" />
-    <PackageReference Include="NLog" Version="5.1.2" />
-    <PackageReference Include="System.ServiceModel.Http" Version="4.10.0" />
-    <PackageReference Include="System.ServiceModel.Security" Version="4.10.0" />
+    <PackageReference Include="JetBrains.Annotations" Version="2022.3.1">
+        <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="NLog" Version="[5.0,6.0)" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0-windows'">
+    <PackageReference Include="System.ServiceModel.Http" Version="[6.0,7.0)" />
+    <PackageReference Include="System.ServiceModel.Security" Version="[6.0,7.0)" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' != 'net6.0-windows'">
+    <PackageReference Include="System.ServiceModel.Http" Version="[4.10,5.0)" />
+    <PackageReference Include="System.ServiceModel.Security" Version="[4.10,5.0)" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,5 +54,23 @@
 		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
 			<_Parameter1>FacadeFor3e.Tests</_Parameter1>
 		</AssemblyAttribute>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="..\README.md">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+    <None Include="ReleaseHistory.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+	<ItemGroup>
+	  <None Include="LICENSE">
+	    <Pack>True</Pack>
+	    <PackagePath></PackagePath>
+	  </None>
 	</ItemGroup>
 </Project>

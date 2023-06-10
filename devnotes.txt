@@ -1,8 +1,18 @@
-﻿To re-generate the soap proxy:
+Advice specific to jetbrains annotations
+https://github.com/tom-englert/JetBrainsAnnotations.Fody
+
+Specifying version ranges of packages
+https://learn.microsoft.com/en-us/nuget/concepts/package-versioning
+
+https://stackoverflow.com/questions/71382251/multiple-target-framework-project-different-versions-of-the-same-nuget-package
+
+---
+
+To re-generate the soap proxy:
 
 svcutil /internal /synconly /namespace:"*,FacadeFor3e.TransactionService" https://server/TE_3E_DEV/web/TransactionService.asmx
 
-Then replace
+Then find and replace
     http://tempuri.org//ServiceExecuteProcess/TransactionService/
 with
     http://tempuri.org//ServiceExecuteProcess/
