@@ -81,6 +81,7 @@ namespace FacadeFor3e
                 return ProcessResponseFromTransactionService(request, response);
                 }
 
+            this.TransactionServices.LogForError(response);
             var processException = new ExecuteProcessException("An invalid response was returned from the web server:\r\n" + response);
             throw processException;
             }
@@ -90,11 +91,11 @@ namespace FacadeFor3e
             var resultsDoc = new XmlDocument();
             resultsDoc.LoadXml(response);
             string responseFormatted = resultsDoc.PrettyPrintXml();
-            this.TransactionServices.Log.Info(responseFormatted);
 
             var result = new ExecuteProcessResult(request, resultsDoc);
             if (result.ExecutionResult == "Failure")
                 {
+                this.TransactionServices.LogForError(responseFormatted);
                 var processException = ExecuteProcessExceptionBuilder.BuildForProcessError(result);
                 throw processException;
                 }
@@ -103,16 +104,19 @@ namespace FacadeFor3e
                 {
                 if (this.ThrowExceptionIfDataErrorsFound && result.HasDataError)
                     {
+                    this.TransactionServices.LogForError(responseFormatted);
                     var processException = ExecuteProcessExceptionBuilder.BuildForDataError(result);
                     throw processException;
                     }
 
                 if (result.ExecutionResult == "Interface" && this.ThrowExceptionIfProcessDoesNotComplete)
                     {
+                    this.TransactionServices.LogForError(responseFormatted);
                     var processException = new ExecuteProcessException("The process did not complete and will appear on action list.", result);
                     throw processException;
                     }
 
+                this.TransactionServices.LogForDebug(responseFormatted);
                 return result;
                 }
 
@@ -157,6 +161,7 @@ namespace FacadeFor3e
             {
             var ts = this.TransactionServices.GetSoapClient();
             OutputToConsoleDetailsOfTheJob(request);
+            this.TransactionServices.LogForDebug(request.PrettyPrintXml());
 
             // ReSharper disable once BitwiseOperatorOnEnumWithoutFlags
             var returnInfoType = (int) ((this.GetKeys ? ReturnInfoType.Keys : ReturnInfoType.None) | ReturnInfoType.Timing);

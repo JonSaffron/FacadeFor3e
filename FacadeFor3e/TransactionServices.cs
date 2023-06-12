@@ -36,7 +36,7 @@ namespace FacadeFor3e
         private ExecuteProcessService? _executeProcess;
         private SendAttachment? _sendAttachment;
 
-        internal readonly Logger Log = LogManager.GetCurrentClassLogger();
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// Constructs a new TransactionServices object without impersonation or user credentials
@@ -173,7 +173,17 @@ namespace FacadeFor3e
                 }
             sb.AppendFormat("\tUser: {0} ({1})", userName, authenticationMethod);
             sb.AppendLine();
-            Log.Info(sb.ToString());
+            this._logger.Info(sb.ToString());
+            }
+
+        internal void LogForDebug(string message)
+            {
+            this._logger.Debug(message);
+            }
+
+        internal void LogForError(string message)
+            {
+            this._logger.Error(message);
             }
 
         private static BasicHttpBinding BuildBinding(bool useHttps)

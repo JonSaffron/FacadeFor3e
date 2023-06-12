@@ -5,7 +5,7 @@
     <PackageId>FacadeFor3E</PackageId>
     <Authors>J Saffron Consulting</Authors>
     <Product>FacadeFor3E</Product>
-    <Version>2.0.1</Version>
+    <Version>2.0.2</Version>
     <Description>A library that makes using the 3E transaction service a little easier.</Description>
     <Copyright>Copyright © J Saffron Consulting Ltd 2014 - 2023</Copyright>
     <RepositoryUrl>https://github.com/JonSaffron/FacadeFor3e</RepositoryUrl>
@@ -65,12 +65,9 @@
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
-
-	<ItemGroup>
-	  <None Include="LICENSE">
-	    <Pack>True</Pack>
-	    <PackagePath></PackagePath>
-	  </None>
-	</ItemGroup>
 </Project>

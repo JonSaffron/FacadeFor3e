@@ -1,6 +1,7 @@
-﻿next
+﻿2.0.2
 ----
-Removed TrustTransfer class from library that got accidentally copied into project
+Removed TrustTransfer example class from library that got accidentally copied into project
+Improved logging
 
 2.0.1
 -----
