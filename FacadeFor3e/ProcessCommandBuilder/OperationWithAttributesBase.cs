@@ -114,7 +114,7 @@ namespace FacadeFor3e.ProcessCommandBuilder
         /// <param name="name">The column name</param>
         /// <param name="value">The value to assign</param>
         /// <returns>A reference to this operation object</returns>
-        public OperationWithAttributesBase AddAttribute(string name, Guid value)
+        public OperationWithAttributesBase AddAttribute(string name, Guid? value)
             {
             var a = new NamedAttributeValue(name, new GuidAttribute(value));
             this.Attributes.Add(a);

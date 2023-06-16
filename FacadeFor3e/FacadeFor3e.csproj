@@ -5,7 +5,7 @@
     <PackageId>FacadeFor3E</PackageId>
     <Authors>J Saffron Consulting</Authors>
     <Product>FacadeFor3E</Product>
-    <Version>2.0.2</Version>
+    <Version>2.0.3</Version>
     <Description>A library that makes using the 3E transaction service a little easier.</Description>
     <Copyright>Copyright © J Saffron Consulting Ltd 2014 - 2023</Copyright>
     <RepositoryUrl>https://github.com/JonSaffron/FacadeFor3e</RepositoryUrl>
@@ -15,6 +15,7 @@
   <PropertyGroup>
     <LangVersion>8.0</LangVersion>
     <Nullable>enable</Nullable>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>A library to help you build apps that use Elite 3E</Title>
     <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -23,10 +24,6 @@
     <FileVersion>$(VersionPrefix)</FileVersion>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
-    <DocumentationFile>FacadeFor3e.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
