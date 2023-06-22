@@ -58,7 +58,7 @@ namespace FacadeFor3e
         /// <remarks>Can be one of
         ///     <c>Success</c> (the process completed),
         ///     <c>Failure</c> (an error occurred), or
-        ///     <c>Interface</c> (the process is still running)</remarks>
+        ///     <c>Interface</c> (the process has not finished running and is stopped at a UI step)</remarks>
         public string ExecutionResult
             {
             get
@@ -251,22 +251,24 @@ namespace FacadeFor3e
         /// <summary>
         /// Generates a string description from a list of <see cref="DataErrors">DataError</see>
         /// </summary>
-        /// <param name="dataErrors"></param>
-        /// <returns></returns>
-        public static string RenderDataErrors(IEnumerable<DataError> dataErrors)
+        /// <param name="dataErrors">A collection of data errors returned from running a process</param>
+        /// <returns>A string containing a description of each of the data errors specified, or null if the data errors collection is empty</returns>
+        public static string? RenderDataErrors(IEnumerable<DataError> dataErrors)
             {
+            if (dataErrors == null)
+                throw new ArgumentNullException(nameof(dataErrors));
             var sb = new StringBuilder();
-            bool isSubsequentRecord = false;
-            foreach (var item in dataErrors)
+            using (var enumerator = dataErrors.GetEnumerator())
                 {
-                if (isSubsequentRecord)
+                if (!enumerator.MoveNext())
+                    return null;
+                AppendDataErrorInfo(enumerator.Current!, sb, 0);
+                while (enumerator.MoveNext())
                     {
                     sb.AppendLine();
+                    AppendDataErrorInfo(enumerator.Current!, sb, 0);
                     }
-                AppendDataErrorInfo(item, sb, 0);
-                isSubsequentRecord = true;
                 }
-
             return sb.ToString();
             }
 

@@ -19,7 +19,7 @@ namespace FacadeFor3e
             if (isReadDataError)
                 {
                 errorMessages.Insert(0, 
-                    "An error occurred while the transaction service populated the data object(s). Among other things this can mean:\r\n"
+                    "An error occurred while the transaction service populated the data object(s). Amongst other things this can mean:\r\n"
                     + "- An invalid attribute was specified that doesn't exist on the object\r\n"
                     + "- An invalid child object was specified that doesn't exist on the object\r\n"
                     + "- If multiple child objects were used then the order they were specified in was wrong\r\n"

@@ -85,9 +85,10 @@ namespace FacadeFor3e
 
             if (response == null)
                 {
-                // if no rows returned, then return something useful
+                // when no rows are returned, then return something useful
                 var result = new XmlDocument();
                 result.AppendChild(result.CreateElement("Data"));
+                this._transactionServices.LogForDebug("no results returned from xoql query");
                 return result;
                 }
 
@@ -95,21 +96,25 @@ namespace FacadeFor3e
                 {
                 var result = new XmlDocument();
                 result.LoadXml(response);
+                string responseFormatted = result.PrettyPrintXml();
+                this._transactionServices.LogForDebug(responseFormatted);
                 return result;
                 }
 
+            this._transactionServices.LogForError(response);
             throw new InvalidOperationException("An invalid response was received from the web server:\r\n" + response);
             }
 
         private string? CallTransactionService(XmlDocument xoql)
             {
-            var ts = this._transactionServices.GetSoapClient();
+            OutputToConsoleDetailsOfTheJob(xoql);
+            this._transactionServices.LogForDebug(xoql.PrettyPrintXml());
+
             // deliberately only passing through the document element, not the xml declaration on any leading or following comments
             // this is because the 3E transaction service is intolerant of anything but the simplest xml
             // ReSharper disable once PossibleNullReferenceException
             var request = xoql.DocumentElement!.OuterXml;
-            OutputToConsoleDetailsOfTheJob(xoql);
-
+            var ts = this._transactionServices.GetSoapClient();
             var result = ts.GetArchetypeData(request); // if no rows are returned, then result will be null
             return result;
             }
@@ -121,7 +126,7 @@ namespace FacadeFor3e
             xnm.AddNamespace("ns", "http://elite.com/schemas/query");
             XmlElement? arch = (XmlElement?) xoql.SelectSingleNode("ns:SELECT/ns:OQL_CONTEXT/ns:NODEMAP[@ID='Node#1']", xnm);
             var archetype = arch?.GetAttribute("QueryID");
-            var jobSpecifics = $"Getting data for {archetype ?? "unknown"}";
+            var jobSpecifics = $"Getting data from {archetype ?? "unknown"}";
             this._transactionServices.LogDetailsOfTheJob(jobSpecifics);
             }
         }

@@ -1,4 +1,9 @@
-﻿2.1.0
+﻿2.1.1
+-----
+Improve logging for GetArchetypeData calls
+Fix potential null reference error in RenderDataErrors
+
+2.1.0
 -----
 Improve functionality for attaching files (this is a change to the interface)
 
