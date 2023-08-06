@@ -63,11 +63,18 @@ namespace FacadeFor3e
 
         internal static ExecuteProcessException BuildForDataError(ExecuteProcessResult executeProcessResult)
             {
+            var dataErrors = executeProcessResult.DataErrors.ToList();
+            if (!dataErrors.Any())
+                {
+                throw new InvalidOperationException("There are no data errors.");
+                }
+
             var msg = new StringBuilder();
             msg.AppendLine("There are problems with the data supplied to the process.");
             msg.AppendLine();
             msg.AppendLine("The specific errors are as follows:");
-            msg.Append(ExecuteProcessResult.RenderDataErrors(executeProcessResult.DataErrors));
+            msg.Append(ExecuteProcessResult.RenderDataErrors(dataErrors)!);
+
             var result = new ExecuteProcessException(msg.ToString(), executeProcessResult);
             return result;
             }

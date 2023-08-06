@@ -82,6 +82,36 @@ namespace FacadeFor3e.ProcessCommandBuilder
             return this;
             }
 
+#if NET6_0_OR_GREATER
+
+        /// <summary>
+        /// Appends a new attribute to the operation
+        /// </summary>
+        /// <param name="name">The column name</param>
+        /// <param name="value">The value to assign</param>
+        /// <returns>A reference to this operation object</returns>
+        public OperationWithAttributesBase AddDateAttribute(string name, DateOnly? value)
+            {
+            var a = new NamedAttributeValue(name, new DateAttribute(value));
+            this.Attributes.Add(a);
+            return this;
+            }
+
+        /// <summary>
+        /// Appends a new attribute to the operation
+        /// </summary>
+        /// <param name="name">The column name</param>
+        /// <param name="value">The value to assign</param>
+        /// <returns>A reference to this operation object</returns>
+        public OperationWithAttributesBase AddAttribute(string name, DateOnly? value)
+            {
+            var a = new NamedAttributeValue(name, new DateAttribute(value));
+            this.Attributes.Add(a);
+            return this;
+            }
+
+#else
+
         /// <summary>
         /// Appends a new attribute to the operation
         /// </summary>
@@ -94,6 +124,8 @@ namespace FacadeFor3e.ProcessCommandBuilder
             this.Attributes.Add(a);
             return this;
             }
+
+#endif
 
         /// <summary>
         /// Appends a new attribute to the operation

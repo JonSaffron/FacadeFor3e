@@ -153,7 +153,12 @@ namespace FacadeFor3e.Tests
 
             Assert.Throws<ArgumentNullException>(() => coll[0] = null);
             Assert.Throws<ArgumentOutOfRangeException>(() => coll[0] = g);
-            var n = new NamedAttributeValue("date", new DateAttribute(DateTime.Today));
+#if NET6_0_OR_GREATER
+            var today = DateOnly.FromDateTime(DateTime.Today);
+#else
+            var today = DateTime.Today;
+#endif
+            var n = new NamedAttributeValue("date", new DateAttribute(today));
             coll[0] = n;
             Assert.AreEqual(n, coll[0]);
             }

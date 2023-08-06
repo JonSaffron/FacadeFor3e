@@ -75,7 +75,6 @@ namespace FacadeFor3e
                 throw new ArgumentNullException(nameof(xoql));
             if (xoql.DocumentElement == null)
                 throw new ArgumentOutOfRangeException(nameof(xoql));
-            // todo check xoql starts with SELECT
             
             string? Func() => CallTransactionService(xoql);
             var response = this._transactionServices.IsImpersonating
@@ -114,8 +113,7 @@ namespace FacadeFor3e
             // this is because the 3E transaction service is intolerant of anything but the simplest xml
             // ReSharper disable once PossibleNullReferenceException
             var request = xoql.DocumentElement!.OuterXml;
-            var ts = this._transactionServices.GetSoapClient();
-            var result = ts.GetArchetypeData(request); // if no rows are returned, then result will be null
+            var result = this._transactionServices.SoapClient.GetArchetypeData(request); // if no rows are returned, then result will be null
             return result;
             }
 
@@ -126,7 +124,7 @@ namespace FacadeFor3e
             xnm.AddNamespace("ns", "http://elite.com/schemas/query");
             XmlElement? arch = (XmlElement?) xoql.SelectSingleNode("ns:SELECT/ns:OQL_CONTEXT/ns:NODEMAP[@ID='Node#1']", xnm);
             var archetype = arch?.GetAttribute("QueryID");
-            var jobSpecifics = $"Getting data from {archetype ?? "unknown"}";
+            var jobSpecifics = $"Getting data from archetype {archetype ?? "unknown"}";
             this._transactionServices.LogDetailsOfTheJob(jobSpecifics);
             }
         }

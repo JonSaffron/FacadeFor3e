@@ -139,8 +139,7 @@ namespace FacadeFor3e.TransactionService
         FacadeFor3e.TransactionService.ExposeEnumResponse ExposeEnum(FacadeFor3e.TransactionService.ExposeEnumRequest request);
         
         // CODEGEN: Generating message contract since element name GetServiceTimeZoneIDResult from namespace http://tempuri.org//ServiceExecuteProcess is not marked nillable
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org//ServiceExecuteProcess/GetServiceTimeZoneID" +
-            "", ReplyAction="*")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org//ServiceExecuteProcess/GetServiceTimeZoneID", ReplyAction="*")]
         FacadeFor3e.TransactionService.GetServiceTimeZoneIDResponse GetServiceTimeZoneID(FacadeFor3e.TransactionService.GetServiceTimeZoneIDRequest request);
         
         // CODEGEN: Generating message contract since element name GetServiceCultureResult from namespace http://tempuri.org//ServiceExecuteProcess is not marked nillable
@@ -152,18 +151,15 @@ namespace FacadeFor3e.TransactionService
         FacadeFor3e.TransactionService.ExecuteProcessResponse ExecuteProcess(FacadeFor3e.TransactionService.ExecuteProcessRequest request);
         
         // CODEGEN: Generating message contract since element name projectXML from namespace http://tempuri.org//ServiceExecuteProcess is not marked nillable
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org//ServiceExecuteProcess/GetAppObjectSecurity" +
-            "Rights", ReplyAction="*")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org//ServiceExecuteProcess/GetAppObjectSecurityRights", ReplyAction="*")]
         FacadeFor3e.TransactionService.GetAppObjectSecurityRightsResponse GetAppObjectSecurityRights(FacadeFor3e.TransactionService.GetAppObjectSecurityRightsRequest request);
         
         // CODEGEN: Generating message contract since element name userNetworkAlias from namespace http://tempuri.org//ServiceExecuteProcess is not marked nillable
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org//ServiceExecuteProcess/CancelAllOpenProcess" +
-            "es", ReplyAction="*")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org//ServiceExecuteProcess/CancelAllOpenProcesses", ReplyAction="*")]
         FacadeFor3e.TransactionService.CancelAllOpenProcessesResponse CancelAllOpenProcesses(FacadeFor3e.TransactionService.CancelAllOpenProcessesRequest request);
         
         // CODEGEN: Generating message contract since element name selectXml from namespace http://tempuri.org//ServiceExecuteProcess is not marked nillable
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org//ServiceExecuteProcess/GetArchetypeDataGlob" +
-            "al", ReplyAction="*")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org//ServiceExecuteProcess/GetArchetypeDataGlobal", ReplyAction="*")]
         FacadeFor3e.TransactionService.GetArchetypeDataGlobalResponse GetArchetypeDataGlobal(FacadeFor3e.TransactionService.GetArchetypeDataGlobalRequest request);
         
         // CODEGEN: Generating message contract since element name selectXml from namespace http://tempuri.org//ServiceExecuteProcess is not marked nillable
@@ -171,13 +167,11 @@ namespace FacadeFor3e.TransactionService
         FacadeFor3e.TransactionService.GetMetricDataGlobalResponse GetMetricDataGlobal(FacadeFor3e.TransactionService.GetMetricDataGlobalRequest request);
         
         // CODEGEN: Generating message contract since element name selectXml from namespace http://tempuri.org//ServiceExecuteProcess is not marked nillable
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org//ServiceExecuteProcess/GetNamedMetricDataGl" +
-            "obal", ReplyAction="*")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org//ServiceExecuteProcess/GetNamedMetricDataGlobal", ReplyAction="*")]
         FacadeFor3e.TransactionService.GetNamedMetricDataGlobalResponse GetNamedMetricDataGlobal(FacadeFor3e.TransactionService.GetNamedMetricDataGlobalRequest request);
         
         // CODEGEN: Generating message contract since element name selectXml from namespace http://tempuri.org//ServiceExecuteProcess is not marked nillable
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org//ServiceExecuteProcess/GetFormattedArchetyp" +
-            "eData", ReplyAction="*")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org//ServiceExecuteProcess/GetFormattedArchetypeData", ReplyAction="*")]
         FacadeFor3e.TransactionService.GetFormattedArchetypeDataResponse GetFormattedArchetypeData(FacadeFor3e.TransactionService.GetFormattedArchetypeDataRequest request);
         
         // CODEGEN: Generating message contract since element name selectXml from namespace http://tempuri.org//ServiceExecuteProcess is not marked nillable
@@ -185,8 +179,7 @@ namespace FacadeFor3e.TransactionService
         FacadeFor3e.TransactionService.GetArchetypeDataResponse GetArchetypeData(FacadeFor3e.TransactionService.GetArchetypeDataRequest request);
         
         // CODEGEN: Generating message contract since element name selectXml from namespace http://tempuri.org//ServiceExecuteProcess is not marked nillable
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org//ServiceExecuteProcess/GetFormattedMetricDa" +
-            "ta", ReplyAction="*")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org//ServiceExecuteProcess/GetFormattedMetricData", ReplyAction="*")]
         FacadeFor3e.TransactionService.GetFormattedMetricDataResponse GetFormattedMetricData(FacadeFor3e.TransactionService.GetFormattedMetricDataRequest request);
         
         // CODEGEN: Generating message contract since element name selectXml from namespace http://tempuri.org//ServiceExecuteProcess is not marked nillable
@@ -194,8 +187,7 @@ namespace FacadeFor3e.TransactionService
         FacadeFor3e.TransactionService.GetMetricDataResponse GetMetricData(FacadeFor3e.TransactionService.GetMetricDataRequest request);
         
         // CODEGEN: Generating message contract since element name selectXml from namespace http://tempuri.org//ServiceExecuteProcess is not marked nillable
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org//ServiceExecuteProcess/GetFormattedNamedMet" +
-            "ricData", ReplyAction="*")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org//ServiceExecuteProcess/GetFormattedNamedMetricData", ReplyAction="*")]
         FacadeFor3e.TransactionService.GetFormattedNamedMetricDataResponse GetFormattedNamedMetricData(FacadeFor3e.TransactionService.GetFormattedNamedMetricDataRequest request);
         
         // CODEGEN: Generating message contract since element name selectXml from namespace http://tempuri.org//ServiceExecuteProcess is not marked nillable
@@ -211,8 +203,7 @@ namespace FacadeFor3e.TransactionService
         FacadeFor3e.TransactionService.GetMetricDataSQLResponse GetMetricDataSQL(FacadeFor3e.TransactionService.GetMetricDataSQLRequest request);
         
         // CODEGEN: Generating message contract since element name selectXml from namespace http://tempuri.org//ServiceExecuteProcess is not marked nillable
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org//ServiceExecuteProcess/GetNamedMetricDataSQ" +
-            "L", ReplyAction="*")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org//ServiceExecuteProcess/GetNamedMetricDataSQL", ReplyAction="*")]
         FacadeFor3e.TransactionService.GetNamedMetricDataSQLResponse GetNamedMetricDataSQL(FacadeFor3e.TransactionService.GetNamedMetricDataSQLRequest request);
         
         // CODEGEN: Generating message contract since element name reportQueryXML from namespace http://tempuri.org//ServiceExecuteProcess is not marked nillable
@@ -220,13 +211,11 @@ namespace FacadeFor3e.TransactionService
         FacadeFor3e.TransactionService.GetDataResponse GetData(FacadeFor3e.TransactionService.GetDataRequest request);
         
         // CODEGEN: Generating message contract since element name reportLayoutId from namespace http://tempuri.org//ServiceExecuteProcess is not marked nillable
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org//ServiceExecuteProcess/GetDataFromReportLay" +
-            "out", ReplyAction="*")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org//ServiceExecuteProcess/GetDataFromReportLayout", ReplyAction="*")]
         FacadeFor3e.TransactionService.GetDataFromReportLayoutResponse GetDataFromReportLayout(FacadeFor3e.TransactionService.GetDataFromReportLayoutRequest request);
         
         // CODEGEN: Generating message contract since element name reportLayoutId from namespace http://tempuri.org//ServiceExecuteProcess is not marked nillable
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org//ServiceExecuteProcess/GetDataFromReportLay" +
-            "outCrystal", ReplyAction="*")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org//ServiceExecuteProcess/GetDataFromReportLayoutCrystal", ReplyAction="*")]
         FacadeFor3e.TransactionService.GetDataFromReportLayoutCrystalResponse GetDataFromReportLayoutCrystal(FacadeFor3e.TransactionService.GetDataFromReportLayoutCrystalRequest request);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org//ServiceExecuteProcess/GetSyncIds", ReplyAction="*")]
@@ -256,13 +245,11 @@ namespace FacadeFor3e.TransactionService
         FacadeFor3e.TransactionService.GetActionsListResponse GetActionsList(FacadeFor3e.TransactionService.GetActionsListRequest request);
         
         // CODEGEN: Generating message contract since element name paramsXML from namespace http://tempuri.org//ServiceExecuteProcess is not marked nillable
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org//ServiceExecuteProcess/GetDataFromArchetype" +
-            "s", ReplyAction="*")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org//ServiceExecuteProcess/GetDataFromArchetypes", ReplyAction="*")]
         FacadeFor3e.TransactionService.GetDataFromArchetypesResponse GetDataFromArchetypes(FacadeFor3e.TransactionService.GetDataFromArchetypesRequest request);
         
         // CODEGEN: Generating message contract since element name printJobId from namespace http://tempuri.org//ServiceExecuteProcess is not marked nillable
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org//ServiceExecuteProcess/UpdatePrintJobStatus" +
-            "", ReplyAction="*")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org//ServiceExecuteProcess/UpdatePrintJobStatus", ReplyAction="*")]
         FacadeFor3e.TransactionService.UpdatePrintJobStatusResponse UpdatePrintJobStatus(FacadeFor3e.TransactionService.UpdatePrintJobStatusRequest request);
         
         // CODEGEN: Generating message contract since element name itemIDToSync from namespace http://tempuri.org//ServiceExecuteProcess is not marked nillable
@@ -294,13 +281,11 @@ namespace FacadeFor3e.TransactionService
         FacadeFor3e.TransactionService.GetOneNoteMapResponse GetOneNoteMap(FacadeFor3e.TransactionService.GetOneNoteMapRequest request);
         
         // CODEGEN: Generating message contract since element name businessObject from namespace http://tempuri.org//ServiceExecuteProcess is not marked nillable
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org//ServiceExecuteProcess/GetBusinessObjectMet" +
-            "hods", ReplyAction="*")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org//ServiceExecuteProcess/GetBusinessObjectMethods", ReplyAction="*")]
         FacadeFor3e.TransactionService.GetBusinessObjectMethodsResponse GetBusinessObjectMethods(FacadeFor3e.TransactionService.GetBusinessObjectMethodsRequest request);
         
         // CODEGEN: Generating message contract since element name defaultsXML from namespace http://tempuri.org//ServiceExecuteProcess is not marked nillable
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org//ServiceExecuteProcess/StartProcessWithDefa" +
-            "ults", ReplyAction="*")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org//ServiceExecuteProcess/StartProcessWithDefaults", ReplyAction="*")]
         FacadeFor3e.TransactionService.StartProcessWithDefaultsResponse StartProcessWithDefaults(FacadeFor3e.TransactionService.StartProcessWithDefaultsRequest request);
         
         // CODEGEN: Generating message contract since element name reportQueryXML from namespace http://tempuri.org//ServiceExecuteProcess is not marked nillable
@@ -308,8 +293,7 @@ namespace FacadeFor3e.TransactionService
         FacadeFor3e.TransactionService.TEST_GetDataResponse TEST_GetData(FacadeFor3e.TransactionService.TEST_GetDataRequest request);
         
         // CODEGEN: Generating message contract since element name reportLayoutId from namespace http://tempuri.org//ServiceExecuteProcess is not marked nillable
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org//ServiceExecuteProcess/TEST_GetDataFromRepo" +
-            "rtLayout", ReplyAction="*")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org//ServiceExecuteProcess/TEST_GetDataFromReportLayout", ReplyAction="*")]
         FacadeFor3e.TransactionService.TEST_GetDataFromReportLayoutResponse TEST_GetDataFromReportLayout(FacadeFor3e.TransactionService.TEST_GetDataFromReportLayoutRequest request);
         
         // CODEGEN: Generating message contract since element name clientXML from namespace http://tempuri.org//ServiceExecuteProcess is not marked nillable

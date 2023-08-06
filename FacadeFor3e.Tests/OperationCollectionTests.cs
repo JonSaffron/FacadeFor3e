@@ -102,5 +102,19 @@ namespace FacadeFor3e.Tests
             coll[1] = e; // does not throw (is a nothing operation)
             }
 
+        [Test]
+        public void AddRange()
+            {
+            var a = new AddOperation("EntPerson");
+            var e = EditOperation.ByPosition(0);
+            var d = DeleteOperation.ByPrimaryKey(12345);
+
+            var coll = new OperationCollection();
+            Assert.DoesNotThrow(() => coll.AddRange(new OperationBase[] {a, e, d}));
+
+            Assert.Throws<ArgumentException>(() => coll.AddRange(new OperationBase[] { null }));
+
+            Assert.Throws<ArgumentNullException>(() => coll.AddRange(null));
+            }
         }
     }

@@ -262,11 +262,13 @@ namespace FacadeFor3e
                 {
                 if (!enumerator.MoveNext())
                     return null;
-                AppendDataErrorInfo(enumerator.Current!, sb, 0);
+                // ReSharper disable once AssignNullToNotNullAttribute
+                AppendDataErrorInfo(enumerator.Current, sb, 0);
                 while (enumerator.MoveNext())
                     {
                     sb.AppendLine();
-                    AppendDataErrorInfo(enumerator.Current!, sb, 0);
+                    // ReSharper disable once AssignNullToNotNullAttribute
+                    AppendDataErrorInfo(enumerator.Current, sb, 0);
                     }
                 }
             return sb.ToString();

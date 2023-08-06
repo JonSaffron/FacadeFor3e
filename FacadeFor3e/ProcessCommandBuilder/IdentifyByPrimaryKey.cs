@@ -70,7 +70,7 @@ namespace FacadeFor3e.ProcessCommandBuilder
                 }
             }
 
-        private void Validate(IAttribute value)
+        private static void Validate(IAttribute value)
             {
             if (value == null)
                 throw new ArgumentNullException(nameof(value));

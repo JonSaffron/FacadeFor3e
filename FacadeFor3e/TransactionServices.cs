@@ -32,11 +32,16 @@ namespace FacadeFor3e
         /// </summary>
         public Uri Endpoint { get; }
 
-        private TransactionServiceClient? _transactionServiceSoapClient;
+        /// <summary>
+        /// Returns whether this object has ben disposed
+        /// </summary>
+        public bool IsDisposed { get; private set; }
+
+        private readonly Lazy<TransactionServiceClient> _transactionServiceSoapClient;
         private ExecuteProcessService? _executeProcess;
         private SendAttachment? _sendAttachment;
 
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        private readonly Lazy<Logger> _logger = new Lazy<Logger>(() => LogManager.GetCurrentClassLogger()!);
 
         /// <summary>
         /// Constructs a new TransactionServices object without impersonation or user credentials
@@ -45,6 +50,7 @@ namespace FacadeFor3e
         public TransactionServices(Uri endpoint)
             {
             this.Endpoint = endpoint ?? throw new ArgumentNullException(nameof(endpoint));
+            this._transactionServiceSoapClient = new Lazy<TransactionServiceClient>(() => BuildSoapClient(endpoint, networkCredentials: null));
             }
 
         /// <summary>
@@ -55,6 +61,7 @@ namespace FacadeFor3e
         public TransactionServices(Uri endpoint, WindowsIdentity accountToImpersonate) : this(endpoint)
             {
             this.AccountToImpersonate = accountToImpersonate ?? throw new ArgumentNullException(nameof(accountToImpersonate));
+            this._transactionServiceSoapClient = new Lazy<TransactionServiceClient>(() => BuildSoapClient(endpoint, networkCredentials: null));
             }
 
         /// <summary>
@@ -65,6 +72,7 @@ namespace FacadeFor3e
         public TransactionServices(Uri endpoint, NetworkCredential networkCredential) : this(endpoint)
             {
             this.NetworkCredential = networkCredential ?? throw new ArgumentNullException(nameof(networkCredential));
+            this._transactionServiceSoapClient = new Lazy<TransactionServiceClient>(() => BuildSoapClient(endpoint, networkCredential));
             }
 
         /// <summary>
@@ -72,9 +80,9 @@ namespace FacadeFor3e
         /// </summary>
         public void Ping()
             {
-            var client = GetSoapClient();
-            LogDetailsOfTheJob("Pinging the transaction service");  // must call GetSoapClient before this line
-            client.Ping();
+            EnsureObjectIsNotDisposed();
+            LogDetailsOfTheJob("Pinging the transaction service");
+            this.SoapClient.Ping();
             }
         
         /// <summary>
@@ -85,15 +93,37 @@ namespace FacadeFor3e
         /// <remarks>The query is run in the context of the user so row level security will be applied</remarks>
         public XmlDocument GetArchetypeData(XmlDocument xoql)
             {
+            EnsureObjectIsNotDisposed();
             var getArchetypeData = new GetArchetypeData(this);
             var result = getArchetypeData.GetData(xoql);
             return result;
             }
 
         /// <summary>
+        /// Returns the data from the specified presentation. 
+        /// </summary>
+        /// <param name="presentationId">Specifies the presentation to run. The report data must come from archetypes and not a metric.</param>
+        /// <returns>An XML representation of the resulting data</returns>
+        /// <remarks>The query is run in the context of the user so row level security will be applied</remarks>
+        public XmlDocument GetDataFromPresentation(string presentationId)
+            {
+            EnsureObjectIsNotDisposed();
+            var getDataFromPresentation = new GetDataFromPresentation(this);
+            var result = getDataFromPresentation.GetData(presentationId);
+            return result;
+            }
+
+        /// <summary>
         /// Gets an object that allows system options/overrides to be interrogated
         /// </summary>
-        public GetOption GetOption => new GetOption(this);
+        public GetOption GetOption
+            {
+            get
+                {
+                EnsureObjectIsNotDisposed();
+                return new GetOption(this);
+                }
+            }
 
         /// <summary>
         /// Gets the culture in use by the 3E Transaction Service
@@ -101,6 +131,7 @@ namespace FacadeFor3e
         /// <returns>A CultureInfo object</returns>
         public CultureInfo GetServiceCulture()
             {
+            EnsureObjectIsNotDisposed();
             var getServiceCulture = new GetServiceCulture(this);
             var result = getServiceCulture.Get();
             return result;
@@ -109,40 +140,55 @@ namespace FacadeFor3e
         /// <summary>
         /// Gets an object that allows a specified process to be run to add, edit and delete records
         /// </summary>
-        public ExecuteProcessService ExecuteProcess => this._executeProcess ??= new ExecuteProcessService(this);
+        public ExecuteProcessService ExecuteProcess
+            {
+            get
+                {
+                EnsureObjectIsNotDisposed();
+                return this._executeProcess ??= new ExecuteProcessService(this);
+                }
+            }
 
         /// <summary>
         /// Gets an objects that allows attachments to be added to records
         /// </summary>
-        public SendAttachment SendAttachment => this._sendAttachment ??= new SendAttachment(this);
+        public SendAttachment SendAttachment
+            {
+            get
+                {
+                EnsureObjectIsNotDisposed();
+                return this._sendAttachment ??= new SendAttachment(this);
+                }
+            }
 
         /// <summary>
         /// Gets whether or not impersonation is being used during calls to the 3E transaction service
         /// </summary>
         public bool IsImpersonating => this.AccountToImpersonate != null && this.AccountToImpersonate != WindowsIdentity.GetCurrent();
 
-        internal TransactionServiceClient GetSoapClient()
+        // ReSharper disable once RedundantSuppressNullableWarningExpression (applies to .net 6 only)
+        internal TransactionServiceClient SoapClient => this._transactionServiceSoapClient.Value!;
+
+        // ReSharper disable once RedundantSuppressNullableWarningExpression (applies to .net 6 only)
+        private Logger Logger => this._logger.Value!;
+
+        private static TransactionServiceClient BuildSoapClient(Uri endPoint, NetworkCredential? networkCredentials)
             {
-            var result = this._transactionServiceSoapClient;
-            if (result == null)
+            bool isSecure = endPoint.Scheme.Equals(Uri.UriSchemeHttps);
+            var binding = BuildBinding(useHttps: isSecure);
+            var endpointAddress = new EndpointAddress(endPoint);
+            var result = new TransactionServiceClient(binding, endpointAddress);    // ClientCredentials should be available once endpoint has been provided
+
+            // Delegation is required for 3E version 3, earlier versions just needed Identification
+            // ReSharper disable PossibleNullReferenceException
+            result.ClientCredentials!.Windows.AllowedImpersonationLevel = TokenImpersonationLevel.Delegation;
+            // ReSharper restore PossibleNullReferenceException
+
+            if (networkCredentials != null)
                 {
-                bool isSecure = this.Endpoint.Scheme.Equals(Uri.UriSchemeHttps);
-                var binding = BuildBinding(useHttps: isSecure);
-                var endpointAddress = new EndpointAddress(this.Endpoint);
-                result = new TransactionServiceClient(binding, endpointAddress);    // ClientCredentials should be available once endpoint has been provided
-
-                // Delegation is required for 3E version 3, earlier versions just needed Identification
                 // ReSharper disable PossibleNullReferenceException
-                result.ClientCredentials!.Windows.AllowedImpersonationLevel = TokenImpersonationLevel.Delegation;
+                result.ClientCredentials!.Windows.ClientCredential = networkCredentials;
                 // ReSharper restore PossibleNullReferenceException
-
-                if (this.NetworkCredential != null)
-                    {
-                    // ReSharper disable PossibleNullReferenceException
-                    result.ClientCredentials!.Windows.ClientCredential = this.NetworkCredential;
-                    // ReSharper restore PossibleNullReferenceException
-                    }
-                this._transactionServiceSoapClient = result;
                 }
 
             return result;
@@ -154,7 +200,7 @@ namespace FacadeFor3e
             var sb = new StringBuilder();
             sb.AppendFormat(jobSpecifics);
             sb.AppendLine();
-            sb.AppendFormat("\tURL: {0}", this._transactionServiceSoapClient!.Endpoint!.Address!);
+            sb.AppendFormat("\tURL: {0}", this.SoapClient.Endpoint!.Address!);
             sb.AppendLine();
             string userName;
             string authenticationMethod;
@@ -175,17 +221,17 @@ namespace FacadeFor3e
                 }
             sb.AppendFormat("\tUser: {0} ({1})", userName, authenticationMethod);
             sb.AppendLine();
-            this._logger.Info(sb.ToString());
+            this.Logger.Info(sb.ToString());
             }
 
         internal void LogForDebug(string message)
             {
-            this._logger.Debug(message);
+            this.Logger.Debug(message);
             }
 
         internal void LogForError(string message)
             {
-            this._logger.Error(message);
+            this.Logger.Error(message);
             }
 
         private static BasicHttpBinding BuildBinding(bool useHttps)
@@ -230,11 +276,11 @@ namespace FacadeFor3e
         /// </summary>
         public void Dispose()
             {
-            if (this._transactionServiceSoapClient != null)
+            if (this._transactionServiceSoapClient.IsValueCreated)
                 {
-                ForceClose(this._transactionServiceSoapClient);
+                ForceClose(this.SoapClient);
                 }
-            this._transactionServiceSoapClient = null;
+            this.IsDisposed = true;
             GC.SuppressFinalize(this);
             }
 
@@ -249,6 +295,12 @@ namespace FacadeFor3e
                 {
                 ts.Abort();
                 }
+            }
+
+        private void EnsureObjectIsNotDisposed()
+            {
+            if (this.IsDisposed)
+                throw new ObjectDisposedException("Object has been disposed.");
             }
         }
     }

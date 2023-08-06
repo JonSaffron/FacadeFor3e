@@ -1,4 +1,12 @@
-﻿2.1.1
+﻿2.2.0
+-----
+Fixed a timing bug that caused a NullReferenceException
+Added GetDataFromPresentation functionality (wraps GetDataFromReportLayout)
+For .net 6 and later, date attributes now use DateOnly objects rather than DateTime objects
+Improved logging for GetOption and GetServiceCulture services
+Internal improvements to initialisation and disposal of the SOAP client
+
+2.1.1
 -----
 Improve logging for GetArchetypeData calls
 Fix potential null reference error in RenderDataErrors

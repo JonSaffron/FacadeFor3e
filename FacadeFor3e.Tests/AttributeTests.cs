@@ -162,7 +162,11 @@ namespace FacadeFor3e.Tests
         [Test]
         public void TestDateWithValue()
             {
-            DateTime testDate = new DateTime(1980, 2, 29);
+#if NET6_0_OR_GREATER
+            var testDate = new DateOnly(1980, 2, 29);
+#else
+            var testDate = new DateTime(1980, 2, 29);
+#endif
             var d = new DateAttribute(testDate);
             Assert.AreEqual(testDate, d.Value);
             Assert.AreEqual("1980-02-29", d.ToString());
@@ -191,7 +195,11 @@ namespace FacadeFor3e.Tests
             int n = -100;
             do
                 {
+#if NET6_0_OR_GREATER
+                var testDate = DateOnly.FromDateTime(DateTime.Today).AddDays(n);
+#else
                 var testDate = DateTime.Today.AddDays(n);
+#endif
                 DateAttribute d = testDate;
                 Assert.AreEqual(testDate, d.Value);
                 n++;
@@ -200,13 +208,18 @@ namespace FacadeFor3e.Tests
                 Assert.IsNull(d.Value);
                 n++;
 
+#if NET6_0_OR_GREATER
+                testDate = DateOnly.FromDateTime(DateTime.Today).AddDays(n);
+#else
                 testDate = DateTime.Today.AddDays(n);
+#endif
                 d.Value = testDate;
                 Assert.AreEqual(testDate, d.Value);
                 n++;
                 } while (n < 100);
             }
 
+#if !NET6_0_OR_GREATER
         [Test]
         public void TestDateWithTimeCausesException()
             {
@@ -216,6 +229,7 @@ namespace FacadeFor3e.Tests
             var d = new DateAttribute(DateTime.Today);
             Assert.Throws<ArgumentOutOfRangeException>(() => d.Value = DateTime.Now);
             }
+#endif
 
         [Test]
         public void TestDateTimeWithValue()

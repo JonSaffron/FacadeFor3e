@@ -58,9 +58,20 @@ namespace FacadeFor3e.Tests
             Assert.AreEqual(887766m, a.Attributes["BasicDecimal"].Attribute.Value);
 
             var now = DateTime.Now;
+#if NET6_0_OR_GREATER
+            var today = DateOnly.FromDateTime(now);
+            a.AddDateAttribute("BasicDate", today);
+            Assert.IsInstanceOf<DateAttribute>(a.Attributes["BasicDate"].Attribute);
+            Assert.AreEqual(today, a.Attributes["BasicDate"].Attribute.Value);
+
+            a.AddAttribute("BasicDate2", today);
+            Assert.IsInstanceOf<DateAttribute>(a.Attributes["BasicDate2"].Attribute);
+            Assert.AreEqual(today, a.Attributes["BasicDate2"].Attribute.Value);
+#else
             a.AddDateAttribute("BasicDate", now.Date);
             Assert.IsInstanceOf<DateAttribute>(a.Attributes["BasicDate"].Attribute);
             Assert.AreEqual(now.Date, a.Attributes["BasicDate"].Attribute.Value);
+#endif
 
             a.AddDateTimeAttribute("BasicDateTime", now);
             Assert.IsInstanceOf<DateTimeAttribute>(a.Attributes["BasicDateTime"].Attribute);

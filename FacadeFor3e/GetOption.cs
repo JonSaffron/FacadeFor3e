@@ -86,6 +86,7 @@ namespace FacadeFor3e
         /// </summary>
         /// <param name="optionName">The name of the system option</param>
         /// <returns>The value of the specified option</returns>
+        /// <remarks>The return value is an entry from NxGenericListItem</remarks>
         public Guid GetListOption(string optionName)
             {
             // response is Guid.ToString()
@@ -112,15 +113,15 @@ namespace FacadeFor3e
                 // ReSharper restore AssignNullToNotNullAttribute
                 : Func();
 
+            this._transactionServices.LogForDebug($"{optionName} = {result}");
             return result;
             }
 
         private string CallTransactionService(string optionName, DataTypeEnum optionType)
             {
-            var ts = this._transactionServices.GetSoapClient();
             OutputToConsoleDetailsOfTheJob(optionName, optionType);
 
-            var result = ts.GetOption(optionName, optionType)!;
+            var result = this._transactionServices.SoapClient.GetOption(optionName, optionType)!;
             return result;
             }
 

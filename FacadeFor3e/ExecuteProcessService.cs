@@ -159,13 +159,12 @@ namespace FacadeFor3e
 
         private string CallTransactionService(XmlDocument request)
             {
-            var ts = this.TransactionServices.GetSoapClient();
             OutputToConsoleDetailsOfTheJob(request);
             this.TransactionServices.LogForDebug(request.PrettyPrintXml());
 
             // ReSharper disable once BitwiseOperatorOnEnumWithoutFlags
             var returnInfoType = (int) ((this.GetKeys ? ReturnInfoType.Keys : ReturnInfoType.None) | ReturnInfoType.Timing);
-            string result = ts.ExecuteProcess(request.OuterXml, returnInfoType)!;
+            string result = this.TransactionServices.SoapClient.ExecuteProcess(request.OuterXml, returnInfoType)!;
             return result;
             }
 

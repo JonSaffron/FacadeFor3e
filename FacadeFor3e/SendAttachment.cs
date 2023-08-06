@@ -134,7 +134,7 @@ namespace FacadeFor3e
 
         private void CallTransactionServiceForStartOfTransfer(string syncId, string archetypeId, Guid itemId, string fileTitle, byte[] data, long totalFileLength)
             {
-            var ts = this._transactionServices.GetSoapClient();
+            var ts = this._transactionServices.SoapClient;
             int chunkLength = data.GetLength(0);
             this._transactionServices.LogForDebug($"  sending {(chunkLength == totalFileLength ? "all" : "initial")} content - {chunkLength:N0} bytes");
 
@@ -146,7 +146,7 @@ namespace FacadeFor3e
                 {
                 ts.SendAttachment(itemId.ToString(), archetypeId, syncId, fileTitle, data, 0, chunkLength, totalFileLength);
                 }
-            catch (FaultException ex) when (ex.Message.StartsWith("Failed to write file") && retry < 5)
+            catch (FaultException ex) when (ex.Message != null && ex.Message.StartsWith("Failed to write file") && retry < 5)
                 {
                 this._transactionServices.LogForDebug($"Failed to write attachment chunk: {ex.Message}");
                 this._transactionServices.LogForDebug($"Waiting and retrying");
@@ -158,7 +158,7 @@ namespace FacadeFor3e
 
         private void CallTransactionServiceForContinuingTransfer(string syncId, string fileTitle, byte[] data, long offset, long totalFileLength)
             {
-            var ts = this._transactionServices.GetSoapClient();
+            var ts = this._transactionServices.SoapClient;
             int chunkLength = data.GetLength(0);
             bool isFinalChunk = (chunkLength + offset) == totalFileLength;
             this._transactionServices.LogForDebug($"  sending {(isFinalChunk ? "final" : "additional")} content - {chunkLength:N0} bytes at {offset:N0}");
@@ -171,7 +171,7 @@ namespace FacadeFor3e
                 {
                 ts.SendAttachmentChunk(syncId, fileTitle, data, offset, chunkLength, totalFileLength);
                 }
-            catch (FaultException ex) when (ex.Message.StartsWith("Failed to write file") && retry < 5)
+            catch (FaultException ex) when (ex.Message != null && ex.Message.StartsWith("Failed to write file") && retry < 5)
                 {
                 this._transactionServices.LogForDebug($"Failed to write attachment chunk: {ex.Message}");
                 this._transactionServices.LogForDebug($"Waiting and retrying");

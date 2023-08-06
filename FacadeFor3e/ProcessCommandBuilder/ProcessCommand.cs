@@ -47,7 +47,7 @@ namespace FacadeFor3e.ProcessCommandBuilder
 
         /// <summary>
         /// Gets or returns the Operating Unit to use whilst running the process.
-        /// Setting this can be useful when adding zero vouchers. Its front-end equivalent is the Operating Unit setting in a process's Folder fields.
+        /// Setting this can be useful when dealing with vouchers. Its front-end equivalent is the Operating Unit setting in a process's Folder fields.
         /// </summary>
         /// <remarks>Value is stored in NxFwkProcessItem.Unit</remarks>
         public string? OperatingUnit { get; set; }
@@ -107,7 +107,6 @@ namespace FacadeFor3e.ProcessCommandBuilder
             writer.WriteStartElement("Initialize", ObjectNameSpace);
             foreach (OperationBase o in this.Operations)
                 {
-                // ReSharper disable once PossibleNullReferenceException
                 o.Render(writer, this.ObjectName);
                 }
             writer.WriteEndElement();
@@ -127,8 +126,7 @@ namespace FacadeFor3e.ProcessCommandBuilder
             if (this.Description != null)
                 writer.WriteAttributeString("Description", this.Description);
             if (this.Priority.HasValue)
-                // ReSharper disable once AssignNullToNotNullAttribute
-                writer.WriteAttributeString("Priority", this.Priority.Value.ToString());
+                writer.WriteAttributeString("Priority", this.Priority.Value.ToString("G"));
             if (this.OperatingUnit != null)
                 writer.WriteAttributeString("OperatingUnit", this.OperatingUnit);
             if (this.CheckSum.HasValue)
@@ -138,8 +136,7 @@ namespace FacadeFor3e.ProcessCommandBuilder
             if (this.ProxyUserId != null)
                 writer.WriteAttributeString("ProxyUserID", this.ProxyUserId);
             if (this.ProcessRequestType.HasValue)
-                // ReSharper disable once AssignNullToNotNullAttribute
-                writer.WriteAttributeString("ProcessRequestType", this.ProcessRequestType.ToString());
+                writer.WriteAttributeString("ProcessRequestType", this.ProcessRequestType.Value.ToString("G"));
             if (this.ProcessAutomationRoleAfterFirstStep != null)
                 writer.WriteAttributeString("ProcessAutomationRoleAfterFirstStep", this.ProcessAutomationRoleAfterFirstStep);
             if (this.ProcessRequestSignature != null)
@@ -153,10 +150,9 @@ namespace FacadeFor3e.ProcessCommandBuilder
         public XmlDocument GenerateCommand()
             {
             var xmlDoc = new XmlDocument();
-            // ReSharper disable AssignNullToNotNullAttribute
-            using XmlWriter w = xmlDoc.CreateNavigator()!.AppendChild();
+            // ReSharper disable once RedundantSuppressNullableWarningExpression (applies to .net 6 only)
+            using XmlWriter w = xmlDoc.CreateNavigator()!.AppendChild()!;
             Render(w);
-            // ReSharper restore AssignNullToNotNullAttribute
             return xmlDoc;
             }
         }

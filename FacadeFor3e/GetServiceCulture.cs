@@ -37,15 +37,15 @@ namespace FacadeFor3e
                 // ReSharper restore AssignNullToNotNullAttribute
                 : Func();
             this._cultureInfo = response == null ? CultureInfo.InvariantCulture : new CultureInfo(response);
+            this._transactionServices.LogForDebug($"ServiceCulture = {this._cultureInfo}");
             return this._cultureInfo;
             }
 
         private string? CallTransactionService()
             {
-            var ts = this._transactionServices.GetSoapClient();
             OutputToConsoleDetailsOfTheJob();
 
-            var result = ts.GetServiceCulture();
+            var result = this._transactionServices.SoapClient.GetServiceCulture();
             return result;
             }
 

@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Globalization;
 using JetBrains.Annotations;
+#if !NET6_0_OR_GREATER
+using DateOnly = System.DateTime;
+#endif
 
 namespace FacadeFor3e.ProcessCommandBuilder
     {
@@ -178,13 +181,13 @@ namespace FacadeFor3e.ProcessCommandBuilder
     [PublicAPI]
     public sealed class DateAttribute : IAttribute
         {
-        private DateTime? _internalValue;
+        private DateOnly? _internalValue;
 
         /// <summary>
         /// Constructs a new 3E date attribute value
         /// </summary>
         /// <param name="value">The initial value of the attribute</param>
-        public DateAttribute(DateTime? value)
+        public DateAttribute(DateOnly? value)
             {
             this.Value = value;
             }
@@ -197,19 +200,21 @@ namespace FacadeFor3e.ProcessCommandBuilder
         /// <param name="day">The day within the month</param>
         public DateAttribute(int year, int month, int day)
             {
-            this.Value = new DateTime(year, month, day);
+            this.Value = new DateOnly(year, month, day);
             }
 
         /// <summary>
         /// Gets/sets the value of this attribute
         /// </summary>
-        public DateTime? Value
+        public DateOnly? Value
             {
             get => this._internalValue;
             set
                 {
+#if !NET6_0_OR_GREATER
                 if (value.HasValue && value.Value.TimeOfDay != TimeSpan.Zero)
                     throw new ArgumentOutOfRangeException(nameof(value), "DateAttribute value cannot include time element.");
+#endif
                 this._internalValue = value;
                 }
             }
@@ -224,7 +229,7 @@ namespace FacadeFor3e.ProcessCommandBuilder
         /// Implicitly converts a date value to a DateAttribute
         /// </summary>
         /// <param name="value">The date value to convert</param>
-        public static implicit operator DateAttribute(DateTime value)
+        public static implicit operator DateAttribute(DateOnly value)
             {
             return new DateAttribute(value);
             }
