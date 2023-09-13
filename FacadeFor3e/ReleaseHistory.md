@@ -1,4 +1,8 @@
-﻿2.2.0
+﻿2.3.0
+-----
+Added functionality for GetArchetypeData to return data in a DataTable (this is usually easier to deal with than as an XmlDocument)
+
+2.2.0
 -----
 Fixed a timing bug that caused a NullReferenceException
 Added GetDataFromPresentation functionality (wraps GetDataFromReportLayout)

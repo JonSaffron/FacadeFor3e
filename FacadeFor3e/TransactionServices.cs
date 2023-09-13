@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Globalization;
 using System.Net;
 using System.Security.Principal;
@@ -86,7 +87,7 @@ namespace FacadeFor3e
             }
         
         /// <summary>
-        /// Runs the specified query against the 3E database
+        /// Runs the specified query against the 3E database and returns the result as an XmlDocument
         /// </summary>
         /// <param name="xoql">Specifies the query to run</param>
         /// <returns>An XML representation of the resulting data</returns>
@@ -96,6 +97,20 @@ namespace FacadeFor3e
             EnsureObjectIsNotDisposed();
             var getArchetypeData = new GetArchetypeData(this);
             var result = getArchetypeData.GetData(xoql);
+            return result;
+            }
+
+        /// <summary>
+        /// Runs the specified query against the 3E database and returns the result as a DataTable
+        /// </summary>
+        /// <param name="xoql">Specifies the query to run</param>
+        /// <returns>An XML representation of the resulting data</returns>
+        /// <remarks>The query is run in the context of the user so row level security will be applied</remarks>
+        public DataTable GetArchetypeDataTable(XmlDocument xoql)
+            {
+            EnsureObjectIsNotDisposed();
+            var getArchetypeData = new GetArchetypeData(this);
+            var result = getArchetypeData.GetDataTable(xoql);
             return result;
             }
 
