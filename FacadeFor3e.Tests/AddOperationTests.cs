@@ -2,6 +2,7 @@
 using System.Xml;
 using FacadeFor3e.ProcessCommandBuilder;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace FacadeFor3e.Tests
     {
@@ -12,28 +13,28 @@ namespace FacadeFor3e.Tests
         public void CanCreateAdd()
             {
             var a = new AddOperation();
-            Assert.IsNull(a.SubClass);
-            Assert.AreEqual(0, a.Attributes.Count);
-            Assert.AreEqual(0, a.Children.Count);
+            ClassicAssert.IsNull(a.SubClass);
+            ClassicAssert.AreEqual(0, a.Attributes.Count);
+            ClassicAssert.AreEqual(0, a.Children.Count);
             }
 
         [Test]
         public void CanCreateAddWithSubClass()
             {
             var a = new AddOperation("EntPerson");
-            Assert.AreEqual("EntPerson", a.SubClass);
+            ClassicAssert.AreEqual("EntPerson", a.SubClass);
             }
 
         [Test]
         public void ChangeSubClass()
             {
             var a = new AddOperation();
-            Assert.IsNull(a.SubClass);
+            ClassicAssert.IsNull(a.SubClass);
             Assert.Throws<ArgumentOutOfRangeException>(() => a.SubClass = " invalid ");
             a.SubClass = "EntOrg";
-            Assert.AreEqual("EntOrg", a.SubClass);
+            ClassicAssert.AreEqual("EntOrg", a.SubClass);
             a.SubClass = null;
-            Assert.IsNull(a.SubClass);
+            ClassicAssert.IsNull(a.SubClass);
             }
 
         [Test]
@@ -42,53 +43,57 @@ namespace FacadeFor3e.Tests
             var a = new AddOperation();
 
             a.AddAttribute("BasicString", "StringValue");
-            Assert.IsInstanceOf<StringAttribute>(a.Attributes["BasicString"].Attribute);
-            Assert.AreEqual("StringValue", a.Attributes["BasicString"].Attribute.Value);
+            ClassicAssert.IsInstanceOf<StringAttribute>(a.Attributes["BasicString"].Attribute);
+            ClassicAssert.AreEqual("StringValue", a.Attributes["BasicString"].Attribute.Value);
 
             a.AddAttribute("BasicBool", true);
-            Assert.IsInstanceOf<BoolAttribute>(a.Attributes["BasicBool"].Attribute);
-            Assert.AreEqual(true, a.Attributes["BasicBool"].Attribute.Value);
+            ClassicAssert.IsInstanceOf<BoolAttribute>(a.Attributes["BasicBool"].Attribute);
+            ClassicAssert.AreEqual(true, a.Attributes["BasicBool"].Attribute.Value);
 
             a.AddAttribute("BasicInt", 527);
-            Assert.IsInstanceOf<IntAttribute>(a.Attributes["BasicInt"].Attribute);
-            Assert.AreEqual(527, a.Attributes["BasicInt"].Attribute.Value);
+            ClassicAssert.IsInstanceOf<IntAttribute>(a.Attributes["BasicInt"].Attribute);
+            ClassicAssert.AreEqual(527, a.Attributes["BasicInt"].Attribute.Value);
 
             a.AddAttribute("BasicDecimal", 887766m);
-            Assert.IsInstanceOf<DecimalAttribute>(a.Attributes["BasicDecimal"].Attribute);
-            Assert.AreEqual(887766m, a.Attributes["BasicDecimal"].Attribute.Value);
+            ClassicAssert.IsInstanceOf<DecimalAttribute>(a.Attributes["BasicDecimal"].Attribute);
+            ClassicAssert.AreEqual(887766m, a.Attributes["BasicDecimal"].Attribute.Value);
 
             var now = DateTime.Now;
 #if NET6_0_OR_GREATER
             var today = DateOnly.FromDateTime(now);
             a.AddDateAttribute("BasicDate", today);
-            Assert.IsInstanceOf<DateAttribute>(a.Attributes["BasicDate"].Attribute);
-            Assert.AreEqual(today, a.Attributes["BasicDate"].Attribute.Value);
+            ClassicAssert.IsInstanceOf<DateAttribute>(a.Attributes["BasicDate"].Attribute);
+            ClassicAssert.AreEqual(today, a.Attributes["BasicDate"].Attribute.Value);
 
             a.AddAttribute("BasicDate2", today);
-            Assert.IsInstanceOf<DateAttribute>(a.Attributes["BasicDate2"].Attribute);
-            Assert.AreEqual(today, a.Attributes["BasicDate2"].Attribute.Value);
+            ClassicAssert.IsInstanceOf<DateAttribute>(a.Attributes["BasicDate2"].Attribute);
+            ClassicAssert.AreEqual(today, a.Attributes["BasicDate2"].Attribute.Value);
 #else
             a.AddDateAttribute("BasicDate", now.Date);
-            Assert.IsInstanceOf<DateAttribute>(a.Attributes["BasicDate"].Attribute);
-            Assert.AreEqual(now.Date, a.Attributes["BasicDate"].Attribute.Value);
+            ClassicAssert.IsInstanceOf<DateAttribute>(a.Attributes["BasicDate"].Attribute);
+            ClassicAssert.AreEqual(now.Date, a.Attributes["BasicDate"].Attribute.Value);
 #endif
 
             a.AddDateTimeAttribute("BasicDateTime", now);
-            Assert.IsInstanceOf<DateTimeAttribute>(a.Attributes["BasicDateTime"].Attribute);
-            Assert.AreEqual(now, a.Attributes["BasicDateTime"].Attribute.Value);
+            ClassicAssert.IsInstanceOf<DateTimeAttribute>(a.Attributes["BasicDateTime"].Attribute);
+            ClassicAssert.AreEqual(now, a.Attributes["BasicDateTime"].Attribute.Value);
 
             var g = Guid.NewGuid();
             a.AddAttribute("BasicGuid", g);
-            Assert.IsInstanceOf<GuidAttribute>(a.Attributes["BasicGuid"].Attribute);
-            Assert.AreEqual(g, a.Attributes["BasicGuid"].Attribute.Value);
+            ClassicAssert.IsInstanceOf<GuidAttribute>(a.Attributes["BasicGuid"].Attribute);
+            ClassicAssert.AreEqual(g, a.Attributes["BasicGuid"].Attribute.Value);
 
             a.AddAliasedAttribute("AliasedAttribute", "Number", "L1234.12345");
-            Assert.IsInstanceOf<AliasAttribute>(a.Attributes["AliasedAttribute"]);
-            Assert.IsInstanceOf<StringAttribute>(a.Attributes["AliasedAttribute"].Attribute);
-            Assert.AreEqual("Number", ((AliasAttribute) a.Attributes["AliasedAttribute"]).Alias);
-            Assert.AreEqual("L1234.12345", ((AliasAttribute) a.Attributes["AliasedAttribute"]).Attribute.Value);
+            ClassicAssert.IsInstanceOf<AliasAttribute>(a.Attributes["AliasedAttribute"]);
+            ClassicAssert.IsInstanceOf<StringAttribute>(a.Attributes["AliasedAttribute"].Attribute);
+            ClassicAssert.AreEqual("Number", ((AliasAttribute) a.Attributes["AliasedAttribute"]).Alias);
+            ClassicAssert.AreEqual("L1234.12345", ((AliasAttribute) a.Attributes["AliasedAttribute"]).Attribute.Value);
 
-            Assert.AreEqual(8, a.Attributes.Count);
+#if NET6_0_OR_GREATER
+            ClassicAssert.AreEqual(9, a.Attributes.Count);
+#else
+            ClassicAssert.AreEqual(8, a.Attributes.Count);
+#endif   
             }
 
         [Test]
@@ -100,7 +105,7 @@ namespace FacadeFor3e.Tests
 
             Action <XmlWriter> renderAddOperation = xw => a.Render(xw, "Entity");
             var s = CommonLibrary.GetRenderedOutput(renderAddOperation);
-            Assert.AreEqual("<Add><Entity><Attributes><OrgName>acme corp</OrgName></Attributes><Children><Site /></Children></Entity></Add>", s);
+            ClassicAssert.AreEqual("<Add><Entity><Attributes><OrgName>acme corp</OrgName></Attributes><Children><Site /></Children></Entity></Add>", s);
             }
 
         [Test]
@@ -112,7 +117,7 @@ namespace FacadeFor3e.Tests
 
             Action <XmlWriter> renderAddOperation = xw => a.Render(xw, "Entity");
             var s = CommonLibrary.GetRenderedOutput(renderAddOperation);
-            Assert.AreEqual("<Add><EntOrg><Attributes><OrgName>acme corp</OrgName></Attributes><Children><Site /></Children></EntOrg></Add>", s);
+            ClassicAssert.AreEqual("<Add><EntOrg><Attributes><OrgName>acme corp</OrgName></Attributes><Children><Site /></Children></EntOrg></Add>", s);
             }
         }
     }

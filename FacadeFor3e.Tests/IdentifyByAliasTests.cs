@@ -1,6 +1,7 @@
 ﻿using System;
 using FacadeFor3e.ProcessCommandBuilder;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 // ReSharper disable ObjectCreationAsStatement
 // ReSharper disable AssignNullToNotNullAttribute
@@ -14,20 +15,20 @@ namespace FacadeFor3e.Tests
         public void CanConstructStandardAlias()
             {
             var a = new IdentifyByAlias("Number", "L12-345");
-            Assert.IsInstanceOf<StringAttribute>(a.KeyValue);
-            Assert.AreEqual("L12-345", a.KeyValue.Value);
+            ClassicAssert.IsInstanceOf<StringAttribute>(a.KeyValue);
+            ClassicAssert.AreEqual("L12-345", a.KeyValue.Value);
             var s = CommonLibrary.GetRenderedOutputWithNode(a.RenderKey);
-            Assert.AreEqual("<Test KeyValue=\"L12-345\" AliasField=\"Number\" />", s);
+            ClassicAssert.AreEqual("<Test KeyValue=\"L12-345\" AliasField=\"Number\" />", s);
             }
 
         [Test]
         public void CanConstructComplexAlias()
             {
             var a = new IdentifyByAlias("MattIndex", new IntAttribute(123456));
-            Assert.IsInstanceOf<IntAttribute>(a.KeyValue);
-            Assert.AreEqual(123456, a.KeyValue.Value);
+            ClassicAssert.IsInstanceOf<IntAttribute>(a.KeyValue);
+            ClassicAssert.AreEqual(123456, a.KeyValue.Value);
             var s = CommonLibrary.GetRenderedOutputWithNode(a.RenderKey);
-            Assert.AreEqual("<Test KeyValue=\"123456\" AliasField=\"MattIndex\" />", s);
+            ClassicAssert.AreEqual("<Test KeyValue=\"123456\" AliasField=\"MattIndex\" />", s);
             }
 
         [Test]

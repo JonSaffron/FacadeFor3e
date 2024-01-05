@@ -2,6 +2,7 @@
 using System.Xml;
 using FacadeFor3e.ProcessCommandBuilder;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 // ReSharper disable AssignNullToNotNullAttribute
 // ReSharper disable ObjectCreationAsStatement
@@ -15,7 +16,7 @@ namespace FacadeFor3e.Tests
         public void CanCreateDelete()
             {
             var d = new DeleteOperation(new IdentifyByPrimaryKey(1));
-            Assert.IsNull(d.SubClass);
+            ClassicAssert.IsNull(d.SubClass);
             }
 
         [Test]
@@ -28,7 +29,7 @@ namespace FacadeFor3e.Tests
         public void CanCreateDeleteWithSubClass()
             {
             var d = new DeleteOperation(new IdentifyByPrimaryKey(1), "EntPerson");
-            Assert.AreEqual("EntPerson", d.SubClass);
+            ClassicAssert.AreEqual("EntPerson", d.SubClass);
             }
 
         [Test]
@@ -38,7 +39,7 @@ namespace FacadeFor3e.Tests
 
             Action <XmlWriter> renderDeleteOperation = xw => d.Render(xw, "Entity");
             var s = CommonLibrary.GetRenderedOutput(renderDeleteOperation);
-            Assert.AreEqual("<Delete><Entity KeyValue=\"1\" /></Delete>", s);
+            ClassicAssert.AreEqual("<Delete><Entity KeyValue=\"1\" /></Delete>", s);
             }
 
         [Test]
@@ -48,32 +49,32 @@ namespace FacadeFor3e.Tests
 
             Action <XmlWriter> renderDeleteOperation = xw => d.Render(xw, "Entity");
             var s = CommonLibrary.GetRenderedOutput(renderDeleteOperation);
-            Assert.AreEqual("<Delete><EntOrg KeyValue=\"1\" /></Delete>", s);
+            ClassicAssert.AreEqual("<Delete><EntOrg KeyValue=\"1\" /></Delete>", s);
             }
 
         [Test]
         public void StaticBuilders()
             {
             var d1 = DeleteOperation.ByPrimaryKey(1);
-            Assert.IsInstanceOf<DeleteOperation>(d1);
-            Assert.IsInstanceOf<IdentifyByPrimaryKey>(d1.KeySpecification);
-            Assert.AreEqual(1, ((IdentifyByPrimaryKey)d1.KeySpecification).KeyValue.Value);
+            ClassicAssert.IsInstanceOf<DeleteOperation>(d1);
+            ClassicAssert.IsInstanceOf<IdentifyByPrimaryKey>(d1.KeySpecification);
+            ClassicAssert.AreEqual(1, ((IdentifyByPrimaryKey)d1.KeySpecification).KeyValue.Value);
 
             var g = Guid.NewGuid();
             var d2 = DeleteOperation.ByPrimaryKey(g);
-            Assert.IsInstanceOf<DeleteOperation>(d2);
-            Assert.IsInstanceOf<IdentifyByPrimaryKey>(d2.KeySpecification);
-            Assert.AreEqual(g, ((IdentifyByPrimaryKey)d2.KeySpecification).KeyValue.Value);
+            ClassicAssert.IsInstanceOf<DeleteOperation>(d2);
+            ClassicAssert.IsInstanceOf<IdentifyByPrimaryKey>(d2.KeySpecification);
+            ClassicAssert.AreEqual(g, ((IdentifyByPrimaryKey)d2.KeySpecification).KeyValue.Value);
 
             var d3 = DeleteOperation.ByPrimaryKey("CL");
-            Assert.IsInstanceOf<DeleteOperation>(d3);
-            Assert.IsInstanceOf<IdentifyByPrimaryKey>(d3.KeySpecification);
-            Assert.AreEqual("CL", ((IdentifyByPrimaryKey)d3.KeySpecification).KeyValue.Value);
+            ClassicAssert.IsInstanceOf<DeleteOperation>(d3);
+            ClassicAssert.IsInstanceOf<IdentifyByPrimaryKey>(d3.KeySpecification);
+            ClassicAssert.AreEqual("CL", ((IdentifyByPrimaryKey)d3.KeySpecification).KeyValue.Value);
 
             var d4 = DeleteOperation.ByUniqueAlias("Number", "M1.123");
-            Assert.IsInstanceOf<DeleteOperation>(d4);
-            Assert.IsInstanceOf<IdentifyByAlias>(d4.KeySpecification);
-            Assert.AreEqual("M1.123", ((IdentifyByAlias)d4.KeySpecification).KeyValue.Value);
+            ClassicAssert.IsInstanceOf<DeleteOperation>(d4);
+            ClassicAssert.IsInstanceOf<IdentifyByAlias>(d4.KeySpecification);
+            ClassicAssert.AreEqual("M1.123", ((IdentifyByAlias)d4.KeySpecification).KeyValue.Value);
             }
 
         [Test]

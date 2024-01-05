@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using FacadeFor3e.ProcessCommandBuilder;
 
 // ReSharper disable ReturnValueOfPureMethodIsNotUsed
@@ -24,10 +25,10 @@ namespace FacadeFor3e.Tests
                 t, d, c
                 };
 
-            Assert.IsTrue(coll.Contains(t));
-            Assert.IsTrue(coll.IndexOf(d) == 1);
-            Assert.IsTrue(coll[2] == c);
-            Assert.AreEqual(3, coll.Count);
+            ClassicAssert.IsTrue(coll.Contains(t));
+            ClassicAssert.IsTrue(coll.IndexOf(d) == 1);
+            ClassicAssert.IsTrue(coll[2] == c);
+            ClassicAssert.AreEqual(3, coll.Count);
             }
 
         [Test]
@@ -77,11 +78,11 @@ namespace FacadeFor3e.Tests
                 };
 
             coll.Remove(t);
-            Assert.IsFalse(coll.Contains(t));
+            ClassicAssert.IsFalse(coll.Contains(t));
             coll.RemoveAt(0);
-            Assert.IsFalse(coll.Contains(d));
+            ClassicAssert.IsFalse(coll.Contains(d));
             coll.Clear();
-            Assert.IsFalse(coll.Contains(c));
+            ClassicAssert.IsFalse(coll.Contains(c));
             }
 
         [Test]
@@ -96,9 +97,9 @@ namespace FacadeFor3e.Tests
                 t, d, c
                 };
 
-            Assert.IsNotNull(coll["ProfDetailTime"]);
-            Assert.IsNotNull(coll["ProfDetailCost"]);
-            Assert.IsNotNull(coll["ProfDetailChrg"]);
+            ClassicAssert.IsNotNull(coll["ProfDetailTime"]);
+            ClassicAssert.IsNotNull(coll["ProfDetailCost"]);
+            ClassicAssert.IsNotNull(coll["ProfDetailChrg"]);
             }
 
         [Test]
@@ -132,11 +133,11 @@ namespace FacadeFor3e.Tests
                 t, d, c
                 };
 
-            Assert.IsFalse(coll.TryGetValue("whatever", out DataObject outValue));
-            Assert.IsNull(outValue);
+            ClassicAssert.IsFalse(coll.TryGetValue("whatever", out DataObject outValue));
+            ClassicAssert.IsNull(outValue);
 
-            Assert.IsTrue(coll.TryGetValue("ProfDetailTime", out outValue));
-            Assert.AreEqual(t, outValue);
+            ClassicAssert.IsTrue(coll.TryGetValue("ProfDetailTime", out outValue));
+            ClassicAssert.AreEqual(t, outValue);
             }
 
         [Test]
@@ -155,7 +156,7 @@ namespace FacadeFor3e.Tests
             Assert.Throws<ArgumentOutOfRangeException>(() => coll[0] = c);
             var n = new DataObject("ProfAdjust");
             coll[0] = n;
-            Assert.AreEqual(n, coll[0]);
+            ClassicAssert.AreEqual(n, coll[0]);
             }
 
         [Test]

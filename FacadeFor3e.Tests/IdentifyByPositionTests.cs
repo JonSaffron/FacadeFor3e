@@ -1,6 +1,7 @@
 ﻿using System;
 using FacadeFor3e.ProcessCommandBuilder;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 // ReSharper disable ObjectCreationAsStatement
 
@@ -13,9 +14,9 @@ namespace FacadeFor3e.Tests
         public void CanConstruct()
             {
             var pk = new IdentifyByPosition(99_000);
-            Assert.AreEqual(99_000, pk.Position);
+            ClassicAssert.AreEqual(99_000, pk.Position);
             var s = CommonLibrary.GetRenderedOutputWithNode(pk.RenderKey);
-            Assert.AreEqual("<Test Position=\"99000\" />", s);
+            ClassicAssert.AreEqual("<Test Position=\"99000\" />", s);
             }
 
         [Test]

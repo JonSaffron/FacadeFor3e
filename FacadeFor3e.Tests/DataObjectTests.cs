@@ -1,6 +1,7 @@
 ﻿using System;
 using FacadeFor3e.ProcessCommandBuilder;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 // ReSharper disable ObjectCreationAsStatement
 // ReSharper disable AssignNullToNotNullAttribute
@@ -14,11 +15,11 @@ namespace FacadeFor3e.Tests
         public void CanConstructValidDataObject()
             {
             var d = new DataObject("Matter");
-            Assert.AreEqual("Matter", d.ObjectName);
-            Assert.AreEqual(0, d.Operations.Count);
+            ClassicAssert.AreEqual("Matter", d.ObjectName);
+            ClassicAssert.AreEqual(0, d.Operations.Count);
 
             var s = CommonLibrary.GetRenderedOutput(d.Render);
-            Assert.AreEqual("<Matter />", s);
+            ClassicAssert.AreEqual("<Matter />", s);
             }
 
         [Test]
@@ -39,7 +40,7 @@ namespace FacadeFor3e.Tests
             var op = new AddOperation("hello");
             d.Operations.Add(op);
 
-            Assert.AreEqual(4, d.Operations.Count);
+            ClassicAssert.AreEqual(4, d.Operations.Count);
             }
 
         [Test]
@@ -58,7 +59,7 @@ namespace FacadeFor3e.Tests
             d.DeleteRecord(new IdentifyByPrimaryKey(2));
 
             var s = CommonLibrary.GetRenderedOutput(d.Render);
-            Assert.AreEqual("<Client>" +
+            ClassicAssert.AreEqual("<Client>" +
                                         "<Add><Client /></Add>" +
                                         "<Edit><Client KeyValue=\"1\" /></Edit>" +
                                         "<Delete><Client KeyValue=\"2\" /></Delete>" +

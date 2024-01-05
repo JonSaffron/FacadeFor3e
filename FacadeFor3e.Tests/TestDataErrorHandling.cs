@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Xml;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace FacadeFor3e.Tests
     {
@@ -18,29 +19,29 @@ namespace FacadeFor3e.Tests
 
             var processResult = new ExecuteProcessResult(request, response);
 
-            Assert.True(processResult.HasDataError);
-            Assert.AreEqual(1, processResult.DataErrors.Count());
+            ClassicAssert.True(processResult.HasDataError);
+            ClassicAssert.AreEqual(1, processResult.DataErrors.Count());
             var dataError = processResult.DataErrors.Single();
-            Assert.AreEqual("516557", dataError.PrimaryKey);
-            Assert.AreEqual(3, dataError.RowIndex);
-            Assert.AreEqual(0, dataError.AttributeErrors.Count);
-            Assert.AreEqual(2, dataError.Children.Count);
+            ClassicAssert.AreEqual("516557", dataError.PrimaryKey);
+            ClassicAssert.AreEqual(3, dataError.RowIndex);
+            ClassicAssert.AreEqual(0, dataError.AttributeErrors.Count);
+            ClassicAssert.AreEqual(2, dataError.Children.Count);
 
             var profDetailTime = dataError.Children.First();
-            Assert.AreEqual("ProfDetailTime", profDetailTime.ObjectId);
-            Assert.AreEqual("61932954", profDetailTime.PrimaryKey);
-            Assert.AreEqual(88, profDetailTime.RowIndex);
-            Assert.AreEqual(1, profDetailTime.AttributeErrors.Count);
-            Assert.IsNull(profDetailTime.ObjectException);
+            ClassicAssert.AreEqual("ProfDetailTime", profDetailTime.ObjectId);
+            ClassicAssert.AreEqual("61932954", profDetailTime.PrimaryKey);
+            ClassicAssert.AreEqual(88, profDetailTime.RowIndex);
+            ClassicAssert.AreEqual(1, profDetailTime.AttributeErrors.Count);
+            ClassicAssert.IsNull(profDetailTime.ObjectException);
 
             var profDetailTimeAtt = profDetailTime.AttributeErrors.Single();
-            Assert.AreEqual("WorkTimekeeper", profDetailTimeAtt.AttributeId);
-            Assert.AreEqual("-2", profDetailTimeAtt.Value);
-            Assert.True(profDetailTimeAtt.Error.StartsWith("Fee-Earner must exist"));
+            ClassicAssert.AreEqual("WorkTimekeeper", profDetailTimeAtt.AttributeId);
+            ClassicAssert.AreEqual("-2", profDetailTimeAtt.Value);
+            ClassicAssert.True(profDetailTimeAtt.Error.StartsWith("Fee-Earner must exist"));
 
             var profDetailCost = dataError.Children.Skip(1).First();
-            Assert.AreEqual("ProfDetailCost", profDetailCost.ObjectId);
-            Assert.AreEqual("sample exception", profDetailCost.ObjectException);
+            ClassicAssert.AreEqual("ProfDetailCost", profDetailCost.ObjectId);
+            ClassicAssert.AreEqual("sample exception", profDetailCost.ObjectException);
             }
 
         [Test]
@@ -55,15 +56,15 @@ namespace FacadeFor3e.Tests
 
             var output = ExecuteProcessResult.RenderDataErrors(processResult.DataErrors);
             var lines = output.Split(new [] {'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries);
-            Assert.True(lines[0].Contains("Proforma"));
-            Assert.True(lines[0].Contains("516557"));
-            Assert.True(lines[1].Contains("ProfDetailTime"));
-            Assert.True(lines[1].Contains("61932954"));
-            Assert.True(lines[2].Contains("Fee-Earner must exist"));
-            Assert.True(lines[3].Contains("ProfDetailCost"));
-            Assert.True(lines[3].Contains("61933093"));
-            Assert.True(lines[4].Contains("sample exception"));
-            Assert.True(lines[5].Contains("allowed for Disbursement Entry"));
+            ClassicAssert.True(lines[0].Contains("Proforma"));
+            ClassicAssert.True(lines[0].Contains("516557"));
+            ClassicAssert.True(lines[1].Contains("ProfDetailTime"));
+            ClassicAssert.True(lines[1].Contains("61932954"));
+            ClassicAssert.True(lines[2].Contains("Fee-Earner must exist"));
+            ClassicAssert.True(lines[3].Contains("ProfDetailCost"));
+            ClassicAssert.True(lines[3].Contains("61933093"));
+            ClassicAssert.True(lines[4].Contains("sample exception"));
+            ClassicAssert.True(lines[5].Contains("allowed for Disbursement Entry"));
             }
         }
     }

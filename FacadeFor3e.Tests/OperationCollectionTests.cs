@@ -1,6 +1,7 @@
 ﻿using System;
 using FacadeFor3e.ProcessCommandBuilder;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 // ReSharper disable CollectionNeverQueried.Local
 
@@ -21,10 +22,10 @@ namespace FacadeFor3e.Tests
                 a, e, d
                 };
 
-            Assert.IsTrue(coll.Contains(a));
-            Assert.IsTrue(coll.IndexOf(e) == 1);
-            Assert.IsTrue(coll[2] == d);
-            Assert.AreEqual(3, coll.Count);
+            ClassicAssert.IsTrue(coll.Contains(a));
+            ClassicAssert.IsTrue(coll.IndexOf(e) == 1);
+            ClassicAssert.IsTrue(coll[2] == d);
+            ClassicAssert.AreEqual(3, coll.Count);
             }
 
         [Test]
@@ -74,11 +75,11 @@ namespace FacadeFor3e.Tests
                 };
 
             coll.Remove(a);
-            Assert.IsFalse(coll.Contains(a));
+            ClassicAssert.IsFalse(coll.Contains(a));
             coll.RemoveAt(0);
-            Assert.IsFalse(coll.Contains(e));
+            ClassicAssert.IsFalse(coll.Contains(e));
             coll.Clear();
-            Assert.IsFalse(coll.Contains(d));
+            ClassicAssert.IsFalse(coll.Contains(d));
             }
 
         [Test]
@@ -97,7 +98,7 @@ namespace FacadeFor3e.Tests
             Assert.Throws<ArgumentOutOfRangeException>(() => coll[0] = d);
             var n = new AddOperation();
             coll[0] = n;
-            Assert.AreEqual(n, coll[0]);
+            ClassicAssert.AreEqual(n, coll[0]);
 
             coll[1] = e; // does not throw (is a nothing operation)
             }

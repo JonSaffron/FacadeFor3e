@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 using JetBrains.Annotations;
@@ -16,9 +17,7 @@ namespace FacadeFor3e
     [PublicAPI]
     public sealed class ProxyIdentityProvider : IDisposable
         {
-        private readonly string _username;
-        private readonly string _domain;
-        private readonly string _password;
+        private readonly NetworkCredential _credentials;
 
         [DllImport("advapi32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         private static extern bool LogonUser(string principal, string authority, string password, LogonSessionType logonType, LogonProvider logonProvider, out SafeAccessTokenHandle token);
@@ -67,14 +66,28 @@ namespace FacadeFor3e
         /// <summary>
         /// Constructs a new ProxyIdentityProvider with the specified credentials
         /// </summary>
+        /// <param name="credentials">Specifies the credentials of the account</param>
+        public ProxyIdentityProvider(NetworkCredential credentials)
+            {
+            this._credentials = credentials ?? throw new ArgumentNullException(nameof(credentials));
+            }
+
+        /// <summary>
+        /// Constructs a new ProxyIdentityProvider with the specified credentials
+        /// </summary>
         /// <param name="username">Specifies the username of the account</param>
         /// <param name="domain">Specifies the domain where the account is defined</param>
         /// <param name="password">Specifies the password for the account</param>
+        [Obsolete("Use overload with NetworkCredentials instead", error: false)]
         public ProxyIdentityProvider(string username, string domain, string password)
             {
-            this._username = username ?? throw new ArgumentNullException(nameof(username));
-            this._domain = domain ?? throw new ArgumentNullException(nameof(domain));
-            this._password = password ?? throw new ArgumentNullException(nameof(password));
+            if (username == null)
+                throw new ArgumentNullException(nameof(username));
+            if (domain == null)
+                throw new ArgumentNullException(nameof(domain));
+            if (password == null)
+                throw new ArgumentNullException(nameof(password));
+            this._credentials = new NetworkCredential(username, password, domain);
             }
 
         /// <summary>
@@ -85,7 +98,7 @@ namespace FacadeFor3e
             {
             if (this._wi == null)
                 {
-                bool result = LogonUser(this._username, this._domain, this._password, LogonSessionType.Interactive, LogonProvider.Default, out _originalToken);
+                bool result = LogonUser(this._credentials.UserName, this._credentials.Domain, this._credentials.Password, LogonSessionType.Interactive, LogonProvider.Default, out _originalToken);
                 if (!result)
                     {
                     System.Diagnostics.Trace.WriteLine("LogonUser failed.");

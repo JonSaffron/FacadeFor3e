@@ -24,7 +24,11 @@ namespace FacadeFor3e.Examples
         {
         public static int CreatePendingMatter(Dictionary<string, string> fd, bool isTender)
             {
+#if NET6_0_OR_GREATER
+            DateOnly today = DateOnly.FromDateTime(DateTime.Today);
+#else
             DateTime today = DateTime.Today;
+#endif
 
             var p = new ProcessCommand("Matter_Srv", "Matter");
             var a = p.AddRecord();
@@ -98,10 +102,16 @@ namespace FacadeFor3e.Examples
 
 	    public static void MatterOpen(int matter, string alternativeMatterNumber, bool useTimeType, string billingGroup, string ptaGroup = null)
             {
+#if NET6_0_OR_GREATER
+            DateOnly today = DateOnly.FromDateTime(DateTime.Today);
+#else
+            DateTime today = DateTime.Today;
+#endif
+
             var p = new ProcessCommand("Matter_Srv", "Matter");
             var e = p.EditRecord(new IdentifyByPrimaryKey(new IntAttribute(matter)));
             e.AddAttribute("MattStatus", "OP");     // set status to open
-            e.AddDateAttribute("OpenDate", DateTime.Today);     // reset open date
+            e.AddDateAttribute("OpenDate", today);     // reset open date
             e.AddAttribute("AltNumber", alternativeMatterNumber);
 
             if (!string.IsNullOrWhiteSpace(ptaGroup))

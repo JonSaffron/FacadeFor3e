@@ -1,4 +1,14 @@
-﻿2.3.0
+﻿3.0.0
+-----
+Removed functionality for GetArchetypeData to return data in a DataTable (new functionality is easier to use)
+Added functionality for GetArchetypeData to return data as:
+	- a scalar value (Boolean, Integer, DateTime, DateOnly, Decimal, Guid, String)
+	- a List of scalar values
+	- a compound value (a POCO whose fields/properties match the column names returned)
+	- a list of compound values
+Improved ProxyIdentityProvider to store credentials more securely
+
+2.3.0
 -----
 Added functionality for GetArchetypeData to return data in a DataTable (this is usually easier to deal with than as an XmlDocument)
 

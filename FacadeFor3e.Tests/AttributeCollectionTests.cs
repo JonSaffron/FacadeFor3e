@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using FacadeFor3e.ProcessCommandBuilder;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 // ReSharper disable CollectionNeverQueried.Local
 // ReSharper disable AssignNullToNotNullAttribute
@@ -24,10 +25,10 @@ namespace FacadeFor3e.Tests
                 b, i, g
                 };
 
-            Assert.IsTrue(coll.Contains(b));
-            Assert.IsTrue(coll.IndexOf(i) == 1);
-            Assert.IsTrue(coll[2] == g);
-            Assert.AreEqual(3, coll.Count);
+            ClassicAssert.IsTrue(coll.Contains(b));
+            ClassicAssert.IsTrue(coll.IndexOf(i) == 1);
+            ClassicAssert.IsTrue(coll[2] == g);
+            ClassicAssert.AreEqual(3, coll.Count);
             }
 
         [Test]
@@ -77,11 +78,11 @@ namespace FacadeFor3e.Tests
                 };
 
             coll.Remove(b);
-            Assert.IsFalse(coll.Contains(b));
+            ClassicAssert.IsFalse(coll.Contains(b));
             coll.RemoveAt(0);
-            Assert.IsFalse(coll.Contains(i));
+            ClassicAssert.IsFalse(coll.Contains(i));
             coll.Clear();
-            Assert.IsFalse(coll.Contains(g));
+            ClassicAssert.IsFalse(coll.Contains(g));
             }
 
         [Test]
@@ -96,9 +97,9 @@ namespace FacadeFor3e.Tests
                 b, i, g
                 };
 
-            Assert.IsNotNull(coll["boolean"]);
-            Assert.IsNotNull(coll["integer"]);
-            Assert.IsNotNull(coll["guid"]);
+            ClassicAssert.IsNotNull(coll["boolean"]);
+            ClassicAssert.IsNotNull(coll["integer"]);
+            ClassicAssert.IsNotNull(coll["guid"]);
             }
 
         [Test]
@@ -132,11 +133,11 @@ namespace FacadeFor3e.Tests
                 b, i, g
                 };
 
-            Assert.IsFalse(coll.TryGetValue("unknown boolean", out NamedAttributeValue outValue));
-            Assert.IsNull(outValue);
+            ClassicAssert.IsFalse(coll.TryGetValue("unknown boolean", out NamedAttributeValue outValue));
+            ClassicAssert.IsNull(outValue);
 
-            Assert.IsTrue(coll.TryGetValue("integer", out outValue));
-            Assert.AreEqual(i, outValue);
+            ClassicAssert.IsTrue(coll.TryGetValue("integer", out outValue));
+            ClassicAssert.AreEqual(i, outValue);
             }
 
         [Test]
@@ -160,7 +161,7 @@ namespace FacadeFor3e.Tests
 #endif
             var n = new NamedAttributeValue("date", new DateAttribute(today));
             coll[0] = n;
-            Assert.AreEqual(n, coll[0]);
+            ClassicAssert.AreEqual(n, coll[0]);
             }
 
         [Test]

@@ -1,6 +1,7 @@
 ﻿using System;
 using FacadeFor3e.ProcessCommandBuilder;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 // ReSharper disable ObjectCreationAsStatement
 // ReSharper disable AssignNullToNotNullAttribute
@@ -14,20 +15,20 @@ namespace FacadeFor3e.Tests
         public void CanConstructForInt()
             {
             var pk = new IdentifyByPrimaryKey(10_000);
-            Assert.IsInstanceOf<IntAttribute>(pk.KeyValue);
-            Assert.AreEqual(10_000, pk.KeyValue.Value);
+            ClassicAssert.IsInstanceOf<IntAttribute>(pk.KeyValue);
+            ClassicAssert.AreEqual(10_000, pk.KeyValue.Value);
             var s = CommonLibrary.GetRenderedOutputWithNode(pk.RenderKey);
-            Assert.AreEqual("<Test KeyValue=\"10000\" />", s);
+            ClassicAssert.AreEqual("<Test KeyValue=\"10000\" />", s);
             }
 
         [Test]
         public void CanConstructForString()
             {
             var pk = new IdentifyByPrimaryKey("TIMEONLY");
-            Assert.IsInstanceOf<StringAttribute>(pk.KeyValue);
-            Assert.AreEqual("TIMEONLY", pk.KeyValue.Value);
+            ClassicAssert.IsInstanceOf<StringAttribute>(pk.KeyValue);
+            ClassicAssert.AreEqual("TIMEONLY", pk.KeyValue.Value);
             var s = CommonLibrary.GetRenderedOutputWithNode(pk.RenderKey);
-            Assert.AreEqual("<Test KeyValue=\"TIMEONLY\" />", s);
+            ClassicAssert.AreEqual("<Test KeyValue=\"TIMEONLY\" />", s);
             }
 
         [Test]
@@ -35,20 +36,20 @@ namespace FacadeFor3e.Tests
             {
             var g = Guid.Parse("{da319fed-2491-492f-9a9d-56209acaef6f}");
             var pk = new IdentifyByPrimaryKey(g);
-            Assert.IsInstanceOf<GuidAttribute>(pk.KeyValue);
-            Assert.AreEqual(g, pk.KeyValue.Value);
+            ClassicAssert.IsInstanceOf<GuidAttribute>(pk.KeyValue);
+            ClassicAssert.AreEqual(g, pk.KeyValue.Value);
             var s = CommonLibrary.GetRenderedOutputWithNode(pk.RenderKey);
-            Assert.AreEqual("<Test KeyValue=\"da319fed-2491-492f-9a9d-56209acaef6f\" />", s);
+            ClassicAssert.AreEqual("<Test KeyValue=\"da319fed-2491-492f-9a9d-56209acaef6f\" />", s);
             }
 
         [Test]
         public void CanConstructForAttribute()
             {
             var pk = new IdentifyByPrimaryKey(new IntAttribute(25_000));
-            Assert.IsInstanceOf<IntAttribute>(pk.KeyValue);
-            Assert.AreEqual(25_000, pk.KeyValue.Value);
+            ClassicAssert.IsInstanceOf<IntAttribute>(pk.KeyValue);
+            ClassicAssert.AreEqual(25_000, pk.KeyValue.Value);
             var s = CommonLibrary.GetRenderedOutputWithNode(pk.RenderKey);
-            Assert.AreEqual("<Test KeyValue=\"25000\" />", s);
+            ClassicAssert.AreEqual("<Test KeyValue=\"25000\" />", s);
             }
 
         [Test]

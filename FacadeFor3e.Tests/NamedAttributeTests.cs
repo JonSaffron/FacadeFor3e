@@ -1,6 +1,7 @@
 ﻿using System;
 using FacadeFor3e.ProcessCommandBuilder;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 // ReSharper disable ObjectCreationAsStatement
 // ReSharper disable AssignNullToNotNullAttribute
@@ -14,8 +15,8 @@ namespace FacadeFor3e.Tests
         public void CanCreateNamedAttribute()
             {
             var na = new NamedAttributeValue("matter", new IntAttribute(12345));
-            Assert.AreEqual("matter", na.Name);
-            Assert.AreEqual(12345, na.Attribute.Value);
+            ClassicAssert.AreEqual("matter", na.Name);
+            ClassicAssert.AreEqual(12345, na.Attribute.Value);
             }
 
         [Test]
@@ -38,7 +39,7 @@ namespace FacadeFor3e.Tests
             {
             var na = new NamedAttributeValue("matter", new IntAttribute(1234));
             ((IntAttribute)na.Attribute).Value = 10;
-            Assert.AreEqual(10, na.Attribute.Value);
+            ClassicAssert.AreEqual(10, na.Attribute.Value);
             }
 
         [Test]
@@ -46,7 +47,7 @@ namespace FacadeFor3e.Tests
             {
             var na = new NamedAttributeValue("Matter", new IntAttribute(12345));
             var s = CommonLibrary.GetRenderedOutput(na.Render);
-            Assert.AreEqual("<Matter>12345</Matter>", s);
+            ClassicAssert.AreEqual("<Matter>12345</Matter>", s);
             }
 
         [Test]
@@ -54,7 +55,7 @@ namespace FacadeFor3e.Tests
             {
             var na = new AliasAttribute("Matter", "Number", new StringAttribute("L1.10"));
             var s = CommonLibrary.GetRenderedOutput(na.Render);
-            Assert.AreEqual("<Matter AliasField=\"Number\">L1.10</Matter>", s);
+            ClassicAssert.AreEqual("<Matter AliasField=\"Number\">L1.10</Matter>", s);
             }
         }
     }

@@ -2,6 +2,7 @@
 using System.Xml;
 using FacadeFor3e.ProcessCommandBuilder;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 // ReSharper disable ObjectCreationAsStatement
 // ReSharper disable AssignNullToNotNullAttribute
@@ -16,19 +17,19 @@ namespace FacadeFor3e.Tests
             {
             var p = new ProcessCommand("Matter_Srv", "Matter");
             p.AddRecord();
-            Assert.AreEqual("Matter_Srv", p.ProcessCode);
-            Assert.AreEqual("Matter", p.ObjectName);
-            Assert.AreEqual("http://elite.com/schemas/transaction/process/write/Matter_Srv", p.ProcessNameSpace);
-            Assert.AreEqual("http://elite.com/schemas/transaction/object/write/Matter", p.ObjectNameSpace);
+            ClassicAssert.AreEqual("Matter_Srv", p.ProcessCode);
+            ClassicAssert.AreEqual("Matter", p.ObjectName);
+            ClassicAssert.AreEqual("http://elite.com/schemas/transaction/process/write/Matter_Srv", p.ProcessNameSpace);
+            ClassicAssert.AreEqual("http://elite.com/schemas/transaction/object/write/Matter", p.ObjectNameSpace);
 
             var s = CommonLibrary.GetRenderedOutput(p.Render);
-            Assert.AreEqual("<Matter_Srv xmlns=\"http://elite.com/schemas/transaction/process/write/Matter_Srv\">" +
+            ClassicAssert.AreEqual("<Matter_Srv xmlns=\"http://elite.com/schemas/transaction/process/write/Matter_Srv\">" +
                             "<Initialize xmlns=\"http://elite.com/schemas/transaction/object/write/Matter\">" +
                             "<Add><Matter /></Add>" +
                             "</Initialize>" +
                             "</Matter_Srv>", s);
             var xmlDoc = p.GenerateCommand();
-            Assert.IsInstanceOf<XmlDocument>(xmlDoc);
+            ClassicAssert.IsInstanceOf<XmlDocument>(xmlDoc);
             }
 
         [Test]
@@ -56,7 +57,7 @@ namespace FacadeFor3e.Tests
             p.ProcessRequestSignature = "xxxyyyyzzz";
 
             var s = CommonLibrary.GetRenderedOutputWithNode(p.RenderProcessAttributes);
-            Assert.AreEqual("<Test ObjectName=\"NBI\" " +
+            ClassicAssert.AreEqual("<Test ObjectName=\"NBI\" " +
                             "Description=\"New Business Inception\" " +
                             "Priority=\"MEDIUM\" " +
                             "OperatingUnit=\"100\" " +

@@ -1,6 +1,7 @@
 ﻿using System;
 using FacadeFor3e.ProcessCommandBuilder;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 // ReSharper disable ObjectCreationAsStatement
 // ReSharper disable AssignNullToNotNullAttribute
@@ -14,20 +15,24 @@ namespace FacadeFor3e.Tests
         public void CanConstructWithDateAttribute()
             {
             var a = new IdentifyByValue("EffStart", new DateAttribute(1980, 2, 29));
-            Assert.IsInstanceOf<DateAttribute>(a.KeyValue);
-            Assert.AreEqual(new DateTime(1980, 2, 29), a.KeyValue.Value);
+            ClassicAssert.IsInstanceOf<DateAttribute>(a.KeyValue);
+#if NET6_0_OR_GREATER
+            ClassicAssert.AreEqual(new DateOnly(1980, 2, 29), a.KeyValue.Value);
+#else
+            ClassicAssert.AreEqual(new DateTime(1980, 2, 29), a.KeyValue.Value);
+#endif
             var s = CommonLibrary.GetRenderedOutputWithNode(a.RenderKey);
-            Assert.AreEqual("<Test KeyValue=\"1980-02-29\" KeyField=\"EffStart\" />", s);
+            ClassicAssert.AreEqual("<Test KeyValue=\"1980-02-29\" KeyField=\"EffStart\" />", s);
             }
 
         [Test]
         public void CanConstructWithBooleanAttribute()
             {
             var a = new IdentifyByValue("IsDefault", new BoolAttribute(true));
-            Assert.IsInstanceOf<BoolAttribute>(a.KeyValue);
-            Assert.AreEqual(true, a.KeyValue.Value);
+            ClassicAssert.IsInstanceOf<BoolAttribute>(a.KeyValue);
+            ClassicAssert.AreEqual(true, a.KeyValue.Value);
             var s = CommonLibrary.GetRenderedOutputWithNode(a.RenderKey);
-            Assert.AreEqual("<Test KeyValue=\"true\" KeyField=\"IsDefault\" />", s);
+            ClassicAssert.AreEqual("<Test KeyValue=\"true\" KeyField=\"IsDefault\" />", s);
             }
 
         [Test]

@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Data;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Net;
 using System.Security.Principal;
@@ -101,16 +101,58 @@ namespace FacadeFor3e
             }
 
         /// <summary>
-        /// Runs the specified query against the 3E database and returns the result as a DataTable
+        /// Runs the specified query and returns the results as an XmlDocument
         /// </summary>
-        /// <param name="xoql">Specifies the query to run</param>
-        /// <returns>An XML representation of the resulting data</returns>
-        /// <remarks>The query is run in the context of the user so row level security will be applied</remarks>
-        public DataTable GetArchetypeDataTable(XmlDocument xoql)
+        /// <param name="xoql">Specifies the query to execute</param>
+        /// <returns>One of the following: Boolean, Integer, DateTime, DateOnly, Decimal, Guid, String</returns>
+        /// <remarks>The query is run in the context of the account running the process. Row level security will be observed.</remarks>
+        public T GetScalarValue<T>(XmlDocument xoql)
             {
             EnsureObjectIsNotDisposed();
             var getArchetypeData = new GetArchetypeData(this);
-            var result = getArchetypeData.GetDataTable(xoql);
+            var result = getArchetypeData.GetScalarValue<T>(xoql);
+            return result;
+            }
+
+        /// <summary>
+        /// Runs the specified query and returns the results as an XmlDocument
+        /// </summary>
+        /// <param name="xoql">Specifies the query to execute</param>
+        /// <returns>A List of one of the following: Boolean, Integer, DateTime, DateOnly, Decimal, Guid, String</returns>
+        /// <remarks>The query is run in the context of the account running the process. Row level security will be observed.</remarks>
+        public List<T> GetScalarList<T>(XmlDocument xoql)
+            {
+            EnsureObjectIsNotDisposed();
+            var getArchetypeData = new GetArchetypeData(this);
+            var result = getArchetypeData.GetScalarList<T>(xoql);
+            return result;
+            }
+        
+        /// <summary>
+        /// Runs the specified query and returns the results as an XmlDocument
+        /// </summary>
+        /// <param name="xoql">Specifies the query to execute</param>
+        /// <returns>A POCO whose fields/properties match the column names returned and are of one of the following: Boolean, Integer, DateTime, DateOnly, Decimal, Guid, String</returns>
+        /// <remarks>The query is run in the context of the account running the process. Row level security will be observed.</remarks>
+        public T GetCompoundValue<T>(XmlDocument xoql) where T : class, new()
+            {
+            EnsureObjectIsNotDisposed();
+            var getArchetypeData = new GetArchetypeData(this);
+            var result = getArchetypeData.GetCompoundValue<T>(xoql);
+            return result;
+            }
+        
+        /// <summary>
+        /// Runs the specified query and returns the results as an XmlDocument
+        /// </summary>
+        /// <param name="xoql">Specifies the query to execute</param>
+        /// <returns>A List of POCOs whose fields/properties match the column names returned and are of one of the following: Boolean, Integer, DateTime, DateOnly, Decimal, Guid, String</returns>
+        /// <remarks>The query is run in the context of the account running the process. Row level security will be observed.</remarks>
+        public List<T> GetCompoundList<T>(XmlDocument xoql) where T : class, new()
+            {
+            EnsureObjectIsNotDisposed();
+            var getArchetypeData = new GetArchetypeData(this);
+            var result = getArchetypeData.GetCompoundList<T>(xoql);
             return result;
             }
 

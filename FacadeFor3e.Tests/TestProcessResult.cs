@@ -2,6 +2,7 @@
 using System.Xml;
 using System.Linq;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace FacadeFor3e.Tests
     {
@@ -19,10 +20,10 @@ namespace FacadeFor3e.Tests
             var processResult = new ExecuteProcessResult(request, response);
             var ex = ExecuteProcessExceptionBuilder.BuildForProcessError(processResult);
 
-            Assert.AreSame(processResult, ex.ExecuteProcessResult);
-            Assert.IsTrue(ex.Message.Contains("Error attempting to read data."));
-            Assert.IsTrue(ex.Message.Contains("The element 'Attributes' in namespace 'http://elite.com/schemas/transaction/object/write/Proforma' has invalid child element 'ProfStatusx' in namespace 'http://elite.com/schemas/transaction/object/write/Proforma'. List of possible elements expected: 'ProfIndex, ProfDate, "));
-            Assert.IsTrue(ex.Message.Contains("An error occurred while the transaction service populated the data object(s)"));
+            ClassicAssert.AreSame(processResult, ex.ExecuteProcessResult);
+            ClassicAssert.IsTrue(ex.Message.Contains("Error attempting to read data."));
+            ClassicAssert.IsTrue(ex.Message.Contains("The element 'Attributes' in namespace 'http://elite.com/schemas/transaction/object/write/Proforma' has invalid child element 'ProfStatusx' in namespace 'http://elite.com/schemas/transaction/object/write/Proforma'. List of possible elements expected: 'ProfIndex, ProfDate, "));
+            ClassicAssert.IsTrue(ex.Message.Contains("An error occurred while the transaction service populated the data object(s)"));
             }
 
         [Test]
@@ -35,13 +36,13 @@ namespace FacadeFor3e.Tests
 
             var processResult = new ExecuteProcessResult(request, response);
 
-            Assert.IsTrue(processResult.HasDataError);
-            Assert.AreEqual(1, processResult.DataErrors.Count());
+            ClassicAssert.IsTrue(processResult.HasDataError);
+            ClassicAssert.AreEqual(1, processResult.DataErrors.Count());
             var dataError = processResult.DataErrors.Single();
-            Assert.AreEqual("Proforma", dataError.ObjectId);
-            Assert.AreEqual("215960", dataError.PrimaryKey);
-            Assert.AreEqual(0, dataError.RowIndex);
-            Assert.AreEqual("The Proforma Edit record that you are trying to update is currently being edited and is locked by [Unknown]. Please try again later, or ask [Unknown] to complete or cancel their activity.", dataError.ObjectException);
+            ClassicAssert.AreEqual("Proforma", dataError.ObjectId);
+            ClassicAssert.AreEqual("215960", dataError.PrimaryKey);
+            ClassicAssert.AreEqual(0, dataError.RowIndex);
+            ClassicAssert.AreEqual("The Proforma Edit record that you are trying to update is currently being edited and is locked by [Unknown]. Please try again later, or ask [Unknown] to complete or cancel their activity.", dataError.ObjectException);
             }
 
         [Test]
@@ -54,13 +55,13 @@ namespace FacadeFor3e.Tests
 
             var processResult = new ExecuteProcessResult(request, response);
 
-            Assert.IsTrue(processResult.HasDataError);
-            Assert.AreEqual(1, processResult.DataErrors.Count());
+            ClassicAssert.IsTrue(processResult.HasDataError);
+            ClassicAssert.AreEqual(1, processResult.DataErrors.Count());
             var dataError = processResult.DataErrors.Single();
-            Assert.AreEqual("Proforma", dataError.ObjectId);
-            Assert.AreEqual("215946", dataError.PrimaryKey);
-            Assert.AreEqual(0, dataError.RowIndex);
-            Assert.AreEqual("The Proforma Edit record that you are trying to update is currently being edited and is locked by Cobra Admin. Please try again later, or ask Cobra Admin to complete or cancel their activity.", dataError.ObjectException);
+            ClassicAssert.AreEqual("Proforma", dataError.ObjectId);
+            ClassicAssert.AreEqual("215946", dataError.PrimaryKey);
+            ClassicAssert.AreEqual(0, dataError.RowIndex);
+            ClassicAssert.AreEqual("The Proforma Edit record that you are trying to update is currently being edited and is locked by Cobra Admin. Please try again later, or ask Cobra Admin to complete or cancel their activity.", dataError.ObjectException);
             }
 
         [Test]
@@ -73,13 +74,13 @@ namespace FacadeFor3e.Tests
 
             var processResult = new ExecuteProcessResult(request, response);
 
-            Assert.AreEqual(Guid.Parse("fc2ce60a-5f75-4de2-a799-8a07c4997668"), processResult.ProcessId);
-            Assert.AreEqual("Success", processResult.ExecutionResult);
-            Assert.AreEqual("Success", processResult.OutputId);
-            Assert.IsFalse(processResult.HasDataError);
-            Assert.IsNull(processResult.NextMessage);
-            Assert.IsTrue(processResult.GetKeys().SequenceEqual(new [] {"215966"}));
-            Assert.IsFalse(processResult.DataErrors.Any());
+            ClassicAssert.AreEqual(Guid.Parse("fc2ce60a-5f75-4de2-a799-8a07c4997668"), processResult.ProcessId);
+            ClassicAssert.AreEqual("Success", processResult.ExecutionResult);
+            ClassicAssert.AreEqual("Success", processResult.OutputId);
+            ClassicAssert.IsFalse(processResult.HasDataError);
+            ClassicAssert.IsNull(processResult.NextMessage);
+            ClassicAssert.IsTrue(processResult.GetKeys().SequenceEqual(new [] {"215966"}));
+            ClassicAssert.IsFalse(processResult.DataErrors.Any());
             }
 
         [Test]
@@ -92,13 +93,13 @@ namespace FacadeFor3e.Tests
 
             var processResult = new ExecuteProcessResult(request, response);
 
-            Assert.AreEqual(Guid.Parse("84647d6b-a173-4e10-a271-7e42394ef600"), processResult.ProcessId);
-            Assert.AreEqual("Success", processResult.ExecutionResult);
-            Assert.AreEqual("Success", processResult.OutputId);
-            Assert.IsFalse(processResult.HasDataError);
-            Assert.IsNull(processResult.NextMessage);
+            ClassicAssert.AreEqual(Guid.Parse("84647d6b-a173-4e10-a271-7e42394ef600"), processResult.ProcessId);
+            ClassicAssert.AreEqual("Success", processResult.ExecutionResult);
+            ClassicAssert.AreEqual("Success", processResult.OutputId);
+            ClassicAssert.IsFalse(processResult.HasDataError);
+            ClassicAssert.IsNull(processResult.NextMessage);
             Assert.Throws<InvalidOperationException>(() => processResult.GetKeys().ToList());
-            Assert.IsFalse(processResult.DataErrors.Any());
+            ClassicAssert.IsFalse(processResult.DataErrors.Any());
             }
 
         [Test]
@@ -111,7 +112,7 @@ namespace FacadeFor3e.Tests
 
             var processResult = new ExecuteProcessResult(request, response);
 
-            Assert.AreEqual("Proforma 215951 is in use by paperless proformas and cannot be edited here at this moment.", processResult.NextMessage);
+            ClassicAssert.AreEqual("Proforma 215951 is in use by paperless proformas and cannot be edited here at this moment.", processResult.NextMessage);
             }
         }
     }
