@@ -9,7 +9,7 @@ namespace FacadeFor3e.Tests
     [TestFixture]
     public class TestTranslateData
         {
-        private CultureInfo _cultureInfo = new CultureInfo("en-US");
+        private readonly CultureInfo _cultureInfo = new ("en-US");
 
         [Test]
         public void TestNoData()
@@ -150,7 +150,7 @@ namespace FacadeFor3e.Tests
             foreach (string item in new[] { "rubbish", "prefix12345", "12345suffix", "5e2", "12.34", "12,35" })
                 {
                 XmlDocument xmlDoc = new XmlDocument();
-                xmlDoc.LoadXml(data);
+                xmlDoc.LoadXml(data.Replace("%%Value%%", item));
                 Assert.Throws<FormatException>(() => GetArchetypeData.TranslateScalarValue<int>(xmlDoc, _cultureInfo));
                 }
             }
@@ -196,7 +196,7 @@ namespace FacadeFor3e.Tests
             foreach (string item in new[] { "rubbish", "781B5FF8-049F-4B42-B13B-C01573CFB86Fx", "x781B5FF8-049F-4B42-B13B-C01573CFB86F", "781B5FF8-049F-4B42B13B-C01573CFB86F" })
                 {
                 XmlDocument xmlDoc = new XmlDocument();
-                xmlDoc.LoadXml(data);
+                xmlDoc.LoadXml(data.Replace("%%Value%%", item));
                 Assert.Throws<FormatException>(() => GetArchetypeData.TranslateScalarValue<Guid>(xmlDoc, _cultureInfo));
                 }
             }
@@ -220,7 +220,7 @@ namespace FacadeFor3e.Tests
                 {
                 XmlDocument xmlDoc = new XmlDocument();
                 xmlDoc.LoadXml(data);
-                xmlDoc.DocumentElement.ChildNodes[0].ChildNodes[0].InnerText = item;
+                xmlDoc.DocumentElement!.ChildNodes[0].ChildNodes[0].InnerText = item;
                 ClassicAssert.AreEqual(item, GetArchetypeData.TranslateScalarValue<string>(xmlDoc, _cultureInfo));
                 }
             }
@@ -269,7 +269,7 @@ namespace FacadeFor3e.Tests
             foreach (string item in new[] { "rubbish", "thursday", "20231512" })
                 {
                 XmlDocument xmlDoc = new XmlDocument();
-                xmlDoc.LoadXml(data);
+                xmlDoc.LoadXml(data.Replace("%%Value%%", item));
                 Assert.Throws<FormatException>(() => GetArchetypeData.TranslateScalarValue<DateTime>(xmlDoc, _cultureInfo));
                 }
             }
@@ -499,6 +499,99 @@ namespace FacadeFor3e.Tests
             ClassicAssert.AreEqual("020487", result[0].Number);
             ClassicAssert.AreNotEqual(result[0], result[1]);
             ClassicAssert.AreEqual(result[2], result[3]);
+            }
+
+        [Test]
+        public void TestNarrative()
+            {
+            // If your XOQL asks for Narrative_UnformattedText then you get only Narrative_UnformattedText
+            // If your XOQL asks for Narrative then you get both Narrative (plaintext) and Narrative_FormattedText (HTML)
+            const string data = @"
+<Data>
+  <Timecard>
+    <TimeIndex>1</TimeIndex>
+    <Narrative>Drafting xxx</Narrative>
+    <Narrative_FormattedText>&lt;p&gt;Drafting xxx&lt;/p&gt;</Narrative_FormattedText>
+  </Timecard>
+</Data>
+";
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(data);
+            var resultBoth = GetArchetypeData.TranslateCompoundValue<NarrativeDataBoth>(xmlDoc, new CultureInfo("en-US"));
+            ClassicAssert.AreEqual("Drafting xxx", resultBoth.Narrative);
+            ClassicAssert.AreEqual("<p>Drafting xxx</p>", resultBoth.Narrative_FormattedText);
+
+            var resultFormattedFullName = GetArchetypeData.TranslateCompoundValue<NarrativeDataFormattedFullName>(xmlDoc, new CultureInfo("en-US"));
+            ClassicAssert.AreEqual("<p>Drafting xxx</p>", resultFormattedFullName.Narrative_FormattedText);
+
+            var resultFormattedPartialName = GetArchetypeData.TranslateCompoundValue<NarrativeDataFormattedPartialName>(xmlDoc, new CultureInfo("en-US"));
+            ClassicAssert.AreEqual("<p>Drafting xxx</p>", resultFormattedPartialName.Narrative);
+            }
+
+        internal class NarrativeDataBoth
+            {
+            public int TimeIndex;
+            public string Narrative;
+            public string Narrative_FormattedText;
+            }
+
+        internal class NarrativeDataFormattedFullName
+            {
+            public int TimeIndex;
+            public string Narrative_FormattedText;
+            }
+
+        internal class NarrativeDataFormattedPartialName
+            {
+            public int TimeIndex;
+            public string Narrative;
+            }
+
+        [Test]
+        public void TestNarrativeUnformatted()
+            {
+            // If your XOQL asks for Narrative_UnformattedText then you get only Narrative_UnformattedText
+            const string data = @"
+<Data>
+  <Timecard>
+    <TimeIndex>1</TimeIndex>
+    <Narrative_UnformattedText>Drafting xxx</Narrative_UnformattedText>
+  </Timecard>
+</Data>
+";
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(data);
+
+            var resultUnformattedFullName = GetArchetypeData.TranslateCompoundValue<NarrativeDataUnformattedFullName>(xmlDoc, new CultureInfo("en-US"));
+            ClassicAssert.AreEqual("Drafting xxx", resultUnformattedFullName.Narrative_UnformattedText);
+
+            var resultUnformattedPartialName = GetArchetypeData.TranslateCompoundValue<NarrativeDataUnformattedPartialName>(xmlDoc, new CultureInfo("en-US"));
+            ClassicAssert.AreEqual("Drafting xxx", resultUnformattedPartialName.Narrative);
+
+            var resultUnformattedPartialNameAttribute = GetArchetypeData.TranslateCompoundValue<NarrativeDataUnformattedPartialNameAttribute>(xmlDoc, new CultureInfo("en-US"));
+            ClassicAssert.AreEqual("Drafting xxx", resultUnformattedPartialNameAttribute.TimecardNarrative);
+            }
+
+        internal class NarrativeDataUnformattedFullName
+            {
+            public int TimeIndex;
+            [ColumnMapping("Narrative")]
+            public string Narrative_UnformattedText;
+            }
+
+        internal class NarrativeDataUnformattedPartialName
+            {
+            public int TimeIndex;
+            [ColumnMapping("Narrative")]
+            public string Narrative;
+            }
+
+        internal class NarrativeDataUnformattedPartialNameAttribute
+            {
+            public int TimeIndex;
+            
+            [ColumnMapping("Narrative")]
+            public string TimecardNarrative;
             }
         }
     }

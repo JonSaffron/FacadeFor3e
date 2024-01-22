@@ -9,6 +9,25 @@ using System.Security.Principal;
 using System.Xml;
 using JetBrains.Annotations;
 
+/*
+   If the query asks for a narrative, the dataset will contain Narrative and then Narrative_FormattedText.
+   So, if both fields are present:
+   	- If there are two matching fields/properties called Narrative and Narrative_FormattedText then we map them exactly as is.
+   	- If both fields are present, and there is only a Narrative_FormattedText field/property then we map to Narrative_FormattedText
+   	- If both fields are present, and there is only a Narrative field/property then we map to Narrative_FormattedText
+   	- Otherwise it's a mapping error
+   
+   If the query asks for an unformatted narrative, the dataset will only contain Narrative_UnformattedText.
+   So, if there is a column with the suffix _UnformattedText
+   	- If there is a Narrative_UnformattedText field/property first then we map it to Narrative_UnformattedText.
+   	- If there is a Narrative field/property then we map it to Narrative_UnformattedText
+   	- Otherwise it's a mapping error
+   
+   If the query asks for any other column
+   	- If there is a matching field/property then map it
+   	- Otherwise it's a mapping error
+*/
+
 namespace FacadeFor3e
     {
     /// <summary>
@@ -432,23 +451,87 @@ namespace FacadeFor3e
             foreach (XmlElement column in row.ChildNodes)
                 {
                 var name = column.LocalName;
-                var compoundMemberAccess = map[name];
-                compoundMemberAccess.CopyValue(column.InnerText, cultureInfo, result);
+                if (map.TryGetValue(name, out var compoundMemberAccess))
+                    {
+                    compoundMemberAccess.CopyValue(column.InnerText, cultureInfo, result);
+                    }
                 }
             return result;
             }
 
         internal static Dictionary<string, ICompoundMemberAccess> MapColumns(XmlDocument xmlDoc, Type t)
             {
+            var columnNames = GetColumnNames(xmlDoc);
+
+            var result = new Dictionary<string, ICompoundMemberAccess>(columnNames.Count);
+            while (columnNames.Count != 0)
+                {
+                string columnName = columnNames.Dequeue();
+                string followingName = columnNames.Count == 0 ? string.Empty : columnNames.Peek();
+                if (string.Equals($"{columnName}_FormattedText", followingName))
+                    {
+                    columnNames.Dequeue();
+                    var withoutSuffix = CompoundMemberAccess.GetMemberAccess(t, columnName);
+                    var withSuffix = CompoundMemberAccess.GetMemberAccess(t, followingName);
+                    if (withSuffix != null && withoutSuffix != null)
+                        {
+                        result.Add(columnName, withoutSuffix);  // plaintext to Narrative
+                        result.Add(followingName, withSuffix);  // HTML to Narrative_FormattedText
+                        }
+                    else if (withSuffix != null)
+                        {
+                        result.Add(followingName, withSuffix);  // HTML to Narrative_FormattedText
+                        }
+                    else if (withoutSuffix != null)
+                        {
+                        result.Add(followingName, withoutSuffix);   // HTML to Narrative
+                        }
+                    else
+                        {
+                        throw new InvalidOperationException($"Could not find a field or property to store the data for column {columnName}");
+                        }
+                    }
+                else if (columnName.EndsWith("_UnformattedText"))
+                    {
+                    var fullName = CompoundMemberAccess.GetMemberAccess(t, columnName);
+                    var partialName = CompoundMemberAccess.GetMemberAccess(t, columnName.Substring(0, columnName.Length - "_UnformattedText".Length));
+                    if (fullName != null)
+                        {
+                        result.Add(columnName, fullName);   // plaintext to Narrative_UnformattedText
+                        }
+                    else if (partialName != null)
+                        {
+                        result.Add(columnName, partialName);    // plaintext to Narrative
+                        }
+                    else
+                        {
+                        throw new InvalidOperationException($"Could not find a field or property to store the data for column {columnName}");
+                        }
+                    }
+                else
+                    {
+                    var compoundMemberAccess = CompoundMemberAccess.GetMemberAccess(t, columnName);
+                    if (compoundMemberAccess == null)
+                        {
+                        throw new InvalidOperationException($"Could not find a field or property to store the data for column {columnName}");
+                        }
+                    result.Add(columnName, compoundMemberAccess);
+                    }
+                }
+            return result;
+            }
+
+        internal static Queue<string> GetColumnNames(XmlDocument xmlDoc)
+            {
+            var result = new Queue<string>();
+            var columnNames = new HashSet<string>();
             XmlElement firstRow = (XmlElement) xmlDoc.DocumentElement!.ChildNodes[0]!;
-            var result = new Dictionary<string, ICompoundMemberAccess>(firstRow.ChildNodes.Count);
             foreach (XmlElement column in firstRow)
                 {
                 string columnName = column.LocalName;
-                if (result.ContainsKey(columnName))
+                if (!columnNames.Add(columnName))
                     throw new InvalidOperationException($"Returned data contains duplicate column {columnName}");
-                var compoundMemberAccess = CompoundMemberAccess.GetMemberAccess(t, columnName);
-                result.Add(columnName, compoundMemberAccess);
+                result.Enqueue(columnName);
                 }
             return result;
             }
@@ -556,15 +639,39 @@ namespace FacadeFor3e
 
             public abstract void CopyValue(string text, CultureInfo cultureInfo, object compoundClass);
 
-            public static ICompoundMemberAccess GetMemberAccess(Type t, string name)
+            public static ICompoundMemberAccess? GetMemberAccess(Type t, string name)
                 {
-                FieldInfo? field = t.GetField(name);
+                var fields = t.GetFields().Where(f =>
+                    f.GetCustomAttributes(false).Any(a => a is ColumnMappingAttribute att && att.Name == name)).ToList();
+                var properties = t.GetProperties().Where(p =>
+                    p.GetCustomAttributes(false).Any(a => a is ColumnMappingAttribute att && att.Name == name)).ToList();
+                if (fields.Count + properties.Count > 1)
+                    {
+                    throw new InvalidOperationException($"There are multiple fields and/or properties that have an attribute mapping to {name}");
+                    }
+                FieldInfo? field = fields.SingleOrDefault();
                 if (field != null)
                     return new FieldAccess(field);
-                PropertyInfo? property = t.GetProperty(name);
+                PropertyInfo? property = properties.SingleOrDefault();
                 if (property != null)
                     return new PropertyAccess(property);
-                throw new InvalidOperationException($"Could not find a field or property for the column {name}");
+
+                field = t.GetField(name);
+                if (field != null)
+                    {
+                    var attributeMapping = field.GetCustomAttribute<ColumnMappingAttribute>();
+                    if (attributeMapping == null)
+                        return new FieldAccess(field);
+                    }
+                property = t.GetProperty(name);
+                if (property != null)
+                    {
+                    var attributeMapping = property.GetCustomAttribute<ColumnMappingAttribute>();
+                    if (attributeMapping == null)
+                        return new PropertyAccess(property);
+                    }
+
+                return null;
                 }
             }
 

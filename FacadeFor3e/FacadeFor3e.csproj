@@ -5,7 +5,7 @@
     <PackageId>FacadeFor3E</PackageId>
     <Authors>J Saffron Consulting</Authors>
     <Product>FacadeFor3E</Product>
-    <Version>3.0.0</Version>
+    <Version>3.0.1</Version>
     <Description>A library that makes using the 3E transaction service a little easier.</Description>
     <Copyright>Copyright © J Saffron Consulting Ltd 2014 - 2024</Copyright>
     <RepositoryUrl>https://github.com/JonSaffron/FacadeFor3e</RepositoryUrl>

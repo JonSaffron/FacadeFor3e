@@ -1,4 +1,9 @@
-﻿3.0.0
+﻿3.0.1
+-----
+Added ColumnMappingAttribute to allow explicit linking of POCO fields/properties to columns returned by GetArchetypeData
+Improved handling of Narratives within GetArchetypeData
+
+3.0.0
 -----
 Removed functionality for GetArchetypeData to return data in a DataTable (new functionality is easier to use)
 Added functionality for GetArchetypeData to return data as:
