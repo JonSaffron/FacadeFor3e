@@ -316,7 +316,7 @@ namespace FacadeFor3e.Tests
         public void TestNotDateOnlyValue()
             {
             const string data = "<Data><Row><Item>%%Value%%</Item></Row></Data>";
-            foreach (string item in new[] { "rubbish", "thursday", "20231512" })
+            foreach (string item in new[] { "rubbish", "thursday", "20231512", "1/27/2024 12:10:20 AM" })
                 {
                 XmlDocument xmlDoc = new XmlDocument();
                 xmlDoc.LoadXml(data);
@@ -589,9 +589,86 @@ namespace FacadeFor3e.Tests
         internal class NarrativeDataUnformattedPartialNameAttribute
             {
             public int TimeIndex;
-            
-            [ColumnMapping("Narrative")]
+
+            [ColumnMapping("Narrative")] 
             public string TimecardNarrative;
+            }
+
+        [Test]
+        public void TestScalarList()
+            {
+            const string data = "<Data><ProfDetail><ProfDetIndex>5117860</ProfDetIndex></ProfDetail><ProfDetail><ProfDetIndex>5117861</ProfDetIndex></ProfDetail><ProfDetail><ProfDetIndex>5117862</ProfDetIndex></ProfDetail></Data>";
+            var xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(data);
+            var result = GetArchetypeData.TranslateScalarList<int>(xmlDoc, this._cultureInfo);
+            Assert.That(result[0], Is.EqualTo(5117860));
+            Assert.That(result[1], Is.EqualTo(5117861));
+            Assert.That(result[2], Is.EqualTo(5117862));
+            }
+
+        [Test]
+        public void TestNarrativeAgain()
+            {
+            const string data = @"
+<Data>
+	<ProfDetailTime>
+		<WorkHrs>1.00000</WorkHrs>
+		<WorkNarrative>First split</WorkNarrative>
+		<WorkNarrative_FormattedText>First split</WorkNarrative_FormattedText>
+		<WorkPhase />
+		<WorkTask />
+		<WorkActivity />
+		<IsDisplay>1</IsDisplay>
+		<PresHrs>1.00000</PresHrs>
+		<PresAmt>260.00</PresAmt>
+		<PresNarrative>First split</PresNarrative>
+		<PresNarrative_FormattedText>First split</PresNarrative_FormattedText>
+	</ProfDetailTime>
+</Data>";
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(data);
+
+            var result = GetArchetypeData.TranslateCompoundValue<ProfDetailTimeByProfDetIndex>(xmlDoc, new CultureInfo("en-US"));
+            ClassicAssert.AreEqual("First split", result.WorkNarrative);
+            ClassicAssert.AreEqual("First split", result.PresNarrative);
+            }
+
+        [Test]
+        public void TestErrorMessages()
+            {
+            const string data = @"
+<Data>
+	<ProfDetailTime>
+		<WorkHrs></WorkHrs>
+		<WorkNarrative>First split</WorkNarrative>
+		<WorkNarrative_FormattedText>First split</WorkNarrative_FormattedText>
+		<WorkPhase />
+		<WorkTask />
+		<WorkActivity />
+		<IsDisplay>1</IsDisplay>
+		<PresHrs>1.00000</PresHrs>
+		<PresAmt>260.00</PresAmt>
+		<PresNarrative>First split</PresNarrative>
+		<PresNarrative_FormattedText>First split</PresNarrative_FormattedText>
+	</ProfDetailTime>
+</Data>";
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(data);
+
+            var result = GetArchetypeData.TranslateCompoundValue<ProfDetailTimeByProfDetIndex>(xmlDoc, new CultureInfo("en-US"));
+            }
+
+        internal class ProfDetailTimeByProfDetIndex
+            {
+            public decimal WorkHrs;
+            public string WorkNarrative;
+            public Guid? WorkPhase;
+            public Guid? WorkTask;
+            public Guid? WorkActivity;
+            public bool IsDisplay;
+            public decimal PresHrs;
+            public decimal PresAmt;
+            public string PresNarrative;
             }
         }
     }

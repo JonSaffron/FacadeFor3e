@@ -418,7 +418,10 @@ namespace FacadeFor3e
                 {
                 T value = TranslateValue<T>(row.ChildNodes[0]!.InnerText, cultureInfo);
                 result.Add(value);
-                } while (enumerator.MoveNext());
+                if (!enumerator.MoveNext())
+                    break;
+                row = (XmlElement)enumerator.Current!;
+                } while (true);
             return result;
             }
 
@@ -546,7 +549,7 @@ namespace FacadeFor3e
                         {
                         return (T) (object) new bool?()!;
                         }
-                    throw new InvalidOperationException("Null value returned.");
+                    throw new InvalidOperationException("Null value cannot be assigned to Boolean field/property.");
                     }
                 if (value == "0")
                     return (T) (object) false;
@@ -562,7 +565,7 @@ namespace FacadeFor3e
                         {
                         return (T) (object) new int?()!;
                         }
-                    throw new InvalidOperationException("Null value returned.");
+                    throw new InvalidOperationException("Null value cannot be assigned to int field/property.");
                     }
                 return (T)(object)int.Parse(value, cultureInfo);
                 }
@@ -574,7 +577,7 @@ namespace FacadeFor3e
                         {
                         return (T) (object) new Guid?()!;
                         }
-                    throw new InvalidOperationException("Null value returned.");
+                    throw new InvalidOperationException("Null value cannot be assigned to Guid field/property.");
                     }
                 return (T)(object)Guid.Parse(value);
                 }
@@ -594,7 +597,7 @@ namespace FacadeFor3e
                         {
                         return (T) (object) new DateTime?()!;
                         }
-                    throw new InvalidOperationException("Null value returned.");
+                    throw new InvalidOperationException("Null value cannot be assigned to DateTime field/property.");
                     }
                 return (T)(object)DateTime.Parse(value, cultureInfo);
                 }
@@ -607,9 +610,14 @@ namespace FacadeFor3e
                         {
                         return (T) (object) new DateOnly?()!;
                         }
-                    throw new InvalidOperationException("Null value returned.");
+                    throw new InvalidOperationException("Null value cannot be assigned to DateOnly field/property.");
                     }
-                return (T)(object)DateOnly.Parse(value, cultureInfo);
+                var dt = DateTime.Parse(value, cultureInfo);
+                if (dt.TimeOfDay != TimeSpan.Zero)
+                    {
+                    throw new InvalidOperationException("Data has a time component and cannot be converted to a DateOnly.");
+                    }
+                return (T)(object)DateOnly.FromDateTime(dt);
                 }
 #endif
             if (typeof(T).IsAssignableFrom(typeof(decimal)))
@@ -620,7 +628,7 @@ namespace FacadeFor3e
                         {
                         return (T) (object) new decimal?()!;
                         }
-                    throw new InvalidOperationException("Null value returned.");
+                    throw new InvalidOperationException("Null value cannot be assigned to decimal field/property.");
                     }
                 return (T)(object)decimal.Parse(value, cultureInfo);
                 }
@@ -697,8 +705,12 @@ namespace FacadeFor3e
                 catch (TargetInvocationException ex)
                     {
                     if (ex.InnerException != null)
-                        throw ex.InnerException;
+                        throw new InvalidOperationException($"Cannot set value of {this._propertyInfo.Name}", ex.InnerException);
                     throw;
+                    }
+                catch (Exception ex)
+                    {
+                    throw new InvalidOperationException($"Cannot set value of {this._propertyInfo.Name}", ex.InnerException);
                     }
                 }
             }
@@ -725,8 +737,12 @@ namespace FacadeFor3e
                 catch (TargetInvocationException ex)
                     {
                     if (ex.InnerException != null)
-                        throw ex.InnerException;
+                        throw new InvalidOperationException($"Cannot set value of {this._fieldInfo.Name}", ex.InnerException);
                     throw;
+                    }
+                catch (Exception ex)
+                    {
+                    throw new InvalidOperationException($"Cannot set value of {this._fieldInfo.Name}", ex.InnerException);
                     }
                 }
             }

@@ -1,7 +1,14 @@
-﻿3.0.1
+﻿3.0.2
+-----
+Fix to get GetArchetype.GetScalarList working
+Fix to parsing dates into DateOnly fields/properties in GetArchetypeData
+Improve error messages raised in GetArchetypeData
+
+3.0.1
 -----
 Added ColumnMappingAttribute to allow explicit linking of POCO fields/properties to columns returned by GetArchetypeData
 Improved handling of Narratives within GetArchetypeData
+*** GetArchetype.GetScalarList is broken in this version ***
 
 3.0.0
 -----
@@ -12,6 +19,7 @@ Added functionality for GetArchetypeData to return data as:
 	- a compound value (a POCO whose fields/properties match the column names returned)
 	- a list of compound values
 Improved ProxyIdentityProvider to store credentials more securely
+*** GetArchetype.GetScalarList is broken in this version ***
 
 2.3.0
 -----
