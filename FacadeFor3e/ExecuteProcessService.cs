@@ -54,7 +54,8 @@ namespace FacadeFor3e
                 throw new ArgumentNullException(nameof(process));
             ValidateProcess(process);
 
-            var request = process.GenerateCommand();
+            var renderer = new TransactionServiceRenderer();
+            XmlDocument request = renderer.Render(process);
             var result = Execute(request);
             return result;
             }

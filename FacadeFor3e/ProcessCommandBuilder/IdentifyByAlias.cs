@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Xml;
 using JetBrains.Annotations;
 
 namespace FacadeFor3e.ProcessCommandBuilder
@@ -64,14 +63,6 @@ namespace FacadeFor3e.ProcessCommandBuilder
             get => this._attribute;
 
             set => this._attribute = value ?? throw new ArgumentNullException(nameof(value));
-            }
-
-        /// <inheritdoc />
-        protected internal override void RenderKey(XmlWriter writer)
-            {
-            // ReSharper disable once AssignNullToNotNullAttribute
-            writer.WriteAttributeString("KeyValue", this.KeyValue.ToString());
-            writer.WriteAttributeString("AliasField", this.AliasField);
             }
         }
     }

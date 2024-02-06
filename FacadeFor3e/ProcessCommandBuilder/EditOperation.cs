@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Xml;
 using JetBrains.Annotations;
 
 namespace FacadeFor3e.ProcessCommandBuilder
@@ -8,7 +7,7 @@ namespace FacadeFor3e.ProcessCommandBuilder
     /// Defines an operation to edit a record
     /// </summary>
     [PublicAPI]
-    public class EditOperation : OperationWithAttributesBase
+    public class EditOperation : OperationWithAttributesBase, IHasKey
         {
         private IdentifyBase _keySpecification;
 
@@ -41,25 +40,6 @@ namespace FacadeFor3e.ProcessCommandBuilder
             get => this._keySpecification;
 
             set => this._keySpecification = value ?? throw new ArgumentNullException(nameof(value));
-            }
-
-        /// <summary>
-        /// Outputs this operation
-        /// </summary>
-        /// <param name="writer">An XMLWriter to output to</param>
-        /// <param name="objectSuperclassName">The name of the parent data object for when SubClass is not specified</param>
-        protected internal override void Render(XmlWriter writer, string objectSuperclassName)
-            {
-            writer.WriteStartElement("Edit");
-            writer.WriteStartElement(this.SubClass ?? objectSuperclassName);
-
-            this.KeySpecification.RenderKey(writer);
-
-            RenderAttributes(writer);
-            RenderChildren(writer);
-
-            writer.WriteEndElement();
-            writer.WriteEndElement();
             }
 
         /// <summary>

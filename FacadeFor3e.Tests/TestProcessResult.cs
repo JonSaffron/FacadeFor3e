@@ -98,6 +98,7 @@ namespace FacadeFor3e.Tests
             ClassicAssert.AreEqual("Success", processResult.OutputId);
             ClassicAssert.IsFalse(processResult.HasDataError);
             ClassicAssert.IsNull(processResult.NextMessage);
+            // ReSharper disable once ReturnValueOfPureMethodIsNotUsed
             Assert.Throws<InvalidOperationException>(() => processResult.GetKeys().ToList());
             ClassicAssert.IsFalse(processResult.DataErrors.Any());
             }

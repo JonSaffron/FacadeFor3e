@@ -115,7 +115,7 @@ namespace FacadeFor3e.Tests
 
             Assert.Throws<ArgumentException>(() => coll.AddRange(new OperationBase[] { null }));
 
-            Assert.Throws<ArgumentNullException>(() => coll.AddRange(null));
+            Assert.Throws<ArgumentNullException>(() => coll.AddRange(null!));
             }
         }
     }

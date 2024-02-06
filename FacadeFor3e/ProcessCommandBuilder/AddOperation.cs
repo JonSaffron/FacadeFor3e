@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Xml;
 using JetBrains.Annotations;
 
 namespace FacadeFor3e.ProcessCommandBuilder
@@ -25,23 +24,6 @@ namespace FacadeFor3e.ProcessCommandBuilder
             {
             this.SubClass = subClass ?? throw new ArgumentNullException(nameof(subClass));
             CommonLibrary.IsValidId(subClass);
-            }
-
-        /// <summary>
-        /// Outputs this operation
-        /// </summary>
-        /// <param name="writer">An XMLWriter to output to</param>
-        /// <param name="objectSuperclassName">The name of the parent data object for when SubClass is not specified</param>
-        protected internal override void Render(XmlWriter writer, string objectSuperclassName)
-            {
-            writer.WriteStartElement("Add");
-            writer.WriteStartElement(this.SubClass ?? objectSuperclassName);
-
-            RenderAttributes(writer);
-            RenderChildren(writer);
-
-            writer.WriteEndElement();
-            writer.WriteEndElement();
             }
         }
     }

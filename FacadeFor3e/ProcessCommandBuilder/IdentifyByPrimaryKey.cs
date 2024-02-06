@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Xml;
 using JetBrains.Annotations;
 
 namespace FacadeFor3e.ProcessCommandBuilder
@@ -84,13 +83,6 @@ namespace FacadeFor3e.ProcessCommandBuilder
                 && !(value is DateTimeAttribute)
                 )
                 throw new ArgumentOutOfRangeException(nameof(value), "Primary key cannot be of the specified type.");
-            }
-
-        /// <inheritdoc />
-        protected internal override void RenderKey(XmlWriter writer)
-            {
-            // ReSharper disable once AssignNullToNotNullAttribute
-            writer.WriteAttributeString("KeyValue", this.KeyValue.ToString());
             }
         }
     }

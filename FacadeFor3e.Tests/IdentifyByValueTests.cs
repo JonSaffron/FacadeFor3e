@@ -21,7 +21,7 @@ namespace FacadeFor3e.Tests
 #else
             ClassicAssert.AreEqual(new DateTime(1980, 2, 29), a.KeyValue.Value);
 #endif
-            var s = CommonLibrary.GetRenderedOutputWithNode(a.RenderKey);
+            var s = CommonLibrary.GetRenderedOutputWithNode(writer => TransactionServiceRenderer.RenderKey(a, writer));
             ClassicAssert.AreEqual("<Test KeyValue=\"1980-02-29\" KeyField=\"EffStart\" />", s);
             }
 
@@ -31,7 +31,7 @@ namespace FacadeFor3e.Tests
             var a = new IdentifyByValue("IsDefault", new BoolAttribute(true));
             ClassicAssert.IsInstanceOf<BoolAttribute>(a.KeyValue);
             ClassicAssert.AreEqual(true, a.KeyValue.Value);
-            var s = CommonLibrary.GetRenderedOutputWithNode(a.RenderKey);
+            var s = CommonLibrary.GetRenderedOutputWithNode(writer => TransactionServiceRenderer.RenderKey(a, writer));
             ClassicAssert.AreEqual("<Test KeyValue=\"true\" KeyField=\"IsDefault\" />", s);
             }
 

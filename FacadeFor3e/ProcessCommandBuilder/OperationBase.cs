@@ -1,5 +1,4 @@
-﻿using System.Xml;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 
 namespace FacadeFor3e.ProcessCommandBuilder
     {
@@ -12,9 +11,9 @@ namespace FacadeFor3e.ProcessCommandBuilder
         private string? _subClass;
 
         /// <summary>
-        /// The subclass of object to create
+        /// The particular subclass of the parent DataObject's base class to carry out the operation on
         /// </summary>
-        /// <remarks>If null, this defaults to the parent data object</remarks>
+        /// <remarks>If not set, the operation will be carried out using the parent DataObject's object type</remarks>
         public string? SubClass
             {
             get => this._subClass;
@@ -29,12 +28,5 @@ namespace FacadeFor3e.ProcessCommandBuilder
                 this._subClass = value;
                 }
             }
-
-        /// <summary>
-        /// Output the operation
-        /// </summary>
-        /// <param name="writer">An XMLWriter to output to</param>
-        /// <param name="objectSuperclassName">The name of the parent data object for when SubClass is not specified</param>
-        protected internal abstract void Render(XmlWriter writer, string objectSuperclassName);
         }
     }

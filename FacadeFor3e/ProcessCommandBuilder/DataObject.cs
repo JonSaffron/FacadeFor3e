@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Xml;
 using JetBrains.Annotations;
 
 namespace FacadeFor3e.ProcessCommandBuilder
@@ -10,8 +9,6 @@ namespace FacadeFor3e.ProcessCommandBuilder
     [PublicAPI]
     public class DataObject
         {
-        private readonly OperationCollection _operations;
-
         /// <summary>
         /// Constructs a new DataObject
         /// </summary>
@@ -20,7 +17,7 @@ namespace FacadeFor3e.ProcessCommandBuilder
             {
             this.ObjectName = objectName ?? throw new ArgumentNullException(nameof(objectName));
             CommonLibrary.EnsureValid(objectName);
-            this._operations =  new OperationCollection();
+            this.Operations = new OperationCollection();
             }
 
         /// <summary>
@@ -31,32 +28,16 @@ namespace FacadeFor3e.ProcessCommandBuilder
         /// <summary>
         /// Gets the operations to be performed
         /// </summary>
-        public OperationCollection Operations => this._operations;
-
-        /// <summary>
-        /// Output the object
-        /// </summary>
-        /// <param name="writer">An XMLWriter to output to</param>
-        protected internal virtual void Render(XmlWriter writer)
-            {
-            writer.WriteStartElement(this.ObjectName);
-            foreach (OperationBase o in this._operations)
-                {
-                // ReSharper disable once PossibleNullReferenceException
-                o.Render(writer, this.ObjectName);
-                }
-            writer.WriteEndElement();
-            }
+        public OperationCollection Operations { get; }
 
         /// <summary>
         /// Creates and appends an operation to create a new record 
         /// </summary>
         /// <returns>An <see cref="AddOperation">AddOperation</see></returns>
-        [Pure]
         public AddOperation AddRecord()
             {
             var o = new AddOperation();
-            this._operations.Add(o);
+            this.Operations.Add(o);
             return o;
             }
 
@@ -68,7 +49,7 @@ namespace FacadeFor3e.ProcessCommandBuilder
         public DeleteOperation DeleteRecord(IdentifyBase keySpecification)
             {
             var o = new DeleteOperation(keySpecification);
-            this._operations.Add(o);
+            this.Operations.Add(o);
             return o;
             }
 
@@ -80,7 +61,7 @@ namespace FacadeFor3e.ProcessCommandBuilder
         public EditOperation EditRecord(IdentifyBase keySpecification)
             {
             var o = new EditOperation(keySpecification);
-            this._operations.Add(o);
+            this.Operations.Add(o);
             return o;
             }
         }

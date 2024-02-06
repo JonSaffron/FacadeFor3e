@@ -220,7 +220,7 @@ namespace FacadeFor3e.Tests
                 {
                 XmlDocument xmlDoc = new XmlDocument();
                 xmlDoc.LoadXml(data);
-                xmlDoc.DocumentElement!.ChildNodes[0].ChildNodes[0].InnerText = item;
+                xmlDoc.DocumentElement!.ChildNodes[0]!.ChildNodes[0]!.InnerText = item;
                 ClassicAssert.AreEqual(item, GetArchetypeData.TranslateScalarValue<string>(xmlDoc, _cultureInfo));
                 }
             }
@@ -318,8 +318,9 @@ namespace FacadeFor3e.Tests
             const string data = "<Data><Row><Item>%%Value%%</Item></Row></Data>";
             foreach (string item in new[] { "rubbish", "thursday", "20231512", "1/27/2024 12:10:20 AM" })
                 {
+                var xmlData = data.Replace("%%Value%%", item);
                 XmlDocument xmlDoc = new XmlDocument();
-                xmlDoc.LoadXml(data);
+                xmlDoc.LoadXml(xmlData);
                 Assert.Throws<FormatException>(() => GetArchetypeData.TranslateScalarValue<DateOnly>(xmlDoc, _cultureInfo));
                 }
             }
@@ -378,10 +379,11 @@ namespace FacadeFor3e.Tests
         public void TestNotDecimalValue()
             {
             const string data = "<Data><Row><Item>%%Value%%</Item></Row></Data>";
-            foreach (string item in new[] { "rubbish", "prefix12345", "12345suffix", "5e2", "12.34", "12,35" })
+            foreach (string item in new[] { "rubbish", "prefix12345", "12345suffix", "5e2", "12.34.56", "12-35" })
                 {
+                var xmlData = data.Replace("%%Value%%", item);
                 XmlDocument xmlDoc = new XmlDocument();
-                xmlDoc.LoadXml(data);
+                xmlDoc.LoadXml(xmlData);
                 Assert.Throws<FormatException>(() => GetArchetypeData.TranslateScalarValue<decimal>(xmlDoc, _cultureInfo));
                 }
             }
@@ -532,12 +534,14 @@ namespace FacadeFor3e.Tests
             {
             public int TimeIndex;
             public string Narrative;
+            // ReSharper disable once InconsistentNaming
             public string Narrative_FormattedText;
             }
 
         internal class NarrativeDataFormattedFullName
             {
             public int TimeIndex;
+            // ReSharper disable once InconsistentNaming
             public string Narrative_FormattedText;
             }
 
@@ -576,6 +580,7 @@ namespace FacadeFor3e.Tests
             {
             public int TimeIndex;
             [ColumnMapping("Narrative")]
+            // ReSharper disable once InconsistentNaming
             public string Narrative_UnformattedText;
             }
 
@@ -655,7 +660,7 @@ namespace FacadeFor3e.Tests
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.LoadXml(data);
 
-            var result = GetArchetypeData.TranslateCompoundValue<ProfDetailTimeByProfDetIndex>(xmlDoc, new CultureInfo("en-US"));
+            Assert.Throws<InvalidOperationException>(() => GetArchetypeData.TranslateCompoundValue<ProfDetailTimeByProfDetIndex>(xmlDoc, new CultureInfo("en-US")));
             }
 
         internal class ProfDetailTimeByProfDetIndex

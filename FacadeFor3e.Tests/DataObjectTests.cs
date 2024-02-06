@@ -18,7 +18,7 @@ namespace FacadeFor3e.Tests
             ClassicAssert.AreEqual("Matter", d.ObjectName);
             ClassicAssert.AreEqual(0, d.Operations.Count);
 
-            var s = CommonLibrary.GetRenderedOutput(d.Render);
+            var s = CommonLibrary.GetRenderedOutput(writer => TransactionServiceRenderer.Render(d, writer));
             ClassicAssert.AreEqual("<Matter />", s);
             }
 
@@ -58,7 +58,7 @@ namespace FacadeFor3e.Tests
             d.EditRecord(new IdentifyByPrimaryKey(1));
             d.DeleteRecord(new IdentifyByPrimaryKey(2));
 
-            var s = CommonLibrary.GetRenderedOutput(d.Render);
+            var s = CommonLibrary.GetRenderedOutput(writer => TransactionServiceRenderer.Render(d, writer));
             ClassicAssert.AreEqual("<Client>" +
                                         "<Add><Client /></Add>" +
                                         "<Edit><Client KeyValue=\"1\" /></Edit>" +

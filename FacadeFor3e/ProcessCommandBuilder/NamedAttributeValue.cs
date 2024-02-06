@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Xml;
 using JetBrains.Annotations;
 
 namespace FacadeFor3e.ProcessCommandBuilder
@@ -31,18 +30,6 @@ namespace FacadeFor3e.ProcessCommandBuilder
             CommonLibrary.EnsureValid(name);
             this.Attribute = attribute ?? throw new ArgumentNullException(nameof(attribute));
             }
-
-        /// <summary>
-        /// Outputs the attribute as XML
-        /// </summary>
-        /// <param name="writer">The XmlWriter to output to</param>
-        protected internal virtual void Render(XmlWriter writer)
-            {
-            writer.WriteStartElement(this.Name);
-            // ReSharper disable once AssignNullToNotNullAttribute
-            writer.WriteValue(this.Attribute.ToString());
-            writer.WriteEndElement();
-            }
         }
 
     /// <summary>
@@ -66,19 +53,6 @@ namespace FacadeFor3e.ProcessCommandBuilder
             {
             this.Alias = alias ?? throw new ArgumentNullException(nameof(alias));
             CommonLibrary.EnsureValid(alias);
-            }
-
-        /// <summary>
-        /// Outputs the attribute as XML
-        /// </summary>
-        /// <param name="writer">The XmlWriter to output to</param>
-        protected internal override void Render(XmlWriter writer)
-            {
-            writer.WriteStartElement(this.Name);
-            writer.WriteAttributeString("AliasField", this.Alias);
-            // ReSharper disable once AssignNullToNotNullAttribute
-            writer.WriteValue(this.Attribute.ToString());
-            writer.WriteEndElement();
             }
         }
     }

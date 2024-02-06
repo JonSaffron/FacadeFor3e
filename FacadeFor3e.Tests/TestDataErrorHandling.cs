@@ -55,7 +55,7 @@ namespace FacadeFor3e.Tests
             var processResult = new ExecuteProcessResult(request, response);
 
             var output = ExecuteProcessResult.RenderDataErrors(processResult.DataErrors);
-            var lines = output.Split(new [] {'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries);
+            var lines = output!.Split(new [] {'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries);
             ClassicAssert.True(lines[0].Contains("Proforma"));
             ClassicAssert.True(lines[0].Contains("516557"));
             ClassicAssert.True(lines[1].Contains("ProfDetailTime"));

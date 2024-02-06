@@ -615,7 +615,7 @@ namespace FacadeFor3e
                 var dt = DateTime.Parse(value, cultureInfo);
                 if (dt.TimeOfDay != TimeSpan.Zero)
                     {
-                    throw new InvalidOperationException("Data has a time component and cannot be converted to a DateOnly.");
+                    throw new FormatException("Data has a time component and cannot be converted to a DateOnly.");
                     }
                 return (T)(object)DateOnly.FromDateTime(dt);
                 }

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Globalization;
-using System.Xml;
 using JetBrains.Annotations;
 
 namespace FacadeFor3e.ProcessCommandBuilder
@@ -34,12 +32,6 @@ namespace FacadeFor3e.ProcessCommandBuilder
                     throw new ArgumentOutOfRangeException(nameof(value));
                 this._position = value;
                 }
-            }
-
-        /// <inheritdoc />
-        protected internal override void RenderKey(XmlWriter writer)
-            {
-            writer.WriteAttributeString("Position", this._position.ToString(CultureInfo.InvariantCulture));
             }
         }
     }

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using System.Xml;
 using JetBrains.Annotations;
 
 namespace FacadeFor3e.ProcessCommandBuilder
@@ -177,42 +175,6 @@ namespace FacadeFor3e.ProcessCommandBuilder
             var a = new DataObject(name);
             this.Children.Add(a);
             return a;
-            }
-
-        /// <summary>
-        /// Outputs this operation's attributes
-        /// </summary>
-        /// <param name="writer">An XMLWriter to output to</param>
-        protected void RenderAttributes(XmlWriter writer)
-            {
-            if (this.Attributes.Any())
-                {
-                writer.WriteStartElement("Attributes");
-                foreach (NamedAttributeValue a in this.Attributes)
-                    {
-                    // ReSharper disable once PossibleNullReferenceException
-                    a.Render(writer);
-                    }
-                writer.WriteEndElement();
-                }
-            }
-
-        /// <summary>
-        /// Outputs this operation's children
-        /// </summary>
-        /// <param name="writer">An XMLWriter to output to</param>
-        protected void RenderChildren(XmlWriter writer)
-            {
-            if (this.Children.Any())
-                {
-                writer.WriteStartElement("Children");
-                foreach (DataObject a in this.Children)
-                    {
-                    // ReSharper disable once PossibleNullReferenceException
-                    a.Render(writer);
-                    }
-                writer.WriteEndElement();
-                }
             }
         }
     }

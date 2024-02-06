@@ -22,14 +22,14 @@ namespace FacadeFor3e.Tests
             ClassicAssert.AreEqual("http://elite.com/schemas/transaction/process/write/Matter_Srv", p.ProcessNameSpace);
             ClassicAssert.AreEqual("http://elite.com/schemas/transaction/object/write/Matter", p.ObjectNameSpace);
 
-            var s = CommonLibrary.GetRenderedOutput(p.Render);
+            var renderer = new TransactionServiceRenderer();
+            var xmlDoc = renderer.Render(p);
+            ClassicAssert.IsInstanceOf<XmlDocument>(xmlDoc);
             ClassicAssert.AreEqual("<Matter_Srv xmlns=\"http://elite.com/schemas/transaction/process/write/Matter_Srv\">" +
                             "<Initialize xmlns=\"http://elite.com/schemas/transaction/object/write/Matter\">" +
                             "<Add><Matter /></Add>" +
                             "</Initialize>" +
-                            "</Matter_Srv>", s);
-            var xmlDoc = p.GenerateCommand();
-            ClassicAssert.IsInstanceOf<XmlDocument>(xmlDoc);
+                            "</Matter_Srv>", xmlDoc.InnerXml);
             }
 
         [Test]
@@ -56,7 +56,7 @@ namespace FacadeFor3e.Tests
             p.ProcessAutomationRoleAfterFirstStep = "NbiRole";
             p.ProcessRequestSignature = "xxxyyyyzzz";
 
-            var s = CommonLibrary.GetRenderedOutputWithNode(p.RenderProcessAttributes);
+            var s = CommonLibrary.GetRenderedOutputWithNode(writer => TransactionServiceRenderer.RenderProcessAttributes(p, writer));
             ClassicAssert.AreEqual("<Test ObjectName=\"NBI\" " +
                             "Description=\"New Business Inception\" " +
                             "Priority=\"MEDIUM\" " +

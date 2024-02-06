@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Xml;
 using JetBrains.Annotations;
 
 namespace FacadeFor3e.ProcessCommandBuilder
@@ -94,66 +93,5 @@ namespace FacadeFor3e.ProcessCommandBuilder
         /// </summary>
         /// <returns>The namespace that applies for the specified object</returns>
         protected internal string ObjectNameSpace => $@"http://elite.com/schemas/transaction/object/write/{this.ObjectName}";
-
-        /// <summary>
-        /// Outputs this process
-        /// </summary>
-        /// <param name="writer">An XMLWriter to output to</param>
-        protected internal override void Render(XmlWriter writer)
-            {
-            writer.WriteStartDocument();
-            writer.WriteStartElement(this.ProcessCode, ProcessNameSpace);
-            RenderProcessAttributes(writer);
-            writer.WriteStartElement("Initialize", ObjectNameSpace);
-            foreach (OperationBase o in this.Operations)
-                {
-                o.Render(writer, this.ObjectName);
-                }
-            writer.WriteEndElement();
-            writer.WriteEndElement();
-            writer.WriteEndDocument();
-            writer.Flush();
-            }
-
-        /// <summary>
-        /// Outputs the optional attributes of the ProcessCommand
-        /// </summary>
-        /// <param name="writer">An XMLWriter to output to</param>
-        protected internal void RenderProcessAttributes(XmlWriter writer)
-            {
-            if (this.ProcessName != null)
-                writer.WriteAttributeString("ObjectName", this.ProcessName);
-            if (this.Description != null)
-                writer.WriteAttributeString("Description", this.Description);
-            if (this.Priority.HasValue)
-                writer.WriteAttributeString("Priority", this.Priority.Value.ToString("G"));
-            if (this.OperatingUnit != null)
-                writer.WriteAttributeString("OperatingUnit", this.OperatingUnit);
-            if (this.CheckSum.HasValue)
-                writer.WriteAttributeString("CheckSum", this.CheckSum.Value.ToString("G"));
-            if (this.ProxyUser != null)
-                writer.WriteAttributeString("ProxyUser", this.ProxyUser);
-            if (this.ProxyUserId != null)
-                writer.WriteAttributeString("ProxyUserID", this.ProxyUserId);
-            if (this.ProcessRequestType.HasValue)
-                writer.WriteAttributeString("ProcessRequestType", this.ProcessRequestType.Value.ToString("G"));
-            if (this.ProcessAutomationRoleAfterFirstStep != null)
-                writer.WriteAttributeString("ProcessAutomationRoleAfterFirstStep", this.ProcessAutomationRoleAfterFirstStep);
-            if (this.ProcessRequestSignature != null)
-                writer.WriteAttributeString("ProcessRequestSignature", this.ProcessRequestSignature);
-            }
-
-        /// <summary>
-        /// Generate the XML instructions to pass to 3E
-        /// </summary>
-        /// <returns>The transaction to be carried out</returns>
-        public XmlDocument GenerateCommand()
-            {
-            var xmlDoc = new XmlDocument();
-            // ReSharper disable once RedundantSuppressNullableWarningExpression (applies to .net 6 only)
-            using XmlWriter w = xmlDoc.CreateNavigator()!.AppendChild()!;
-            Render(w);
-            return xmlDoc;
-            }
         }
     }

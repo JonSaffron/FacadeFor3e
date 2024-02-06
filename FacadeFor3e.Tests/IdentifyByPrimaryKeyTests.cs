@@ -17,7 +17,7 @@ namespace FacadeFor3e.Tests
             var pk = new IdentifyByPrimaryKey(10_000);
             ClassicAssert.IsInstanceOf<IntAttribute>(pk.KeyValue);
             ClassicAssert.AreEqual(10_000, pk.KeyValue.Value);
-            var s = CommonLibrary.GetRenderedOutputWithNode(pk.RenderKey);
+            var s = CommonLibrary.GetRenderedOutputWithNode(writer => TransactionServiceRenderer.RenderKey(pk, writer));
             ClassicAssert.AreEqual("<Test KeyValue=\"10000\" />", s);
             }
 
@@ -27,7 +27,7 @@ namespace FacadeFor3e.Tests
             var pk = new IdentifyByPrimaryKey("TIMEONLY");
             ClassicAssert.IsInstanceOf<StringAttribute>(pk.KeyValue);
             ClassicAssert.AreEqual("TIMEONLY", pk.KeyValue.Value);
-            var s = CommonLibrary.GetRenderedOutputWithNode(pk.RenderKey);
+            var s = CommonLibrary.GetRenderedOutputWithNode(writer => TransactionServiceRenderer.RenderKey(pk, writer));
             ClassicAssert.AreEqual("<Test KeyValue=\"TIMEONLY\" />", s);
             }
 
@@ -38,7 +38,7 @@ namespace FacadeFor3e.Tests
             var pk = new IdentifyByPrimaryKey(g);
             ClassicAssert.IsInstanceOf<GuidAttribute>(pk.KeyValue);
             ClassicAssert.AreEqual(g, pk.KeyValue.Value);
-            var s = CommonLibrary.GetRenderedOutputWithNode(pk.RenderKey);
+            var s = CommonLibrary.GetRenderedOutputWithNode(writer => TransactionServiceRenderer.RenderKey(pk, writer));
             ClassicAssert.AreEqual("<Test KeyValue=\"da319fed-2491-492f-9a9d-56209acaef6f\" />", s);
             }
 
@@ -48,7 +48,7 @@ namespace FacadeFor3e.Tests
             var pk = new IdentifyByPrimaryKey(new IntAttribute(25_000));
             ClassicAssert.IsInstanceOf<IntAttribute>(pk.KeyValue);
             ClassicAssert.AreEqual(25_000, pk.KeyValue.Value);
-            var s = CommonLibrary.GetRenderedOutputWithNode(pk.RenderKey);
+            var s = CommonLibrary.GetRenderedOutputWithNode(writer => TransactionServiceRenderer.RenderKey(pk, writer));
             ClassicAssert.AreEqual("<Test KeyValue=\"25000\" />", s);
             }
 

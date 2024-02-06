@@ -17,6 +17,11 @@ namespace FacadeFor3e.ProcessCommandBuilder
         /// Gets the untyped attribute value
         /// </summary>
         object? Value { get; }
+
+        /// <summary>
+        /// Returns whether or not the attribute has a non-null value
+        /// </summary>
+        bool HasValue { get; }
         }
 
     /// <summary>
@@ -56,6 +61,9 @@ namespace FacadeFor3e.ProcessCommandBuilder
 
         /// <inheritdoc />
         object? IAttribute.Value => this.Value;
+
+        /// <inheritdoc />
+        public bool HasValue => this.Value.HasValue;
         }
 
     /// <summary>
@@ -95,6 +103,9 @@ namespace FacadeFor3e.ProcessCommandBuilder
 
         /// <inheritdoc />
         object? IAttribute.Value => this.Value;
+
+        /// <inheritdoc />
+        public bool HasValue => this.Value.HasValue;
         }
 
     /// <summary>
@@ -134,6 +145,9 @@ namespace FacadeFor3e.ProcessCommandBuilder
 
         /// <inheritdoc />
         object? IAttribute.Value => this.Value;
+
+        /// <inheritdoc />
+        public bool HasValue => !string.IsNullOrWhiteSpace(this.Value);
         }
 
     /// <summary>
@@ -173,6 +187,9 @@ namespace FacadeFor3e.ProcessCommandBuilder
 
         /// <inheritdoc />
         object? IAttribute.Value => this.Value;
+
+        /// <inheritdoc />
+        public bool HasValue => this.Value.HasValue;
         }
 
     /// <summary>
@@ -236,6 +253,9 @@ namespace FacadeFor3e.ProcessCommandBuilder
 
         /// <inheritdoc />
         object? IAttribute.Value => this.Value;
+
+        /// <inheritdoc />
+        public bool HasValue => this.Value.HasValue;
         }
 
     /// <summary>
@@ -289,11 +309,15 @@ namespace FacadeFor3e.ProcessCommandBuilder
 
         /// <inheritdoc />
         object? IAttribute.Value => this.Value;
+
+        /// <inheritdoc />
+        public bool HasValue => this.Value.HasValue;
         }
 
     /// <summary>
     /// A 3E Boolean attribute value
     /// </summary>
+    /// <remarks>Boolean attributes don't support null values</remarks>
     [PublicAPI]
     public sealed class BoolAttribute : IAttribute
         {
@@ -305,7 +329,7 @@ namespace FacadeFor3e.ProcessCommandBuilder
         /// <summary>
         /// Constructs a new 3E Boolean attribute value
         /// </summary>
-        /// <param name="value"></param>
+        /// <param name="value">The initial value of the attribute</param>
         public BoolAttribute(bool value)
             {
             this.Value = value;
@@ -328,5 +352,9 @@ namespace FacadeFor3e.ProcessCommandBuilder
 
         /// <inheritdoc />
         object IAttribute.Value => this.Value;
+
+
+        /// <inheritdoc />
+        public bool HasValue => true;
         }
     }
