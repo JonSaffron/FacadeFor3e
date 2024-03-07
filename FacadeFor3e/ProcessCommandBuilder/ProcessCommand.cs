@@ -65,11 +65,13 @@ namespace FacadeFor3e.ProcessCommandBuilder
         /// <summary>
         /// Gets or sets the proxy user id.
         /// </summary>
+        // todo should this be a guid?
         public string? ProxyUserId { get; set; }
 
         /// <summary>
         /// Gets or sets how the execution of the process should be altered from the default.
         /// </summary>
+        /// <remarks>TransactionServices only, and it didn't seem to work even then</remarks>
         public ProcessExecutionRequestTypeEnum? ProcessRequestType { get; set; }
 
         /// <summary>
@@ -81,6 +83,13 @@ namespace FacadeFor3e.ProcessCommandBuilder
         /// Validates request is coming from an authorized external application.
         /// </summary>
         public string? ProcessRequestSignature { get; set; }
+
+        /// <summary>
+        /// Used to specify the ID of the output to take from page steps when it is not equal to "RELEASE"
+        /// Elite internal doco says "Allows to specify the output step of a process in Post and Patch requests."
+        /// </summary>
+        /// <remarks>OData only</remarks>
+        public string? OutputStepOverride { get; set; } 
 
         /// <summary>
         /// Generates the namespace required for the process

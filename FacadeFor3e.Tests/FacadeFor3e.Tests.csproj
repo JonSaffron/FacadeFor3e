@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
 	  <TargetFrameworks>net48;net6.0-windows</TargetFrameworks>
@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
     <PackageReference Include="NUnit" Version="4.0.1" />
+    <PackageReference Include="NLog" Version="5.1.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,5 +34,9 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+
+	<Target Name="CopyConfigForUnitTesting" AfterTargets="AfterBuild">
+		<Copy SourceFiles="$(OutDir)\$(TargetFileName).config" DestinationFiles="$(OutDir)\ReSharperTestRunner.dll.config" />
+	</Target>
 
 </Project>

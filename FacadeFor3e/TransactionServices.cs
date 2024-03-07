@@ -34,7 +34,7 @@ namespace FacadeFor3e
         public Uri Endpoint { get; }
 
         /// <summary>
-        /// Returns whether this object has ben disposed
+        /// Returns whether this object has been disposed
         /// </summary>
         public bool IsDisposed { get; private set; }
 
@@ -219,7 +219,7 @@ namespace FacadeFor3e
             }
 
         /// <summary>
-        /// Gets whether or not impersonation is being used during calls to the 3E transaction service
+        /// Gets whether impersonation is being used during calls to the 3E transaction service
         /// </summary>
         public bool IsImpersonating => this.AccountToImpersonate != null && this.AccountToImpersonate != WindowsIdentity.GetCurrent();
 

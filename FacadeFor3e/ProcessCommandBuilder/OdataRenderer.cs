@@ -1,20 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.IO;
 using System.Linq;
-using System.Text;
+using System.Net.Http;
+using System.Text.Json;
 
 namespace FacadeFor3e.ProcessCommandBuilder
     {
     /// <summary>
     /// Describes all the various values needed to call the OData service
     /// </summary>
+    [Experimental("OData")]
     public class ODataRequest
         {
         /// <summary>
         /// The HTML verb to use
         /// </summary>
-        public readonly string Verb;
+        public readonly HttpMethod Verb;
 
         /// <summary>
         /// The URL to use
@@ -24,7 +28,7 @@ namespace FacadeFor3e.ProcessCommandBuilder
         /// <summary>
         /// The command to send
         /// </summary>
-        public readonly string Json;
+        public readonly byte[] Json;
 
         /// <summary>
         /// Constructs a new OData request object
@@ -32,7 +36,7 @@ namespace FacadeFor3e.ProcessCommandBuilder
         /// <param name="verb">The HTML verb to use</param>
         /// <param name="endPoint">The URL to use</param>
         /// <param name="json">The command to send</param>
-        public ODataRequest(string verb, string endPoint, string json)
+        public ODataRequest(HttpMethod verb, string endPoint, byte[] json)
             {
             this.Verb = verb;
             this.EndPoint = endPoint;
@@ -40,9 +44,10 @@ namespace FacadeFor3e.ProcessCommandBuilder
             }
         }
 
+    [Experimental("OData")]
     internal class ODataRenderer
         {
-        private JSonWriter _writer = new JSonWriter();
+        private Utf8JsonWriter _writer = null!;
         
         public ODataRequest Render(ProcessCommand processCommand)
             {
@@ -52,19 +57,19 @@ namespace FacadeFor3e.ProcessCommandBuilder
                 {
                 throw new InvalidOperationException("The 3E OData interface expects one and only one operation.");
                 }
-            string verb = GetVerbForOperation(operation);
+            HttpMethod verb = GetVerbForOperation(operation);
             string endPoint = GetEndPointForOperation(operation, processCommand.ObjectName);
-            string json = GetJson(operation, processCommand.ObjectName);
-            return new ODataRequest(verb, endPoint, json);
+            var jsonDocument = GetJson(processCommand);
+            return new ODataRequest(verb, endPoint, jsonDocument);
             }
 
-        private static string GetVerbForOperation(OperationBase operation)
+        private static HttpMethod GetVerbForOperation(OperationBase operation)
             {
             switch (operation)
                 {
-                case AddOperation _: return "POST";
-                case EditOperation _: return "PATCH";
-                case DeleteOperation _: return "DELETE";
+                case AddOperation _: return HttpMethod.Post;
+                case EditOperation _: return new HttpMethod("PATCH");
+                case DeleteOperation _: return HttpMethod.Delete;
                 default: throw new InvalidOperationException();
                 }
             }
@@ -75,12 +80,17 @@ namespace FacadeFor3e.ProcessCommandBuilder
             IdentifyBase key;
             switch (operation)
                 {
+                case AddOperation _:
+                    return entity;
+
                 case EditOperation edit: 
                     key = edit.KeySpecification;
                     break;
+
                 case DeleteOperation delete: 
                     key = delete.KeySpecification;
                     break;
+
                 default: throw new InvalidOperationException();
                 }
             IdentifyByPrimaryKey? primaryKey = key as IdentifyByPrimaryKey;
@@ -88,24 +98,52 @@ namespace FacadeFor3e.ProcessCommandBuilder
                 {
                 throw new InvalidOperationException("Don't know how to specify something other than the primary key");
                 }
-            return $"{entity}({primaryKey.KeyValue.Value})";
+            return $"{entity}/{primaryKey.KeyValue.Value}";
             }
 
-        private string GetJson(OperationBase operation, string superClass)
+        private byte[] GetJson(ProcessCommand processCommand)
             {
-            this._writer = new JSonWriter();
-            this._writer.WriteObjectStart();
-            WriteProcessCommand(operation, superClass);
-            this._writer.WriteObjectEnd();
-            return this._writer.ToString();
+            var i = new JsonWriterOptions { Indented = true, SkipValidation = false };
+            using var stream = new MemoryStream();
+            using (this._writer = new Utf8JsonWriter(stream, i))
+                {
+                this._writer.WriteStartObject();
+                WriteProcessCommand(processCommand);
+                this._writer.WriteEndObject();
+                this._writer.Flush();
+                }
+
+            return stream.ToArray();
             }
 
-        private void WriteProcessCommand(OperationBase operation, string superClass)
+        private void WriteProcessCommand(ProcessCommand processCommand)
             {
-            var entity = operation.SubClass ?? superClass;
-            this._writer.WriteProperty("@odata.type", $"E3E.OData.AllTypes.{entity}");
-            this._writer.WriteProperty("_release_process", true);
-            this._writer.WriteProperty("_cleanup_process_on_failure", true);
+            var operation = processCommand.Operations.Single();
+            var entity = operation.SubClass ?? processCommand.ObjectName;
+            this._writer.WriteString("@odata.type", $"E3E.OData.AllTypes.{entity}");
+            this._writer.WriteString("_process_override", processCommand.ProcessCode);
+            this._writer.WriteBoolean("_release_process", true);
+            this._writer.WriteBoolean("_cleanup_process_on_failure", true);
+            if (processCommand.OutputStepOverride != null)
+                {
+                this._writer.WriteString("_output_step_override", processCommand.OutputStepOverride);
+                }
+            if (processCommand.Description != null)
+                {
+                this._writer.WriteString("_description", processCommand.Description);
+                }
+            if (processCommand.ProcessName != null)
+                {
+                this._writer.WriteString("_name", processCommand.ProcessName);
+                }
+            if (processCommand.OperatingUnit != null)
+                {
+                this._writer.WriteString("_operating_unit", processCommand.OperatingUnit);
+                }
+            if (processCommand.ProxyUserId != null)
+                {
+                this._writer.WriteString("_role_id", processCommand.ProxyUserId);
+                }
 
             if (operation is OperationWithAttributesBase operationWithAttributes)
                 {
@@ -115,8 +153,8 @@ namespace FacadeFor3e.ProcessCommandBuilder
 
         private void WriteChildOperation(OperationBase operation)
             {
-            this._writer.WriteObjectStart();
-            this._writer.WriteProperty("_patch_operation", GetPatchType(operation));
+            this._writer.WriteStartObject();
+            this._writer.WriteString("_patch_operation", GetPatchType(operation));
             
             IdentifyBase? identifyBase = (operation as IHasKey)?.KeySpecification;
             if (identifyBase != null)
@@ -129,7 +167,7 @@ namespace FacadeFor3e.ProcessCommandBuilder
                 WriteOperationAttributesAndChildren(operationWithAttributes);
                 }
 
-            this._writer.WriteObjectEnd();
+            this._writer.WriteEndObject();
             }
 
         private void WriteKeySpecification(IdentifyBase identifyBase)
@@ -137,10 +175,13 @@ namespace FacadeFor3e.ProcessCommandBuilder
             switch (identifyBase)
                 {
                 case IdentifyByPrimaryKey identifyByPrimaryKey:
-                    this._writer.WriteProperty("***primary key***", identifyByPrimaryKey.KeyValue);
+                    if (identifyByPrimaryKey.PrimaryKeyName == null)
+                        throw new InvalidOperationException("OData requires the name of the primary key attribute when used to target a row in a child collection.");
+                    this._writer.WritePropertyName(identifyByPrimaryKey.PrimaryKeyName);
+                    WriteAttributeValue(identifyByPrimaryKey.KeyValue);
                     break;
                 case IdentifyByPosition identifyByPosition:
-                    this._writer.WriteProperty("_index", identifyByPosition.Position);
+                    this._writer.WriteNumber("_index", identifyByPosition.Position);
                     break;
                 default:
                     throw new InvalidOperationException("Don't know how to deal with other row identification type " + identifyBase.GetType().Name);
@@ -182,163 +223,75 @@ namespace FacadeFor3e.ProcessCommandBuilder
             {
             foreach (var attribute in operationWithAttributes.Attributes)
                 {
-                this._writer.WriteAttribute(attribute);
+                WriteAttribute(attribute);
                 }
 
             var childOps = BuildChildOps(operationWithAttributes.Children);
             foreach (var objectName in childOps.Keys)
                 {
-                this._writer.WriteArrayStart($"{objectName}s");
+                this._writer.WriteStartArray($"{objectName}s");
                 foreach (var listItem in childOps[objectName])
                     {
                     WriteChildOperation(listItem);
                     }
-                this._writer.WriteArrayEnd();
+                this._writer.WriteEndArray();
                 }
             }
 
-
-
-
-
-
-        private class JSonWriter
+        private void WriteAttribute(NamedAttributeValue attribute)
             {
-            private readonly Stack<JsonElement> _stack = new Stack<JsonElement>();
-            private bool _lastElementWasProperty;
-            private readonly StringBuilder _stringBuilder = new StringBuilder();
-
-            private enum JsonElement
+            if (attribute is AliasAttribute _)
                 {
-                Object,
-                Array
+                this._writer.WritePropertyName($"{attribute.Name}_Alias");
+                }
+            else
+                {
+                this._writer.WritePropertyName(attribute.Name);
+                }
+            WriteAttributeValue(attribute.Attribute);
+            }
+
+        private void WriteAttributeValue(IAttribute attribute)
+            {
+            if (!attribute.HasValue)
+                {
+                this._writer.WriteNullValue();
+                return;
                 }
 
-            public void WriteObjectStart()
+            switch (attribute)
                 {
-                if (this._lastElementWasProperty)
-                    {
-                    this._stringBuilder.AppendLine(",");
-                    }
-                this._stringBuilder.AppendLine($"{Indent}{{");
-                this._stack.Push(JsonElement.Object);
-                this._lastElementWasProperty = false;
+                case DecimalAttribute decimalAttribute:
+                    this._writer.WriteNumberValue(decimalAttribute.Value!.Value);
+                    break;
+
+                case IntAttribute intAttribute:
+                    this._writer.WriteNumberValue(intAttribute.Value!.Value);
+                    break;
+
+                case StringAttribute stringAttribute:
+                    this._writer.WriteStringValue(stringAttribute.Value);
+                    break;
+
+                case GuidAttribute guidAttribute:
+                    this._writer.WriteStringValue(guidAttribute.Value!.Value);
+                    break;
+
+                case DateAttribute dateAttribute:
+                    this._writer.WriteStringValue(dateAttribute.Value!.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
+                    break;
+
+                case DateTimeAttribute dateTimeAttribute:
+                    this._writer.WriteStringValue(dateTimeAttribute.Value!.Value);
+                    break;
+
+                case BoolAttribute boolAttribute:
+                    this._writer.WriteBooleanValue(boolAttribute.Value);
+                    break;
+
+                default:
+                    throw new InvalidOperationException();
                 }
-
-            public void WriteObjectEnd()
-                {
-                if (this._stack.Pop() != JsonElement.Object)
-                    throw new InvalidOperationException("Cannot end object - an array needs to be finished first");
-                if (this._lastElementWasProperty)
-                    {
-                    this._stringBuilder.AppendLine();
-                    }
-                this._stringBuilder.Append($"{Indent}}}");
-                this._lastElementWasProperty = true;
-                }
-
-            public void WriteArrayStart(string element)
-                {
-                if (this._lastElementWasProperty)
-                    {
-                    this._stringBuilder.AppendLine(",");
-                    }
-                this._stringBuilder.AppendLine($"{Indent}\"{element}\": [");
-                this._stack.Push(JsonElement.Array);
-                this._lastElementWasProperty = false;
-                }
-
-            public void WriteArrayEnd()
-                {
-                if (this._stack.Pop() != JsonElement.Array)
-                    throw new InvalidOperationException("Cannot end array - an object needs to be finished first");
-                if (this._lastElementWasProperty)
-                    {
-                    this._stringBuilder.AppendLine();
-                    }
-                this._stringBuilder.Append($"{Indent}]");
-                this._lastElementWasProperty = true;
-                }
-
-            public void WriteAttribute(NamedAttributeValue attribute)
-                {
-                if (this._lastElementWasProperty)
-                    {
-                    this._stringBuilder.AppendLine(",");
-                    }
-                this._stringBuilder.Append($"{Indent}\"{attribute.Name}\": {GetAttributeValue(attribute.Attribute)}");
-                this._lastElementWasProperty = true;
-                }
-
-            public void WriteProperty(string name, string value)
-                {
-                if (this._lastElementWasProperty)
-                    {
-                    this._stringBuilder.AppendLine(",");
-                    }
-                this._stringBuilder.Append($"{Indent}\"{name}\": \"{value}\"");
-                this._lastElementWasProperty = true;
-                }
-
-            public void WriteProperty(string name, int value)
-                {
-                if (this._lastElementWasProperty)
-                    {
-                    this._stringBuilder.AppendLine(",");
-                    }
-                this._stringBuilder.Append($"{Indent}\"{name}\": {value.ToString(CultureInfo.InvariantCulture)}");
-                this._lastElementWasProperty = true;
-                }
-
-            public void WriteProperty(string name, bool value)
-                {
-                if (this._lastElementWasProperty)
-                    {
-                    this._stringBuilder.AppendLine(",");
-                    }
-                this._stringBuilder.Append($"{Indent}\"{name}\": {value.ToString().ToLowerInvariant()}");
-                this._lastElementWasProperty = true;
-                }
-
-            public void WriteProperty(string name, IAttribute attribute)
-                {
-                if (this._lastElementWasProperty)
-                    {
-                    this._stringBuilder.AppendLine(",");
-                    }
-                this._stringBuilder.Append($"{Indent}\"{name}\": {GetAttributeValue(attribute)}");
-                this._lastElementWasProperty = true;
-                }
-
-            private static string GetAttributeValue(IAttribute attribute)
-                {
-                if (!attribute.HasValue)
-                    return "null";
-
-                switch (attribute)
-                    {
-                    case DecimalAttribute decimalAttribute:
-                        return decimalAttribute.Value!.Value.ToString(CultureInfo.InvariantCulture);
-                    case IntAttribute intAttribute:
-                        return intAttribute.Value!.Value.ToString(CultureInfo.InvariantCulture);
-                    case StringAttribute stringAttribute:
-                        return $"\"{stringAttribute.Value}\"";
-                    case GuidAttribute guidAttribute:
-                        return $"\"{guidAttribute.Value!.Value:D}\"";
-                    case DateAttribute dateAttribute:
-                        return $"\"{dateAttribute.Value!.Value:yyyy-MM-dd}\"";
-                    case DateTimeAttribute dateTimeAttribute:
-                        return $"\"{dateTimeAttribute.Value!.Value:yyyy-MM-dd HH:mm:ss}\"";
-                    case BoolAttribute boolAttribute:
-                        return boolAttribute.Value.ToString().ToLowerInvariant();
-                    default:
-                        throw new InvalidOperationException();
-                    }
-                }
-
-            public override string ToString() => this._stringBuilder.ToString();
-
-            private string Indent => new string(' ', this._stack.Count << 2);
             }
         }
     }

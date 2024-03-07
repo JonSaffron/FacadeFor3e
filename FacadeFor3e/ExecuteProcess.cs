@@ -11,7 +11,7 @@ namespace FacadeFor3e
     /// Connects to the 3E transaction service and allows processes to be run
     /// </summary>
     [PublicAPI]
-    public class ExecuteProcess : ExecuteProcessService, IDisposable
+    public sealed class ExecuteProcess : ExecuteProcessService, IDisposable
         {
         /// <summary>
         /// Constructs a new ExecuteProcess object without impersonation or user credentials

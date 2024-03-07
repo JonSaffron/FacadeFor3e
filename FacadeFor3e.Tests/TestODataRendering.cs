@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel;
 using FacadeFor3e.ProcessCommandBuilder;
 using NUnit.Framework;
+
+#pragma warning disable OData
 
 namespace FacadeFor3e.Tests
     {
@@ -18,6 +17,7 @@ namespace FacadeFor3e.Tests
             var e = p.EditRecord(new IdentifyByPrimaryKey(15284));
             e.AddAliasedAttribute("Prefix", "Description", "Mr");
             e.AddAttribute("FirstName", "Jack");
+            e.AddAttribute("MiddleName", (string) null);
             e.AddAttribute("NameFormat", "DEFAULT");
             var c = e.AddChild("Relate");
             var ec1 = c.EditRecord(new IdentifyByPosition(0));
@@ -26,7 +26,7 @@ namespace FacadeFor3e.Tests
             var addSiteOp = addSite.AddRecord();
             addSiteOp.AddAttribute("SiteType", "BILLING");
             addSiteOp.AddAttribute("Description", "new site");
-            var editSiteOp = addSite.EditRecord(new IdentifyByPrimaryKey(12345));
+            var editSiteOp = addSite.EditRecord(new IdentifyByPrimaryKey("SiteIndex", 12345));
 #if NET6_0_OR_GREATER
             editSiteOp.AddDateAttribute("FinishDate", DateOnly.FromDateTime(DateTime.Today));
 #else
@@ -36,7 +36,9 @@ namespace FacadeFor3e.Tests
 
             var renderer = new ODataRenderer();
             var result = renderer.Render(p);
-            Console.Write(result.Json);
+
+            var json = System.Text.Encoding.UTF8.GetString(result.Json);
+            Console.Write(json);
             }
         }
     }
