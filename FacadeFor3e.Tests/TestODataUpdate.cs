@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Text.Json;
@@ -30,7 +29,7 @@ namespace FacadeFor3e.Tests
 
             Uri baseUri = new Uri("https://rdfin91tewa01.dentons.global/TE_3E_DEV_EU_REPORT/odata/");
             var service = new ODataServices(baseUri);
-            var response = service.Execute(command);
+            var response = service.Execute(command, ExecuteParams.Default);
             Console.WriteLine(response);
             }
 
@@ -45,8 +44,8 @@ namespace FacadeFor3e.Tests
             Uri tranSvc =
                 new Uri("https://rdfin91tewa01.dentons.global/te_3e_dev_eu_report/web/transactionservice.asmx");
             var ts = new TransactionServices(tranSvc);
-            ts.ExecuteProcess.Execute(command);
-        }
+            ts.ExecuteProcess.Execute(command, ExecuteProcessParams.Default);
+            }
 
         [Test]
         public void Test3()
@@ -57,7 +56,7 @@ namespace FacadeFor3e.Tests
 
             Uri baseUri = new Uri("https://rdfin91tewa01.dentons.global/TE_3E_DEV_EU_REPORT/odata/");
             var service = new ODataServices(baseUri);
-            var response = service.Execute(command);
+            var response = service.Execute(command, ExecuteParams.Default);
             Console.WriteLine(response.ResponseString);
             }
 
@@ -273,7 +272,7 @@ namespace FacadeFor3e.Tests
 
             Uri baseUri = new Uri("https://rdfin91tewa01.dentons.global/TE_3E_DEV_EU_REPORT/odata/");
             var service = new ODataServices(baseUri);
-            var response = service.Execute(processCommandForAdd);
+            var response = service.Execute(processCommandForAdd, ExecuteParams.Default);
 
             var origTimeIndex = response.ResponseJSonDocument.RootElement.GetProperty("TimeIndex").GetInt32();
 
@@ -282,7 +281,7 @@ namespace FacadeFor3e.Tests
             edit.AddAttribute("WorkRate", 700m);
             edit.AddAttribute("Currency", "GBP");
 
-            service.Execute(processCommandForEdit);
+            service.Execute(processCommandForEdit, ExecuteParams.Default);
 
             var uri = new Uri($"TimeCard?$filter=OrigTimeIndex eq {origTimeIndex} and IsActive eq true&$select=TimeIndex", UriKind.Relative);
             response = service.Select(uri);
@@ -292,7 +291,7 @@ namespace FacadeFor3e.Tests
             var update = processCommandForUpdate.EditRecord(new IdentifyByPrimaryKey(newTimeIndex));
             update.AddAttribute("Narrative", $"updated at {DateTime.Now:T}");
 
-            service.Execute(processCommandForUpdate);
+            service.Execute(processCommandForUpdate, ExecuteParams.Default);
 
             response = service.Select(uri);
             newTimeIndex = response.ResponseJSonDocument.RootElement.GetProperty("value")[0].GetProperty("TimeIndex").GetInt32();
@@ -300,7 +299,46 @@ namespace FacadeFor3e.Tests
             uri = new Uri($"TimeCard/{newTimeIndex}?$select=OrigTimeIndex,TimeIndex,IsActive,Narrative,WorkRate,Currency,WorkHrs", UriKind.Relative);
             service.Select(uri);
             }
+
+        [Test]
+        public void TestDeserialisation()
+            {
+            var json = JsonDocument.Parse(Resources.ExampleProfPresParagraphs);
+            var jsonSerialiserOptions = new JsonSerializerOptions { IncludeFields = true };
+
+            var element = json.RootElement.GetProperty("value")[0].GetProperty("ProfPresParagraphs")[0];
+            var r = element.Deserialize<DbPresentationParagraph>(jsonSerialiserOptions);
+
+            var result = json.RootElement.GetProperty("value")[0].GetProperty("ProfPresParagraphs").EnumerateArray().Select(item => item.Deserialize<DbPresentationParagraph>(jsonSerialiserOptions)).ToList();
+            ClassicAssert.AreEqual(9, result.Count);
+#if NET6_0_OR_GREATER
+            ClassicAssert.AreEqual(new DateOnly(2023, 09, 19), result[0].PresDate);
+#else
+            ClassicAssert.AreEqual(new DateTime(2023, 09, 19), result[0].PresDate);
+#endif
+            ClassicAssert.AreEqual("EUR", result[1].Currency);
+            ClassicAssert.AreEqual(543.12, result[5].PresAmount);
+            ClassicAssert.AreEqual(new Guid("d07726c1-2a71-4283-b82b-d6bbe2d079f7"), result[6].ProfPresentationParagraphID);
+            ClassicAssert.IsNull(result[2].PresAmount);
+            }
+
         }
+
+        public class DbPresentationParagraph
+            {
+            // ReSharper disable once InconsistentNaming
+            public Guid ProfPresentationParagraphID;
+#if NET6_0_OR_GREATER
+            public DateOnly PresDate;
+#else
+            public DateTime PresDate;
+#endif
+            public string Currency;
+            public decimal? PresAmount;
+            public decimal? PresHours;
+            public string Narrative;
+            public string SortString;
+            }
     }
 
 /*

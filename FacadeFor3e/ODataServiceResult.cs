@@ -13,6 +13,8 @@ namespace FacadeFor3e
             {
             this.Request = request ?? throw new ArgumentNullException(nameof(request));
             this.Response = response ?? throw new ArgumentNullException(nameof(response));
+            // ReSharper disable once PossibleNullReferenceException
+            // ReSharper disable once AssignNullToNotNullAttribute
             this.RawResponseBytes = this.Response.Content.ReadAsByteArrayAsync().Result;
             }
 
@@ -21,7 +23,10 @@ namespace FacadeFor3e
 
         public bool IsError => !this.Response.IsSuccessStatusCode;
 
+        // ReSharper disable once AssignNullToNotNullAttribute
+        // ReSharper disable PossibleNullReferenceException
         public bool IsResponseJSon => string.Equals(this.Response.Content.Headers.ContentType?.MediaType, "application/json");
+        // ReSharper restore PossibleNullReferenceException
 
         public byte[] RawResponseBytes { get; }
 
@@ -79,8 +84,9 @@ namespace FacadeFor3e
             if (!this.IsResponseJSon)
                 throw new InvalidOperationException("Response is not a json object");
             var result = JsonSerializer.Deserialize<T>(this.RawResponseBytes);
-            System.Diagnostics.Debug.Assert(result != null);
-            return result!;
+            if (result == null)
+                throw new InvalidOperationException("Failed to deserialise.");
+            return result;
             }
         }
     }

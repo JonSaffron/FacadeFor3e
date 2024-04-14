@@ -98,7 +98,9 @@ namespace FacadeFor3e
             {
             if (this._wi == null)
                 {
+                // ReSharper disable AssignNullToNotNullAttribute
                 bool result = LogonUser(this._credentials.UserName, this._credentials.Domain, this._credentials.Password, LogonSessionType.Interactive, LogonProvider.Default, out _originalToken);
+                // ReSharper restore AssignNullToNotNullAttribute
                 if (!result)
                     {
                     System.Diagnostics.Trace.WriteLine("LogonUser failed.");

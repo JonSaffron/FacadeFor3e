@@ -41,6 +41,7 @@ namespace FacadeFor3e.ProcessCommandBuilder
         object? IAttribute.Value => this.Value;
 
         /// <inheritdoc />
+        // ReSharper disable once AssignNullToNotNullAttribute
         public bool HasValue => !string.IsNullOrWhiteSpace(this.Value);
         }
     }

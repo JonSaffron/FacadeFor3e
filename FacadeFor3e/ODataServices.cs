@@ -3,6 +3,7 @@ using NLog;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -44,7 +45,8 @@ namespace FacadeFor3e
 
         private readonly Lazy<Logger> _logger = new Lazy<Logger>(() => LogManager.GetCurrentClassLogger()!);
 
-        private Logger Logger => this._logger.Value!;
+        // ReSharper disable once AssignNullToNotNullAttribute
+        private Logger Logger => this._logger.Value;
 
         /// <summary>
         /// Constructs a new ODataServices object without impersonation or user credentials
@@ -81,6 +83,7 @@ namespace FacadeFor3e
         public ODataServices(Uri baseEndpoint, ODataAuthentication oDataAuthentication) : this(baseEndpoint)
             {
             this._httpClient = BuildHttpClient(null);
+            // ReSharper disable once PossibleNullReferenceException
             this._httpClient.DefaultRequestHeaders.Authorization = oDataAuthentication.Header;
             }
 
@@ -88,8 +91,12 @@ namespace FacadeFor3e
             {
             using HttpClient httpClient = new HttpClient();
             var content = new FormUrlEncodedContent(credentials);
-            var response = httpClient.PostAsync(tokenEndpoint, content).Result;
+            // ReSharper disable once PossibleNullReferenceException
+            // ReSharper disable once AssignNullToNotNullAttribute
+            HttpResponseMessage response = httpClient.PostAsync(tokenEndpoint, content).Result;
+            // ReSharper disable once PossibleNullReferenceException
             response.EnsureSuccessStatusCode();
+            // ReSharper disable once PossibleNullReferenceException
             var jsonDocument = JsonDocument.Parse(response.Content.ReadAsByteArrayAsync().Result);
             var tokenType = jsonDocument.RootElement.GetProperty("token_type").GetString();
             var token = jsonDocument.RootElement.GetProperty("access_token").GetString();
@@ -100,38 +107,62 @@ namespace FacadeFor3e
             return result;
             }
 
+        public ODataServiceResult Select(FormattableString relativeUri)
+            {
+            if (relativeUri == null) throw new ArgumentNullException(nameof(relativeUri));
+            var uri = new Uri(relativeUri.ToString(CultureInfo.InvariantCulture), UriKind.Relative);
+            return Select(uri);
+            }
+
+        [Obsolete]
         public ODataServiceResult Select(Uri relativeUri)
             {
             if (relativeUri == null)
                 throw new ArgumentNullException(nameof(relativeUri));
             if (relativeUri.IsAbsoluteUri)
                 throw new ArgumentOutOfRangeException(nameof(relativeUri), "Specify a relative uri");
+            // ReSharper disable once AssignNullToNotNullAttribute
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, relativeUri);
             LogDetailsOfTheJob(request);
 
-            var response = this._httpClient.SendAsync(request).Result;
+            // ReSharper disable once PossibleNullReferenceException
+            // ReSharper disable once AssignNullToNotNullAttribute
+            HttpResponseMessage response = this._httpClient.SendAsync(request).Result;
+            // ReSharper disable once AssignNullToNotNullAttribute
+            // ReSharper disable PossibleNullReferenceException
             string responseText = response.Content.ReadAsStringAsync().Result;
+            // ReSharper restore PossibleNullReferenceException
             LogForDebug($"{response.StatusCode:D} {responseText}");
             response.EnsureSuccessStatusCode();
             var result = new ODataServiceResult(request, response);
             return result;
             }
 
-        public ODataServiceResult Execute(ProcessCommand command)
+        public ODataServiceResult Execute(ProcessCommand command, ExecuteParams executeParams)
             {
             var renderer = new ODataRenderer();
             var requestParameters = renderer.Render(command);
             HttpRequestMessage request = new HttpRequestMessage(requestParameters.Verb, requestParameters.EndPoint);
             request.Content = new ByteArrayContent(requestParameters.Json);
+            // ReSharper disable once PossibleNullReferenceException
+            // ReSharper disable once AssignNullToNotNullAttribute
             request.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             LogDetailsOfTheJob(request);
             LogForDebug(Encoding.UTF8.GetString(requestParameters.Json));
 
-            var response = this._httpClient.SendAsync(request).Result;
+            // ReSharper disable once PossibleNullReferenceException
+            // ReSharper disable once AssignNullToNotNullAttribute
+            HttpResponseMessage response = this._httpClient.SendAsync(request).Result;
+            // ReSharper disable once AssignNullToNotNullAttribute
+            // ReSharper disable PossibleNullReferenceException
             string responseText = response.Content.ReadAsStringAsync().Result;
+            // ReSharper restore PossibleNullReferenceException
             LogForDebug($"{response.StatusCode:D} {responseText}");
-            if (this.ThrowErrorIfProcessFails)
+            if (executeParams.ThrowExceptionIfProcessFails)
+                {
                 response.EnsureSuccessStatusCode();
+                }
+
             var result = new ODataServiceResult(request, response);
             return result;
             }
@@ -170,9 +201,11 @@ namespace FacadeFor3e
             {
             if (request == null) throw new ArgumentNullException(nameof(request));
             var sb = new StringBuilder();
+            // ReSharper disable once PossibleNullReferenceException
+            // ReSharper disable once AssignNullToNotNullAttribute
             sb.AppendFormat(request.Method.ToString());
             sb.AppendLine();
-            sb.AppendFormat("\tURL: {0}", new Uri(this._httpClient.BaseAddress, request.RequestUri));
+            sb.AppendFormat("\tURL: {0}", new Uri(this._httpClient.BaseAddress!, request.RequestUri!));
             sb.AppendLine();
             string userName;
             string authenticationMethod;
@@ -201,13 +234,23 @@ namespace FacadeFor3e
         /// </summary>
         public bool IsImpersonating => this.AccountToImpersonate != null && this.AccountToImpersonate != WindowsIdentity.GetCurrent();
 
-        public bool ThrowErrorIfProcessFails { get; set; } = true;
-
         internal static string GetCurrentWindowsIdentity()
             {
             using var wi = WindowsIdentity.GetCurrent();
             var result = wi.Name;
             return result;
             }
+        }
+
+    public class ExecuteParams
+        {
+        private static readonly ExecuteParams DefaultExecuteParams = new ExecuteParams
+            {
+            ThrowExceptionIfProcessFails = true
+            };
+
+        public bool ThrowExceptionIfProcessFails;
+
+        public static ExecuteParams Default => DefaultExecuteParams;
         }
     }

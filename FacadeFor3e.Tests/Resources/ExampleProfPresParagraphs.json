@@ -1,0 +1,139 @@
+﻿{
+  "@odata.context": "https://rdfin91tewa01.dentons.global/TE_3E_DEV_EU_REPORT/odata/$metadata#Proforma_ndt(ProfPresParagraphs)",
+  "value": [
+    {
+      "ProfPresParagraphs": [
+        {
+          "ProfPresentationParagraphID": "cc75bc73-f072-4cd4-9166-013dc8b8109c",
+          "ArchetypeCode": "ProfPresentationParagraph",
+          "LastProcItemID": "c56a8cd3-374a-4089-be70-71b366b6285f",
+          "OrigProcItemID": "c56a8cd3-374a-4089-be70-71b366b6285f",
+          "HasAttachments": false,
+          "TimeStamp": "2023-09-19T13:42:25.763Z",
+          "PresDate": "2023-09-19T00:00:00Z",
+          "Currency": "EUR",
+          "PresAmount": 1464.77,
+          "PresHours": 2.5,
+          "Narrative": "505533b2-2df1-4ffa-bf16-31c3351c408e",
+          "SortString": "sorted",
+          "ProfMaster": 225370
+        },
+        {
+          "ProfPresentationParagraphID": "22945a5c-662a-40e0-8c40-0bde5682b2cb",
+          "ArchetypeCode": "ProfPresentationParagraph",
+          "LastProcItemID": "66d0cc07-59bd-488c-912d-b30a9f6c9e05",
+          "OrigProcItemID": "66d0cc07-59bd-488c-912d-b30a9f6c9e05",
+          "HasAttachments": false,
+          "TimeStamp": "2023-09-19T14:25:54.923Z",
+          "PresDate": "2023-09-19T00:00:00Z",
+          "Currency": "EUR",
+          "PresAmount": 1234.56,
+          "PresHours": 2.5,
+          "Narrative": "e2aaebbe-84fc-416d-a5cb-162cbea451dc",
+          "SortString": "sorted",
+          "ProfMaster": 225370
+        },
+        {
+          "ProfPresentationParagraphID": "b70b2634-d99c-41f4-908c-6b3a32503fea",
+          "ArchetypeCode": "ProfPresentationParagraph",
+          "LastProcItemID": "53477542-7a37-41d9-a319-fc37587feb77",
+          "OrigProcItemID": "712e6fc3-a7e0-4ab4-a1fb-f3b21a259802",
+          "HasAttachments": false,
+          "TimeStamp": "2023-09-19T14:33:58.217Z",
+          "PresDate": "2023-09-18T00:00:00Z",
+          "Currency": "EUR",
+          "PresHours": 1.2,
+          "Narrative": "11655030-f330-4051-af36-58b9be68da58",
+          "ProfMaster": 225370
+        },
+        {
+          "ProfPresentationParagraphID": "18286078-3699-4e6f-97a2-aaedb7a74554",
+          "ArchetypeCode": "ProfPresentationParagraph",
+          "LastProcItemID": "3aec99b9-c9c2-4a6c-b83b-cb15eaca26a3",
+          "OrigProcItemID": "3aec99b9-c9c2-4a6c-b83b-cb15eaca26a3",
+          "HasAttachments": false,
+          "TimeStamp": "2023-09-19T14:20:57.36Z",
+          "PresDate": "2023-09-19T00:00:00Z",
+          "Currency": "EUR",
+          "PresAmount": 1234.56,
+          "PresHours": 2.5,
+          "Narrative": "c3ab371f-9c2c-4405-b989-12981049fe62",
+          "SortString": "sorted",
+          "ProfMaster": 225370
+        },
+        {
+          "ProfPresentationParagraphID": "b7621d5e-8926-4c7b-a9ae-ca2db9d3df1d",
+          "ArchetypeCode": "ProfPresentationParagraph",
+          "LastProcItemID": "f65b0241-b45d-4836-aab3-3be4b4cea23b",
+          "OrigProcItemID": "f65b0241-b45d-4836-aab3-3be4b4cea23b",
+          "HasAttachments": false,
+          "TimeStamp": "2023-09-19T14:26:02.703Z",
+          "PresDate": "2023-09-18T00:00:00Z",
+          "Currency": "EUR",
+          "PresAmount": 543.12,
+          "PresHours": 1.2,
+          "Narrative": "54cfd5f6-34b7-41be-8768-4f93744ebad1",
+          "ProfMaster": 225370
+        },
+        {
+          "ProfPresentationParagraphID": "da9ef0f1-e894-4817-bbb5-d29db4e5c29e",
+          "ArchetypeCode": "ProfPresentationParagraph",
+          "LastProcItemID": "49bb3a18-63fd-478d-9d64-64f419e10780",
+          "OrigProcItemID": "c80a167b-40b2-4629-b9c5-8ae85edd975a",
+          "HasAttachments": false,
+          "TimeStamp": "2023-09-19T14:32:32.343Z",
+          "PresDate": "2023-09-18T00:00:00Z",
+          "Currency": "EUR",
+          "PresAmount": 543.12,
+          "PresHours": 1.2,
+          "Narrative": "9958704d-d356-479e-96b1-724a80a5a460",
+          "ProfMaster": 225370
+        },
+        {
+          "ProfPresentationParagraphID": "d07726c1-2a71-4283-b82b-d6bbe2d079f7",
+          "ArchetypeCode": "ProfPresentationParagraph",
+          "LastProcItemID": "184d7df9-6e78-4959-a59e-a38dc0fcab79",
+          "OrigProcItemID": "184d7df9-6e78-4959-a59e-a38dc0fcab79",
+          "HasAttachments": false,
+          "TimeStamp": "2023-09-19T14:22:19.803Z",
+          "PresDate": "2023-09-19T00:00:00Z",
+          "Currency": "EUR",
+          "PresAmount": 1234.56,
+          "PresHours": 2.5,
+          "Narrative": "0d25c79d-cccf-41dc-8aa4-0ab8bcc82f1a",
+          "SortString": "sorted",
+          "ProfMaster": 225370
+        },
+        {
+          "ProfPresentationParagraphID": "8a8ae090-f344-430a-84ba-eeff591c9dab",
+          "ArchetypeCode": "ProfPresentationParagraph",
+          "LastProcItemID": "0ecc4d90-64cb-4163-951c-32eca1b03fc0",
+          "OrigProcItemID": "0ecc4d90-64cb-4163-951c-32eca1b03fc0",
+          "HasAttachments": false,
+          "TimeStamp": "2023-09-19T14:22:26.857Z",
+          "PresDate": "2023-09-18T00:00:00Z",
+          "Currency": "EUR",
+          "PresAmount": 543.12,
+          "PresHours": 1.2,
+          "Narrative": "a4e6c332-1cde-44f1-aec1-f88740769f34",
+          "ProfMaster": 225370
+        },
+        {
+          "ProfPresentationParagraphID": "a7cd3d02-c8ee-4ea8-a5ab-f8c142acf36b",
+          "ArchetypeCode": "ProfPresentationParagraph",
+          "LastProcItemID": "833d807b-c8fb-413a-babb-bd7cd0bde536",
+          "OrigProcItemID": "833d807b-c8fb-413a-babb-bd7cd0bde536",
+          "HasAttachments": false,
+          "TimeStamp": "2023-09-19T12:54:00.62Z",
+          "PresDate": "2023-09-19T00:00:00Z",
+          "Currency": "EUR",
+          "PresAmount": 1464.77,
+          "PresHours": 2.5,
+          "Narrative": "70fc1c26-c667-4f02-93d5-c0628f0d3300",
+          "SortString": "sorted",
+          "ProfMaster": 225370
+        }
+      ]
+    }
+  ]
+}

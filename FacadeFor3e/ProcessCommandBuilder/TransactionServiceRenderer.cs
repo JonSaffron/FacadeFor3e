@@ -15,7 +15,8 @@ namespace FacadeFor3e.ProcessCommandBuilder
             {
             if (processCommand == null) throw new ArgumentNullException(nameof(processCommand));
             var xmlDoc = new XmlDocument();
-            using XmlWriter w = xmlDoc.CreateNavigator()!.AppendChild();
+            // ReSharper disable once RedundantSuppressNullableWarningExpression
+            using XmlWriter w = xmlDoc.CreateNavigator()!.AppendChild()!;
             Render(processCommand, w);
             return xmlDoc;
             }
@@ -218,11 +219,17 @@ namespace FacadeFor3e.ProcessCommandBuilder
 
         internal static void RenderKey(IdentifyByPrimaryKey key, XmlWriter writer)
             {
+            if (!key.KeyValue.HasValue)
+                throw new InvalidOperationException("Primary Key value not set.");
+            // ReSharper disable once AssignNullToNotNullAttribute
             writer.WriteAttributeString("KeyValue", key.KeyValue.ToString());
             }
 
         internal static void RenderKey(IdentifyByAlias key, XmlWriter writer)
             {
+            if (!key.KeyValue.HasValue)
+                throw new InvalidOperationException("Alias value not set.");
+            // ReSharper disable once AssignNullToNotNullAttribute
             writer.WriteAttributeString("KeyValue", key.KeyValue.ToString());
             writer.WriteAttributeString("AliasField", key.AliasField);
             }
@@ -234,6 +241,9 @@ namespace FacadeFor3e.ProcessCommandBuilder
 
         internal static void RenderKey(IdentifyByValue key, XmlWriter writer)
             {
+            if (!key.KeyValue.HasValue)
+                throw new InvalidOperationException("Value for key not set.");
+            // ReSharper disable once AssignNullToNotNullAttribute
             writer.WriteAttributeString("KeyValue", key.KeyValue.ToString());
             writer.WriteAttributeString("KeyField", key.KeyField);
             }

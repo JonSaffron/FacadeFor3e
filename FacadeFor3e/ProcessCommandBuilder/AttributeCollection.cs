@@ -64,10 +64,46 @@ namespace FacadeFor3e.ProcessCommandBuilder
             {
             if (item == null)
                 throw new ArgumentNullException(nameof(item));
-            // ReSharper disable once PossibleNullReferenceException
-            if (this.Any(a => a.Name.Equals(item.Name, StringComparison.OrdinalIgnoreCase)))
-                throw new ArgumentOutOfRangeException($"An attribute with the name {item.Name} has already been added.");
+            for (int i = 0; i < this.Count; i++)
+                {
+                if (i == index)
+                    continue;
+
+                var a = this[i];
+                if (a == null)
+                    throw new InvalidOperationException();
+                if (a.Name.Equals(item.Name, StringComparison.OrdinalIgnoreCase))
+                    throw new ArgumentOutOfRangeException($"An attribute with the name {item.Name} already exists.");
+                }
+
             base.SetItem(index, item);
+            }
+
+        /// <summary>
+        /// Removes the specified attribute from the collection
+        /// </summary>
+        /// <param name="name">The name of the attribute to retrieve</param>
+        /// <returns>True if the specified attribute was found, false otherwise</returns>
+        /// <exception cref="ArgumentNullException">If a null value for the attribute name is specified</exception>
+        public bool Remove(string name)
+            {
+            if (name == null)
+                throw new ArgumentNullException(nameof(name));
+            for (int i = 0; i < this.Count; i++)
+                {
+                var a = this[i];
+
+                if (a == null)
+                    throw new InvalidOperationException();
+                if (a.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
+                    {
+                    // ReSharper disable once RedundantBaseQualifier
+                    base.RemoveAt(i);
+                    return true;
+                    }
+                }
+
+            return false;
             }
         }
     }

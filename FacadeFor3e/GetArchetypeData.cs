@@ -456,6 +456,7 @@ namespace FacadeFor3e
                 var name = column.LocalName;
                 if (map.TryGetValue(name, out var compoundMemberAccess))
                     {
+                    // ReSharper disable once PossibleNullReferenceException
                     compoundMemberAccess.CopyValue(column.InnerText, cultureInfo, result);
                     }
                 }
@@ -469,8 +470,13 @@ namespace FacadeFor3e
             var result = new Dictionary<string, ICompoundMemberAccess>(columnNames.Count);
             while (columnNames.Count != 0)
                 {
-                string columnName = columnNames.Dequeue();
-                string followingName = columnNames.Count == 0 ? string.Empty : columnNames.Peek();
+                string? columnName = columnNames.Dequeue();
+                if (columnName == null)
+                    throw new InvalidOperationException("Here to stop resharper whinging.");
+                string? followingName = columnNames.Count == 0 ? string.Empty : columnNames.Peek();
+                if (followingName == null)
+                    throw new InvalidOperationException("Here to stop resharper whinging.");
+
                 if (string.Equals($"{columnName}_FormattedText", followingName))
                     {
                     columnNames.Dequeue();
@@ -699,8 +705,8 @@ namespace FacadeFor3e
                 var parameters = new object[] { text, cultureInfo };
                 try
                     {
-                    object? value = this._translateValue.Invoke(null, parameters);
-                    this._propertyInfo.SetValue(compoundClass, value);
+                    object? value = this._translateValue.Invoke(null!, parameters);
+                    this._propertyInfo.SetValue(compoundClass, value!);
                     }
                 catch (TargetInvocationException ex)
                     {
@@ -710,7 +716,7 @@ namespace FacadeFor3e
                     }
                 catch (Exception ex)
                     {
-                    throw new InvalidOperationException($"Cannot set value of {this._propertyInfo.Name}", ex.InnerException);
+                    throw new InvalidOperationException($"Cannot set value of {this._propertyInfo.Name}", ex);
                     }
                 }
             }
@@ -731,8 +737,8 @@ namespace FacadeFor3e
                 var parameters = new object[] { text, cultureInfo };
                 try
                     {
-                    object? value = this._translateValue.Invoke(null, parameters);
-                    this._fieldInfo.SetValue(compoundClass, value);
+                    object? value = this._translateValue.Invoke(null!, parameters);
+                    this._fieldInfo.SetValue(compoundClass, value!);
                     }
                 catch (TargetInvocationException ex)
                     {
@@ -742,7 +748,7 @@ namespace FacadeFor3e
                     }
                 catch (Exception ex)
                     {
-                    throw new InvalidOperationException($"Cannot set value of {this._fieldInfo.Name}", ex.InnerException);
+                    throw new InvalidOperationException($"Cannot set value of {this._fieldInfo.Name}", ex);
                     }
                 }
             }

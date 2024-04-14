@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -67,8 +66,10 @@ namespace FacadeFor3e.ProcessCommandBuilder
             {
             switch (operation)
                 {
+                // ReSharper disable once AssignNullToNotNullAttribute
                 case AddOperation _: return HttpMethod.Post;
                 case EditOperation _: return new HttpMethod("PATCH");
+                // ReSharper disable once AssignNullToNotNullAttribute
                 case DeleteOperation _: return HttpMethod.Delete;
                 default: throw new InvalidOperationException();
                 }
@@ -213,6 +214,7 @@ namespace FacadeFor3e.ProcessCommandBuilder
                         listOfOps = new List<OperationBase>();
                         result.Add(entity, listOfOps);
                         }
+                    // ReSharper disable once PossibleNullReferenceException
                     listOfOps.Add(op);
                     }
                 }
@@ -227,10 +229,11 @@ namespace FacadeFor3e.ProcessCommandBuilder
                 }
 
             var childOps = BuildChildOps(operationWithAttributes.Children);
-            foreach (var objectName in childOps.Keys)
+            foreach (var keyAndList in childOps)
                 {
-                this._writer.WriteStartArray($"{objectName}s");
-                foreach (var listItem in childOps[objectName])
+                this._writer.WriteStartArray($"{keyAndList.Key}s");
+                // ReSharper disable once PossibleNullReferenceException
+                foreach (var listItem in keyAndList.Value)
                     {
                     WriteChildOperation(listItem);
                     }
@@ -278,11 +281,11 @@ namespace FacadeFor3e.ProcessCommandBuilder
                     break;
 
                 case DateAttribute dateAttribute:
-                    this._writer.WriteStringValue(dateAttribute.Value!.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
+                    this._writer.WriteStringValue($"{dateAttribute.Value!.Value:yyyy-MM-dd}T00:00:00Z");
                     break;
 
                 case DateTimeAttribute dateTimeAttribute:
-                    this._writer.WriteStringValue(dateTimeAttribute.Value!.Value);
+                    this._writer.WriteStringValue(dateTimeAttribute.Value!.Value.ToString("s"));
                     break;
 
                 case BoolAttribute boolAttribute:

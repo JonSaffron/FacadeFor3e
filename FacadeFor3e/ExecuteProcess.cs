@@ -91,12 +91,9 @@ namespace FacadeFor3e
 
         private static string? ExecuteInternal(ExecuteProcessService executeProcessService, ProcessCommand process)
             {
-            bool getKey = process.Operations.Count == 1 && process.Operations[0] is AddOperation;
-            
-            executeProcessService.GetKeys = getKey;
-            executeProcessService.ThrowExceptionIfProcessDoesNotComplete = true;
-            executeProcessService.ThrowExceptionIfDataErrorsFound = true;
-            ExecuteProcessResult runProcessResult = executeProcessService.Execute(process);
+            bool getKey = process.Operations.Any(item => item is AddOperation);
+            var executeProcessParams = getKey ? ExecuteProcessParams.DefaultWithKeys : ExecuteProcessParams.Default;
+            ExecuteProcessResult runProcessResult = executeProcessService.Execute(process, executeProcessParams);
 
             string? result = getKey ? runProcessResult.GetKeys().FirstOrDefault() : null;
             return result;

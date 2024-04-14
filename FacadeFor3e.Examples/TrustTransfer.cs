@@ -72,7 +72,7 @@ namespace FacadeFor3e.Examples
                 ep.ThrowExceptionIfProcessDoesNotComplete = true;
                 ep.ThrowExceptionIfDataErrorsFound = true;
  
-                var r = ep.Execute(p);
+                var r = ep.Execute(p, ExecuteProcessParams.DefaultWithKeys);
                 int result = int.Parse(r.GetKeys().First());
                 return result;
                 }

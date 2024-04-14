@@ -47,8 +47,9 @@ namespace FacadeFor3e
         /// Executes the specified ProcessCommand and returns the result
         /// </summary>
         /// <param name="process">The ProcessCommand object to execute</param>
+        /// <param name="executeProcessParams">Flags to control the request and how the response is handled</param>
         /// <returns>An <see cref="ExecuteProcessResult">ExecuteProcessResult</see> object</returns>
-        public ExecuteProcessResult Execute(ProcessCommand process)
+        public ExecuteProcessResult Execute(ProcessCommand process, ExecuteProcessParams executeProcessParams)
             {
             if (process == null)
                 throw new ArgumentNullException(nameof(process));
@@ -56,7 +57,7 @@ namespace FacadeFor3e
 
             var renderer = new TransactionServiceRenderer();
             XmlDocument request = renderer.Render(process);
-            var result = Execute(request);
+            var result = Execute(request, executeProcessParams);
             return result;
             }
 
@@ -64,8 +65,9 @@ namespace FacadeFor3e
         /// Executes a process command defined by an XmlDocument and returns the result
         /// </summary>
         /// <param name="request">The process document to execute</param>
+        /// <param name="executeProcessParams">Flags to control the request and how the response is handled</param>
         /// <returns>An <see cref="ExecuteProcessResult">ExecuteProcessResult</see> object</returns>
-        public ExecuteProcessResult Execute(XmlDocument request)
+        public ExecuteProcessResult Execute(XmlDocument request, ExecuteProcessParams executeProcessParams)
             {
             if (request == null)
                 throw new ArgumentNullException(nameof(request));
@@ -79,7 +81,7 @@ namespace FacadeFor3e
 
             if (response.StartsWith("<ProcessExecutionResults ") && response.EndsWith("</ProcessExecutionResults>"))
                 {
-                return ProcessResponseFromTransactionService(request, response);
+                return ProcessResponseFromTransactionService(request, response, executeProcessParams);
                 }
 
             this.TransactionServices.LogForError(response);
@@ -87,7 +89,7 @@ namespace FacadeFor3e
             throw processException;
             }
 
-        private ExecuteProcessResult ProcessResponseFromTransactionService(XmlDocument request, string response)
+        private ExecuteProcessResult ProcessResponseFromTransactionService(XmlDocument request, string response, ExecuteProcessParams executeProcessParams)
             {
             var resultsDoc = new XmlDocument();
             resultsDoc.LoadXml(response);
@@ -103,14 +105,14 @@ namespace FacadeFor3e
 
             if (result.ExecutionResult == "Interface" || result.ExecutionResult == "Success")
                 {
-                if (this.ThrowExceptionIfDataErrorsFound && result.HasDataError)
+                if (executeProcessParams.ThrowExceptionIfDataErrorsFound && result.HasDataError)
                     {
                     this.TransactionServices.LogForError(responseFormatted);
                     var processException = ExecuteProcessExceptionBuilder.BuildForDataError(result);
                     throw processException;
                     }
 
-                if (result.ExecutionResult == "Interface" && this.ThrowExceptionIfProcessDoesNotComplete)
+                if (result.ExecutionResult == "Interface" && executeProcessParams.ThrowExceptionIfProcessDoesNotComplete)
                     {
                     this.TransactionServices.LogForError(responseFormatted);
                     var processException = new ExecuteProcessException("The process did not complete and will appear on action list.", result);

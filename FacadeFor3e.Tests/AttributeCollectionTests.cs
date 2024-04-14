@@ -180,5 +180,27 @@ namespace FacadeFor3e.Tests
             Assert.Throws<KeyNotFoundException>(() => coll["xxx"].ToString());
             Assert.Throws<ArgumentNullException>(() => coll.TryGetValue(null, out _));
             }
+
+        [Test]
+        public void CanChangeAttributeValue()
+            {
+            var b = new NamedAttributeValue("boolean", new BoolAttribute(true));
+            var i = new NamedAttributeValue("integer", new IntAttribute(25));
+            var g = new NamedAttributeValue("guid", new GuidAttribute(Guid.NewGuid()));
+
+            var coll = new AttributeCollection
+                {
+                b, i, g
+                };
+
+            var n = new NamedAttributeValue("integer", new IntAttribute(42));
+            coll[1] = n;
+            Assert.Throws<ArgumentOutOfRangeException>(() => coll[0] = n);
+
+            coll.Remove("integer");
+            coll.Add(new NamedAttributeValue("integer", new IntAttribute(-1)));
+
+            ClassicAssert.AreEqual(3, coll.Count);
+            }
         }
     }
