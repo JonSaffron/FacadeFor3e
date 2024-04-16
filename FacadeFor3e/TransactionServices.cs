@@ -42,7 +42,7 @@ namespace FacadeFor3e
         private ExecuteProcessService? _executeProcess;
         private SendAttachment? _sendAttachment;
 
-        private readonly Lazy<Logger> _logger = new Lazy<Logger>(() => LogManager.GetCurrentClassLogger()!);
+        private static readonly Lazy<Logger> LazyLogger = new Lazy<Logger>(() => LogManager.GetCurrentClassLogger()!);
 
         /// <summary>
         /// Constructs a new TransactionServices object without impersonation or user credentials
@@ -227,7 +227,7 @@ namespace FacadeFor3e
         internal TransactionServiceClient SoapClient => this._transactionServiceSoapClient.Value!;
 
         // ReSharper disable once RedundantSuppressNullableWarningExpression (applies to .net 6 only)
-        private Logger Logger => this._logger.Value!;
+        private static Logger Logger => LazyLogger.Value!;
 
         private static TransactionServiceClient BuildSoapClient(Uri endPoint, NetworkCredential? networkCredentials)
             {
@@ -278,17 +278,17 @@ namespace FacadeFor3e
                 }
             sb.AppendFormat("\tUser: {0} ({1})", userName, authenticationMethod);
             sb.AppendLine();
-            this.Logger.Info(sb.ToString());
+            Logger.Info(sb.ToString());
             }
 
         internal void LogForDebug(string message)
             {
-            this.Logger.Debug(message);
+            Logger.Debug(message);
             }
 
         internal void LogForError(string message)
             {
-            this.Logger.Error(message);
+            Logger.Error(message);
             }
 
         private static BasicHttpBinding BuildBinding(bool useHttps)

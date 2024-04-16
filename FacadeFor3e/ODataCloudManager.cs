@@ -10,14 +10,16 @@ namespace FacadeFor3e
         private readonly Uri _baseEndpoint;
         private readonly Uri _tokenEndpoint;
         private readonly Dictionary<string, string> _credentials;
+        private readonly string _instanceId;
         private ODataServices? _odataServices;
         private ODataAuthentication? _authentication;
 
-        public ODataCloudManager(Uri baseEndpoint, Uri tokenEndpoint, Dictionary<string, string> credentials)
+        public ODataCloudManager(Uri baseEndpoint, Uri tokenEndpoint, Dictionary<string, string> credentials, string instanceId)
             {
             this._baseEndpoint = baseEndpoint ?? throw new ArgumentNullException(nameof(baseEndpoint));
             this._tokenEndpoint = tokenEndpoint ?? throw new ArgumentNullException(nameof(tokenEndpoint));
             this._credentials = credentials ?? throw new ArgumentNullException(nameof(credentials));
+            this._instanceId = instanceId ?? throw new ArgumentNullException(nameof(instanceId));
             }
 
         public ODataServices GetODataServices()
@@ -25,7 +27,7 @@ namespace FacadeFor3e
             if (IsNewTokenRequired())
                 {
                 this._authentication = ODataServices.Authenticate(this._tokenEndpoint, this._credentials);
-                this._odataServices = new ODataServices(this._baseEndpoint, this._authentication);
+                this._odataServices = new ODataServices(this._baseEndpoint, this._authentication, this._instanceId);
                 }
             return this._odataServices!;
             }

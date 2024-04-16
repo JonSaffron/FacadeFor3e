@@ -36,8 +36,6 @@ namespace FacadeFor3e
             {
             get
                 {
-                if (this.IsError)
-                    throw new InvalidOperationException("Response indicates an error occurred");
                 if (!this.IsResponseJSon)
                     throw new InvalidOperationException("Response is not a json object");
                 var result = JsonDocument.Parse(this.RawResponseBytes);

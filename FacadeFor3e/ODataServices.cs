@@ -41,25 +41,33 @@ namespace FacadeFor3e
         /// </summary>
         public bool IsDisposed { get; private set; }
 
-        private readonly HttpClient _httpClient;
+        private readonly HttpClient _httpClient = null!; // will be set in public constructors
 
-        private readonly Lazy<Logger> _logger = new Lazy<Logger>(() => LogManager.GetCurrentClassLogger()!);
+        private static readonly Lazy<Logger> LazyLogger = new Lazy<Logger>(() => LogManager.GetCurrentClassLogger()!);
 
         // ReSharper disable once AssignNullToNotNullAttribute
-        private Logger Logger => this._logger.Value;
+        private static Logger Logger => LazyLogger.Value;
 
         /// <summary>
         /// Constructs a new ODataServices object without impersonation or user credentials
         /// </summary>
         /// <param name="baseEndpoint">The url to use to connect to the 3E OData service</param>
-        public ODataServices(Uri baseEndpoint)
+        private ODataServices(Uri baseEndpoint)
             {
-            this.BaseEndpoint = baseEndpoint ?? throw new ArgumentNullException(nameof(baseEndpoint));
-            this._httpClient = BuildHttpClient(CredentialCache.DefaultNetworkCredentials);
+            if (baseEndpoint == null)
+                throw new ArgumentNullException(nameof(baseEndpoint));
+            if (!baseEndpoint.IsAbsoluteUri)
+                throw new ArgumentOutOfRangeException(nameof(baseEndpoint), "Must be an absolute URI.");
+            if (!baseEndpoint.AbsolutePath.EndsWith("/"))
+                {
+                baseEndpoint = new Uri(baseEndpoint, $"{baseEndpoint.AbsolutePath}/");
+                }
+
+            this.BaseEndpoint = baseEndpoint;
             }
 
         /// <summary>
-        /// Constructs a new ODataServices object which will impersonate the specified account during calls to the 3E OData service
+        /// Constructs a new ODataServices object which will impersonate the specified account during calls to the on premises 3E OData service
         /// </summary>
         /// <param name="baseEndpoint">The url to use to connect to the 3E OData service</param>
         /// <param name="accountToImpersonate">The account to impersonate</param>
@@ -70,7 +78,7 @@ namespace FacadeFor3e
             }
 
         /// <summary>
-        /// Constructs a new ODataServices object which will pass the specified credentials during calls to the OData service
+        /// Constructs a new ODataServices object which will pass the specified credentials during calls to the on premises 3E OData service
         /// </summary>
         /// <param name="baseEndpoint">The url to use to connect to the 3E OData service</param>
         /// <param name="networkCredential">The credentials to use when calling the 3E OData service</param>
@@ -80,23 +88,33 @@ namespace FacadeFor3e
             this._httpClient = BuildHttpClient(networkCredential);
             }
 
-        public ODataServices(Uri baseEndpoint, ODataAuthentication oDataAuthentication) : this(baseEndpoint)
+        /// <summary>
+        /// Constructs a new ODataServices object which will pass the specified cloud credentials during calls to the 3E OData service
+        /// </summary>
+        /// <param name="baseEndpoint"></param>
+        /// <param name="oDataAuthentication"></param>
+        /// <param name="instanceId"></param>
+        public ODataServices(Uri baseEndpoint, ODataAuthentication oDataAuthentication, string instanceId) : this(baseEndpoint)
             {
             this._httpClient = BuildHttpClient(null);
             // ReSharper disable once PossibleNullReferenceException
             this._httpClient.DefaultRequestHeaders.Authorization = oDataAuthentication.Header;
+            this._httpClient.DefaultRequestHeaders.Add("X-3E-InstanceId", instanceId);
             }
 
         public static ODataAuthentication Authenticate(Uri tokenEndpoint, Dictionary<string, string> credentials)
             {
             using HttpClient httpClient = new HttpClient();
             var content = new FormUrlEncodedContent(credentials);
-            // ReSharper disable once PossibleNullReferenceException
-            // ReSharper disable once AssignNullToNotNullAttribute
-            HttpResponseMessage response = httpClient.PostAsync(tokenEndpoint, content).Result;
-            // ReSharper disable once PossibleNullReferenceException
+            LogForDebug("Acquiring token to access OData service from " + tokenEndpoint);
+            var postRequestTask = httpClient.PostAsync(tokenEndpoint, content);
+            if (postRequestTask == null)
+                throw new InvalidOperationException("This test exists to quieten a warning in Resharper.");
+            HttpResponseMessage? response = postRequestTask.Result;
+            LogForDebug($"{response.StatusCode:D}");
+            if (response == null || response.Content == null)
+                throw new InvalidOperationException("Received an invalid response during authentication.");
             response.EnsureSuccessStatusCode();
-            // ReSharper disable once PossibleNullReferenceException
             var jsonDocument = JsonDocument.Parse(response.Content.ReadAsByteArrayAsync().Result);
             var tokenType = jsonDocument.RootElement.GetProperty("token_type").GetString();
             var token = jsonDocument.RootElement.GetProperty("access_token").GetString();
@@ -114,7 +132,6 @@ namespace FacadeFor3e
             return Select(uri);
             }
 
-        [Obsolete]
         public ODataServiceResult Select(Uri relativeUri)
             {
             if (relativeUri == null)
@@ -160,7 +177,8 @@ namespace FacadeFor3e
             LogForDebug($"{response.StatusCode:D} {responseText}");
             if (executeParams.ThrowExceptionIfProcessFails)
                 {
-                response.EnsureSuccessStatusCode();
+                if (!response.IsSuccessStatusCode)
+                    throw new ExecuteProcessException(responseText);
                 }
 
             var result = new ODataServiceResult(request, response);
@@ -192,9 +210,9 @@ namespace FacadeFor3e
             return result;
             }
 
-        internal void LogForDebug(string message)
+        internal static void LogForDebug(string message)
             {
-            this.Logger.Debug(message);
+            Logger.Debug(message);
             }
 
         internal void LogDetailsOfTheJob(HttpRequestMessage request)
@@ -226,7 +244,7 @@ namespace FacadeFor3e
                 }
             sb.AppendFormat("\tUser: {0} ({1})", userName, authenticationMethod);
             sb.AppendLine();
-            this.Logger.Info(sb.ToString());
+            Logger.Info(sb.ToString());
             }
 
         /// <summary>
