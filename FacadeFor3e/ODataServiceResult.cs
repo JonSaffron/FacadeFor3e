@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -6,32 +7,78 @@ using JetBrains.Annotations;
 
 namespace FacadeFor3e
     {
+    /// <summary>
+    /// An objects that provides information on the request sent to and the response received from the OData service
+    /// </summary>
     [PublicAPI]
     public class ODataServiceResult
         {
-        public ODataServiceResult(HttpRequestMessage request, HttpResponseMessage response)
+        internal ODataServiceResult(HttpRequestMessage request, HttpResponseMessage response)
             {
             this.Request = request ?? throw new ArgumentNullException(nameof(request));
             this.Response = response ?? throw new ArgumentNullException(nameof(response));
-            // ReSharper disable once PossibleNullReferenceException
-            // ReSharper disable once AssignNullToNotNullAttribute
-            this.RawResponseBytes = this.Response.Content.ReadAsByteArrayAsync().Result;
+            this.RawResponseBytes = Array.Empty<byte>();
+
+#if !NET6_0_OR_GREATER
+            if (this.Response.Content == null)
+                return;
+#endif
+            var task = this.Response.Content.ReadAsByteArrayAsync();
+            var content = task.Result;
+#if !NET6_0_OR_GREATER
+            if (content == null)
+                return;
+#endif
+            this.RawResponseBytes = content;
             }
 
+        /// <summary>
+        /// Gets the request sent to 3E
+        /// </summary>
         public HttpRequestMessage Request { get; }
+        
+        /// <summary>
+        /// Gets the response from 3E
+        /// </summary>
         public HttpResponseMessage Response { get; }
 
-        public bool IsError => !this.Response.IsSuccessStatusCode;
-
-        // ReSharper disable once AssignNullToNotNullAttribute
-        // ReSharper disable PossibleNullReferenceException
-        public bool IsResponseJSon => string.Equals(this.Response.Content.Headers.ContentType?.MediaType, "application/json");
-        // ReSharper restore PossibleNullReferenceException
-
+        /// <summary>
+        /// The raw data of the response content received from the OData service
+        /// </summary>
         public byte[] RawResponseBytes { get; }
 
+        /// <summary>
+        /// Gets whether the request succeeded or failed
+        /// </summary>
+        /// <remarks>Returns true if the HTTP status code received was in the 200-299 range.</remarks>
+        public bool IsError => !this.Response.IsSuccessStatusCode;
+
+        /// <summary>
+        /// Returns whether the response was in JSON format
+        /// </summary>
+        public bool IsResponseJSon
+            {
+            get
+                {
+                if (this.RawResponseBytes.Length == 0)
+                    return false;
+
+                // ReSharper disable ConditionalAccessQualifierIsNonNullableAccordingToAPIContract
+                var mediaType = this.Response.Content?.Headers?.ContentType?.MediaType ?? string.Empty;
+                // ReSharper restore ConditionalAccessQualifierIsNonNullableAccordingToAPIContract
+                return string.Equals(mediaType, "application/json");
+                }
+            }
+
+        /// <summary>
+        /// Returns the response body as a string
+        /// </summary>
         public string ResponseString => Encoding.UTF8.GetString(this.RawResponseBytes);
 
+        /// <summary>
+        /// Returns the response body as a JsonDocument
+        /// </summary>
+        /// <exception cref="InvalidOperationException">If the response was not in JSON format</exception>
         public JsonDocument ResponseJSonDocument
             {
             get
@@ -43,48 +90,29 @@ namespace FacadeFor3e
                 }
             }
 
-        public string? ErrorMessage
+        /// <summary>
+        /// Returns any error messages returned from the OData service
+        /// </summary>
+        /// <remarks>Returns no items if <see cref="IsError"/> returns false</remarks>
+        public IEnumerable<string> ErrorMessages
             {
             get
                 {
                 if (!this.IsError)
-                    return null;
+                    return Array.Empty<string>();
 
                 if (!this.IsResponseJSon)
-                    return this.ResponseString;
+                    return new[] { this.ResponseString };
 
-                var result = this.ResponseJSonDocument.RootElement.GetProperty("error").GetProperty("message").GetString();
+                var errors = this.ResponseJSonDocument.RootElement.GetProperty("error").GetProperty("message").GetString();
+                if (errors == null || string.IsNullOrWhiteSpace(errors))
+                    {
+                    return new[] { $"Unknown error - HTTP status code {this.Response.StatusCode}" };
+                    }
+
+                var result = errors.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
                 return result;
                 }
-            }
-
-        /// <summary>
-        /// Returns the ProcessId used during the update. 
-        /// </summary>
-        /// <remarks>This requires customisation to the archetype and object to work, plus a change to informationobjectmapping.json</remarks>
-        public Guid ProcessId
-            {
-            get
-                {
-                if (this.IsError)
-                    throw new InvalidOperationException("Response indicates an error occurred");
-                if (!this.IsResponseJSon)
-                    throw new InvalidOperationException("Response is not a json object");
-                var result = this.ResponseJSonDocument.RootElement.GetProperty("_ProcessId_ccc").GetGuid();
-                return result;
-                }
-            }
-
-        public T DeserialiseResult<T>()
-            {
-            if (this.IsError)
-                throw new InvalidOperationException("Response indicates an error occurred");
-            if (!this.IsResponseJSon)
-                throw new InvalidOperationException("Response is not a json object");
-            var result = JsonSerializer.Deserialize<T>(this.RawResponseBytes);
-            if (result == null)
-                throw new InvalidOperationException("Failed to deserialise.");
-            return result;
             }
         }
     }

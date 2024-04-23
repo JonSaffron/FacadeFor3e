@@ -46,7 +46,9 @@ namespace FacadeFor3e.Tests
         public void RenderAttribute()
             {
             var na = new NamedAttributeValue("Matter", new IntAttribute(12345));
-            var s = CommonLibrary.GetRenderedOutput(writer => TransactionServiceRenderer.Render(na, writer));
+            var renderer = new TestTransactionServiceRenderer();
+            renderer.Render(na);
+            var s = renderer.Result;
             ClassicAssert.AreEqual("<Matter>12345</Matter>", s);
             }
 
@@ -54,7 +56,9 @@ namespace FacadeFor3e.Tests
         public void RenderAliasAttribute()
             {
             var na = new AliasAttribute("Matter", "Number", new StringAttribute("L1.10"));
-            var s = CommonLibrary.GetRenderedOutput(writer => TransactionServiceRenderer.Render(na, writer));
+            var renderer = new TestTransactionServiceRenderer();
+            renderer.Render(na);
+            var s = renderer.Result;
             ClassicAssert.AreEqual("<Matter AliasField=\"Number\">L1.10</Matter>", s);
             }
         }

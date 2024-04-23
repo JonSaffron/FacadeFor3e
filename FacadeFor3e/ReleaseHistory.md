@@ -1,4 +1,10 @@
-﻿3.0.2
+﻿4.0.0-rc1
+---------
+Introduces an interface for the 3E OData service
+Changes to the ExecuteProcessService for thread safety
+Internals changes and updates
+
+3.0.2
 -----
 Fix to get GetArchetype.GetScalarList working
 Fix to parsing dates into DateOnly fields/properties in GetArchetypeData

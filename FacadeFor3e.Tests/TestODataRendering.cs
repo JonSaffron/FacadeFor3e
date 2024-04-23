@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using FacadeFor3e.ProcessCommandBuilder;
 using NUnit.Framework;
 
@@ -35,7 +34,7 @@ namespace FacadeFor3e.Tests
             editSiteOp.AddAttribute("IsDefault", false);
 
             var renderer = new ODataRenderer();
-            var result = renderer.Render(p);
+            var result = renderer.Render(p, ODataExecuteOptions.Default);
 
             var json = System.Text.Encoding.UTF8.GetString(result.Json);
             Console.Write(json);

@@ -21,21 +21,6 @@ namespace FacadeFor3e
         protected TransactionServices TransactionServices;
 
         /// <summary>
-        /// Gets or sets whether to throw an exception if the response contains details of data errors
-        /// </summary>
-        public bool ThrowExceptionIfDataErrorsFound { get; set; } = true;
-
-        /// <summary>
-        /// Gets or sets whether to throw an exception if the process doesn't complete
-        /// </summary>
-        public bool ThrowExceptionIfProcessDoesNotComplete { get; set; } = true;
-
-        /// <summary>
-        /// Gets or sets whether to return the primary keys of the top-level records that remain in the process worklist when the process finishes
-        /// </summary>
-        public bool GetKeys { get; set; } = true;
-
-        /// <summary>
         /// Constructs a new object for executing a <see cref="ProcessCommand">ProcessCommand</see>
         /// </summary>
         internal ExecuteProcessService(TransactionServices transactionServices)
@@ -47,17 +32,17 @@ namespace FacadeFor3e
         /// Executes the specified ProcessCommand and returns the result
         /// </summary>
         /// <param name="process">The ProcessCommand object to execute</param>
-        /// <param name="executeProcessParams">Flags to control the request and how the response is handled</param>
+        /// <param name="options">Specifies options that control the request and how the response is handled</param>
         /// <returns>An <see cref="ExecuteProcessResult">ExecuteProcessResult</see> object</returns>
-        public ExecuteProcessResult Execute(ProcessCommand process, ExecuteProcessParams executeProcessParams)
+        public ExecuteProcessResult Execute(ProcessCommand process, ExecuteProcessOptions options)
             {
             if (process == null)
                 throw new ArgumentNullException(nameof(process));
             ValidateProcess(process);
 
             var renderer = new TransactionServiceRenderer();
-            XmlDocument request = renderer.Render(process);
-            var result = Execute(request, executeProcessParams);
+            XmlDocument request = renderer.Render(process, options);
+            var result = Execute(request, options);
             return result;
             }
 
@@ -67,12 +52,12 @@ namespace FacadeFor3e
         /// <param name="request">The process document to execute</param>
         /// <param name="executeProcessParams">Flags to control the request and how the response is handled</param>
         /// <returns>An <see cref="ExecuteProcessResult">ExecuteProcessResult</see> object</returns>
-        public ExecuteProcessResult Execute(XmlDocument request, ExecuteProcessParams executeProcessParams)
+        public ExecuteProcessResult Execute(XmlDocument request, ExecuteProcessOptions executeProcessParams)
             {
             if (request == null)
                 throw new ArgumentNullException(nameof(request));
 
-            string Func() => CallTransactionService(request);
+            string Func() => CallTransactionService(request, executeProcessParams);
             string response = this.TransactionServices.IsImpersonating
                 // ReSharper disable AssignNullToNotNullAttribute
                 ? WindowsIdentity.RunImpersonated(this.TransactionServices.AccountToImpersonate!.AccessToken, Func)
@@ -89,7 +74,7 @@ namespace FacadeFor3e
             throw processException;
             }
 
-        private ExecuteProcessResult ProcessResponseFromTransactionService(XmlDocument request, string response, ExecuteProcessParams executeProcessParams)
+        private ExecuteProcessResult ProcessResponseFromTransactionService(XmlDocument request, string response, ExecuteProcessOptions executeProcessParams)
             {
             var resultsDoc = new XmlDocument();
             resultsDoc.LoadXml(response);
@@ -160,13 +145,13 @@ namespace FacadeFor3e
                 }
             }
 
-        private string CallTransactionService(XmlDocument request)
+        private string CallTransactionService(XmlDocument request, ExecuteProcessOptions processParams)
             {
             OutputToConsoleDetailsOfTheJob(request);
             this.TransactionServices.LogForDebug(request.PrettyPrintXml());
 
             // ReSharper disable once BitwiseOperatorOnEnumWithoutFlags
-            var returnInfoType = (int) ((this.GetKeys ? ReturnInfoType.Keys : ReturnInfoType.None) | ReturnInfoType.Timing);
+            var returnInfoType = (int) ((processParams.GetKeys ? ReturnInfoType.Keys : ReturnInfoType.None) | ReturnInfoType.Timing);
             string result = this.TransactionServices.SoapClient.ExecuteProcess(request.OuterXml, returnInfoType)!;
             return result;
             }

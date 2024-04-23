@@ -37,8 +37,9 @@ namespace FacadeFor3e.Tests
             {
             var d = new DeleteOperation(new IdentifyByPrimaryKey(1));
 
-            Action <XmlWriter> renderDeleteOperation = xw => TransactionServiceRenderer.Render(d, xw, "Entity");
-            var s = CommonLibrary.GetRenderedOutput(renderDeleteOperation);
+            var renderer = new TestTransactionServiceRenderer();
+            renderer.Render(d, "Entity");
+            var s = renderer.Result;
             ClassicAssert.AreEqual("<Delete><Entity KeyValue=\"1\" /></Delete>", s);
             }
 
@@ -47,8 +48,9 @@ namespace FacadeFor3e.Tests
             {
             var d = new DeleteOperation(new IdentifyByPrimaryKey(1), "EntOrg");
 
-            Action <XmlWriter> renderDeleteOperation = xw => TransactionServiceRenderer.Render(d, xw, "Entity");
-            var s = CommonLibrary.GetRenderedOutput(renderDeleteOperation);
+            var renderer = new TestTransactionServiceRenderer();
+            renderer.Render(d, "Entity");
+            var s = renderer.Result;
             ClassicAssert.AreEqual("<Delete><EntOrg KeyValue=\"1\" /></Delete>", s);
             }
 

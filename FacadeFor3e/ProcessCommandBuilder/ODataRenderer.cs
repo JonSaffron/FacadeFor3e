@@ -9,48 +9,25 @@ using System.Text.Json;
 namespace FacadeFor3e.ProcessCommandBuilder
     {
     /// <summary>
-    /// Describes all the various values needed to call the OData service
+    /// Renders a <see cref="ProcessCommand"/> into a <see cref="ODataRequest"/> for the OData service
     /// </summary>
     [Experimental("OData")]
-    public class ODataRequest
-        {
-        /// <summary>
-        /// The HTML verb to use
-        /// </summary>
-        public readonly HttpMethod Verb;
-
-        /// <summary>
-        /// The URL to use
-        /// </summary>
-        public readonly string EndPoint;
-
-        /// <summary>
-        /// The command to send
-        /// </summary>
-        public readonly byte[] Json;
-
-        /// <summary>
-        /// Constructs a new OData request object
-        /// </summary>
-        /// <param name="verb">The HTML verb to use</param>
-        /// <param name="endPoint">The URL to use</param>
-        /// <param name="json">The command to send</param>
-        public ODataRequest(HttpMethod verb, string endPoint, byte[] json)
-            {
-            this.Verb = verb;
-            this.EndPoint = endPoint;
-            this.Json = json;
-            }
-        }
-
-    [Experimental("OData")]
-    internal class ODataRenderer
+    public class ODataRenderer
         {
         private Utf8JsonWriter _writer = null!;
         
-        public ODataRequest Render(ProcessCommand processCommand)
+        /// <summary>
+        /// Generate the JSON instruction to pass to the OData service
+        /// </summary>
+        /// <param name="processCommand">Specifies the command to be rendered</param>
+        /// <param name="options">Specifies options that affect the output</param>
+        /// <returns>An <see cref="ODataRequest"/> that contains all the details necessary to call the OData service</returns>
+        /// <exception cref="ArgumentNullException">If a null value is passed in for one of the parameters</exception>
+        /// <exception cref="InvalidOperationException">If the <see cref="ProcessCommand"/> is not compatible with the OData service</exception>
+        public ODataRequest Render(ProcessCommand processCommand, ODataExecuteOptions options)
             {
             if (processCommand == null) throw new ArgumentNullException(nameof(processCommand));
+            if (options == null) throw new ArgumentNullException(nameof(options));
             var operation = processCommand.Operations.SingleOrDefault();
             if (operation == null)
                 {
@@ -58,7 +35,7 @@ namespace FacadeFor3e.ProcessCommandBuilder
                 }
             HttpMethod verb = GetVerbForOperation(operation);
             string endPoint = GetEndPointForOperation(operation, processCommand.ObjectName);
-            var jsonDocument = GetJson(processCommand);
+            var jsonDocument = GetJson(processCommand, options);
             return new ODataRequest(verb, endPoint, jsonDocument);
             }
 
@@ -99,17 +76,28 @@ namespace FacadeFor3e.ProcessCommandBuilder
                 {
                 throw new InvalidOperationException("Don't know how to specify something other than the primary key");
                 }
-            return $"{entity}/{primaryKey.KeyValue.Value}";
+            return $"{entity}({primaryKey.KeyValue.Value})";
             }
 
-        private byte[] GetJson(ProcessCommand processCommand)
+        private byte[] GetJson(ProcessCommand processCommand, ODataExecuteOptions options)
             {
             var i = new JsonWriterOptions { Indented = true, SkipValidation = false };
             using var stream = new MemoryStream();
             using (this._writer = new Utf8JsonWriter(stream, i))
                 {
                 this._writer.WriteStartObject();
+                
+                var operation = processCommand.Operations.Single();
+                var entity = operation.SubClass ?? processCommand.ObjectName;
+                this._writer.WriteString("@odata.type", $"E3E.OData.AllTypes.{entity}");
+                WriteProcessOptions(options);
                 WriteProcessCommand(processCommand);
+
+                if (operation is OperationWithAttributesBase operationWithAttributes)
+                    {
+                    WriteOperationAttributesAndChildren(operationWithAttributes);
+                    }
+                
                 this._writer.WriteEndObject();
                 this._writer.Flush();
                 }
@@ -117,38 +105,45 @@ namespace FacadeFor3e.ProcessCommandBuilder
             return stream.ToArray();
             }
 
+        private void WriteProcessOptions(ODataExecuteOptions options)
+            {
+            this._writer.WriteBoolean("_release_process", options.ReleaseProcess);
+            
+            this._writer.WriteBoolean("_cleanup_process_on_failure", options.CleanupProcessOnFailure);
+            
+            if (options.OutputStepOverride != null)
+                {
+                this._writer.WriteString("_output_step_override", options.OutputStepOverride);
+                }
+
+            if (options.RoleId.HasValue)
+                {
+                this._writer.WriteString("_role_id", options.RoleId.Value);
+                }
+            }
+
         private void WriteProcessCommand(ProcessCommand processCommand)
             {
-            var operation = processCommand.Operations.Single();
-            var entity = operation.SubClass ?? processCommand.ObjectName;
-            this._writer.WriteString("@odata.type", $"E3E.OData.AllTypes.{entity}");
             this._writer.WriteString("_process_override", processCommand.ProcessCode);
-            this._writer.WriteBoolean("_release_process", true);
-            this._writer.WriteBoolean("_cleanup_process_on_failure", true);
-            if (processCommand.OutputStepOverride != null)
-                {
-                this._writer.WriteString("_output_step_override", processCommand.OutputStepOverride);
-                }
-            if (processCommand.Description != null)
-                {
-                this._writer.WriteString("_description", processCommand.Description);
-                }
+            
             if (processCommand.ProcessName != null)
                 {
                 this._writer.WriteString("_name", processCommand.ProcessName);
                 }
+            
+            if (processCommand.Description != null)
+                {
+                this._writer.WriteString("_description", processCommand.Description);
+                }
+
+            if (processCommand.Priority != null)
+                {
+                this._writer.WriteString("_priority", processCommand.Priority.Priority);
+                }
+
             if (processCommand.OperatingUnit != null)
                 {
                 this._writer.WriteString("_operating_unit", processCommand.OperatingUnit);
-                }
-            if (processCommand.ProxyUserId != null)
-                {
-                this._writer.WriteString("_role_id", processCommand.ProxyUserId);
-                }
-
-            if (operation is OperationWithAttributesBase operationWithAttributes)
-                {
-                WriteOperationAttributesAndChildren(operationWithAttributes);
                 }
             }
 
@@ -185,7 +180,7 @@ namespace FacadeFor3e.ProcessCommandBuilder
                     this._writer.WriteNumber("_index", identifyByPosition.Position);
                     break;
                 default:
-                    throw new InvalidOperationException("Don't know how to deal with other row identification type " + identifyBase.GetType().Name);
+                    throw new InvalidOperationException($"Row identification type {identifyBase.GetType().Name} is not supported by OData");
                 }
             }
 
@@ -243,7 +238,8 @@ namespace FacadeFor3e.ProcessCommandBuilder
 
         private void WriteAttribute(NamedAttributeValue attribute)
             {
-            if (attribute is AliasAttribute _)
+            // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
+            if (attribute is AliasAttribute)
                 {
                 this._writer.WritePropertyName($"{attribute.Name}_Alias");
                 }

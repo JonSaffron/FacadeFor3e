@@ -108,8 +108,9 @@ namespace FacadeFor3e.Tests
             e.AddAttribute("OrgName", "acme corp");
             e.AddChild("Site");
 
-            Action <XmlWriter> renderEditOperation = xw => TransactionServiceRenderer.Render(e, xw, "Entity");
-            var s = CommonLibrary.GetRenderedOutput(renderEditOperation);
+            var renderer = new TestTransactionServiceRenderer();
+            renderer.Render(e, "Entity");
+            var s = renderer.Result;
             ClassicAssert.AreEqual("<Edit><Entity KeyValue=\"1\"><Attributes><OrgName>acme corp</OrgName></Attributes><Children><Site /></Children></Entity></Edit>", s);
             }
 
@@ -120,8 +121,9 @@ namespace FacadeFor3e.Tests
             e.AddAttribute("OrgName", "acme corp");
             e.AddChild("Site");
 
-            Action <XmlWriter> renderEditOperation = xw => TransactionServiceRenderer.Render(e, xw, "Entity");
-            var s = CommonLibrary.GetRenderedOutput(renderEditOperation);
+            var renderer = new TestTransactionServiceRenderer();
+            renderer.Render(e, "Entity");
+            var s = renderer.Result;
             ClassicAssert.AreEqual("<Edit><EntOrg KeyValue=\"1\"><Attributes><OrgName>acme corp</OrgName></Attributes><Children><Site /></Children></EntOrg></Edit>", s);
             }
 

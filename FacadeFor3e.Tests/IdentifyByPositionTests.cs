@@ -15,7 +15,9 @@ namespace FacadeFor3e.Tests
             {
             var pk = new IdentifyByPosition(99_000);
             ClassicAssert.AreEqual(99_000, pk.Position);
-            var s = CommonLibrary.GetRenderedOutputWithNode(writer => TransactionServiceRenderer.RenderKey(pk, writer));
+            var renderer = new TestTransactionServiceRenderer(true);
+            renderer.RenderKey(pk);
+            var s = renderer.Result;
             ClassicAssert.AreEqual("<Test Position=\"99000\" />", s);
             }
 

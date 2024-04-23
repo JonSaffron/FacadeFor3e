@@ -30,6 +30,7 @@ namespace FacadeFor3e.ProcessCommandBuilder
         /// <param name="keyValue">The value within the collection to search for</param>
         public IdentifyByAlias(string aliasField, string keyValue)
             {
+            if (keyValue == null) throw new ArgumentNullException(nameof(keyValue));
             this.AliasField = aliasField;
             this.KeyValue = new StringAttribute(keyValue);
             }

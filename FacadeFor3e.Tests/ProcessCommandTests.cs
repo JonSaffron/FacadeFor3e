@@ -23,7 +23,7 @@ namespace FacadeFor3e.Tests
             ClassicAssert.AreEqual("http://elite.com/schemas/transaction/object/write/Matter", p.ObjectNameSpace);
 
             var renderer = new TransactionServiceRenderer();
-            var xmlDoc = renderer.Render(p);
+            var xmlDoc = renderer.Render(p, ExecuteProcessOptions.Default);
             ClassicAssert.IsInstanceOf<XmlDocument>(xmlDoc);
             ClassicAssert.AreEqual("<Matter_Srv xmlns=\"http://elite.com/schemas/transaction/process/write/Matter_Srv\">" +
                             "<Initialize xmlns=\"http://elite.com/schemas/transaction/object/write/Matter\">" +
@@ -42,32 +42,45 @@ namespace FacadeFor3e.Tests
             }
 
         [Test]
-        public void OtherProperties()
+        public void OtherProcessProperties()
             {
             var p = new ProcessCommand("Matter_Srv", "Matter");
             p.ProcessName = "NBI";
             p.Description = "New Business Inception";
-            p.Priority = PriorityEnum.MEDIUM;
+            p.Priority = ProcessPriority.Medium;
             p.OperatingUnit = "100";
-            p.CheckSum = 1;
-            p.ProxyUser = "joe bloggs";
-            p.ProxyUserId = "firm\\joe.bloggs";
-            p.ProcessRequestType = ProcessExecutionRequestTypeEnum.SaveFirstEndOnNoErrors;
-            p.ProcessAutomationRoleAfterFirstStep = "NbiRole";
-            p.ProcessRequestSignature = "xxxyyyyzzz";
 
-            var s = CommonLibrary.GetRenderedOutputWithNode(writer => TransactionServiceRenderer.RenderProcessAttributes(p, writer));
-            ClassicAssert.AreEqual("<Test ObjectName=\"NBI\" " +
+            var renderer = new TestTransactionServiceRenderer(true);
+            renderer.RenderProcessAttributes(p);
+            var s = renderer.Result;
+            ClassicAssert.AreEqual("<Test " +
+                            "Name=\"NBI\" " +
                             "Description=\"New Business Inception\" " +
                             "Priority=\"MEDIUM\" " +
                             "OperatingUnit=\"100\" " +
-                            "CheckSum=\"1\" " +
-                            "ProxyUser=\"joe bloggs\" " +
-                            "ProxyUserID=\"firm\\joe.bloggs\" " +
-                            "ProcessRequestType=\"SaveFirstEndOnNoErrors\" " +
-                            "ProcessAutomationRoleAfterFirstStep=\"NbiRole\" " +
-                            "ProcessRequestSignature=\"xxxyyyyzzz\" " +
                             "/>", s);
+            }
+
+        [Test]
+        public void OtherProcessOptions()
+            {
+            var options = new ExecuteProcessOptions();
+            options.CheckSum = 123.45m;
+            options.ProxyUser = new Guid("E97FB230-2E09-43C1-B0C2-125E833AFAFE");
+            options.ProcessExecutionRequestType = new ProcessExecutionRequestType(ProcessExecutionRequestTypeEnum.SaveFirstEndOnNoErrors, true);
+            options.ProcessAutomationRoleAfterFirstStep = "NbiRole"; 
+            options.ProcessRequestSignature = "xxxyyyyzzz";
+
+            var renderer = new TestTransactionServiceRenderer(true);
+            renderer.RenderProcessOptions(options);
+            var s = renderer.Result;
+            ClassicAssert.AreEqual("<Test " +
+                                   "ProxyUser=\"e97fb230-2e09-43c1-b0c2-125e833afafe\" " +
+                                   "CheckSum=\"123.45\" " +
+                                   "ProcessRequestType=\"SaveFirstEndOnNoErrors_SuppressChildAutogeneration\" " +
+                                   "ProcessAutomationRoleAfterFirstStep=\"NbiRole\" " +
+                                   "ProcessRequestSignature=\"xxxyyyyzzz\" " +
+                                   "/>", s);
             }
         }
     }

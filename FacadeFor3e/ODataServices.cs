@@ -9,7 +9,6 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Principal;
 using System.Text;
-using System.Text.Json;
 using FacadeFor3e.ProcessCommandBuilder;
 
 namespace FacadeFor3e
@@ -34,25 +33,244 @@ namespace FacadeFor3e
         /// <summary>
         /// The base url to use to connect to the 3E OData service 
         /// </summary>
-        public Uri BaseEndpoint { get; }
+        public Uri BaseEndpoint => this._httpClient.BaseAddress!;
 
         /// <summary>
         /// Returns whether this object has been disposed
         /// </summary>
         public bool IsDisposed { get; private set; }
 
-        private readonly HttpClient _httpClient = null!; // will be set in public constructors
+        private readonly HttpClient _httpClient;
 
         private static readonly Lazy<Logger> LazyLogger = new Lazy<Logger>(() => LogManager.GetCurrentClassLogger()!);
 
         // ReSharper disable once AssignNullToNotNullAttribute
         private static Logger Logger => LazyLogger.Value;
 
+        private readonly Func<string> _authenticationMethod;
+
         /// <summary>
         /// Constructs a new ODataServices object without impersonation or user credentials
         /// </summary>
         /// <param name="baseEndpoint">The url to use to connect to the 3E OData service</param>
-        private ODataServices(Uri baseEndpoint)
+        public ODataServices(Uri baseEndpoint)
+            {
+            this._httpClient = BuildHttpClient(baseEndpoint, CredentialCache.DefaultNetworkCredentials);
+            this._authenticationMethod = () => $"current user {GetCurrentWindowsIdentity()}";
+            }
+
+        /// <summary>
+        /// Constructs a new ODataServices object which will impersonate the specified account during calls to the on premises 3E OData service
+        /// </summary>
+        /// <param name="baseEndpoint">The url to use to connect to the 3E OData service</param>
+        /// <param name="accountToImpersonate">The account to impersonate</param>
+        public ODataServices(Uri baseEndpoint, WindowsIdentity accountToImpersonate)
+            {
+            this.AccountToImpersonate = accountToImpersonate ?? throw new ArgumentNullException(nameof(accountToImpersonate));
+            this._httpClient = BuildHttpClient(baseEndpoint, CredentialCache.DefaultNetworkCredentials);
+            this._authenticationMethod = () => $"impersonating {accountToImpersonate.Name}";
+            }
+
+        /// <summary>
+        /// Constructs a new ODataServices object which will pass the specified credentials during calls to the on premises 3E OData service
+        /// </summary>
+        /// <param name="baseEndpoint">The url to use to connect to the 3E OData service</param>
+        /// <param name="networkCredential">The credentials to use when calling the 3E OData service</param>
+        public ODataServices(Uri baseEndpoint, NetworkCredential networkCredential)
+            {
+            this.NetworkCredential = networkCredential ?? throw new ArgumentNullException(nameof(networkCredential));
+            this._httpClient = BuildHttpClient(baseEndpoint, networkCredential);
+            this._authenticationMethod = () => $"windows credentials for {networkCredential.Domain}\\{networkCredential.UserName}";
+            }
+
+        /// <summary>
+        /// Constructs a new ODataServices object which will pass the specified cloud credentials during calls to the 3E OData service
+        /// </summary>
+        /// <param name="baseEndpoint"></param>
+        /// <param name="oDataAuthentication"></param>
+        /// <param name="instanceId"></param>
+        public ODataServices(Uri baseEndpoint, ODataAuthentication oDataAuthentication, string instanceId)
+            {
+            this._httpClient = BuildHttpClient(baseEndpoint, null);
+            // ReSharper disable once PossibleNullReferenceException
+            this._httpClient.DefaultRequestHeaders.Authorization = oDataAuthentication.Header;
+            this._httpClient.DefaultRequestHeaders.Add("X-3E-InstanceId", instanceId);
+            this._authenticationMethod = () => $"token for instance {instanceId} (expires {oDataAuthentication.Expires.ToLocalTime():HH:mm:ss})";
+            }
+
+        /// <summary>
+        /// Authenticates against an OData service in the cloud
+        /// </summary>
+        /// <param name="tokenEndpoint">The uri of the web service that provides the authentication service</param>
+        /// <param name="credentials">The set of credentials to present to the service</param>
+        /// <returns>An ODataAuthentication object containing the token to use in subsequent requests and the point of expiry</returns>
+        /// <exception cref="InvalidOperationException">If authentication fails</exception>
+        public static ODataAuthentication Authenticate(Uri tokenEndpoint, Dictionary<string, string> credentials)
+            {
+            using var httpClient = new HttpClient();
+            var content = new FormUrlEncodedContent(credentials);
+            LogForDebug($"Acquiring token to access OData service from {tokenEndpoint}");
+            var postRequestTask = httpClient.PostAsync(tokenEndpoint, content);
+#if !NET6_0_OR_GREATER
+            if (postRequestTask == null)
+                throw new InvalidOperationException("This test exists to quieten a warning in Resharper.");
+#endif
+            var response = postRequestTask.Result;
+#if !NET6_0_OR_GREATER
+            if (response == null)
+                throw new InvalidOperationException("This test exists to quieten a warning in Resharper");
+#endif
+            LogForDebug($"{(response.IsSuccessStatusCode ? "Success" : "Failed")} {response.StatusCode:D}");
+
+            var serviceResult = new ODataServiceResult(new HttpRequestMessage(), response);
+            if (serviceResult.IsError)
+                throw new InvalidOperationException($"The authentication request returned error code {response.StatusCode}");
+            if (!serviceResult.IsResponseJSon)
+                throw new InvalidOperationException("Received an invalid response during authentication.");
+
+            var jsonDocument = serviceResult.ResponseJSonDocument;
+            var tokenType = jsonDocument.RootElement.GetProperty("token_type").GetString();
+            var token = jsonDocument.RootElement.GetProperty("access_token").GetString();
+            if (tokenType == null || token == null)
+                throw new InvalidOperationException("Invalid response.");
+            int secondsToExpiry = jsonDocument.RootElement.GetProperty("expires_in").GetInt32();
+            var result = new ODataAuthentication(tokenType, token, secondsToExpiry);
+            return result;
+            }
+
+        /// <summary>
+        /// Performs a GET request to the OData service to query the 3E database
+        /// </summary>
+        /// <param name="relativeUri">A <see cref="FormattableString"/> that defines the request</param>
+        /// <returns>A <see cref="ODataServiceResult"/> that contains the response</returns>
+        /// <exception cref="ArgumentNullException">If the </exception>
+        /// <remarks>The string supplied will be formatted using the InvariantCulture before being turned into a Relative URI</remarks>
+        [Pure]
+        public ODataServiceResult Select(FormattableString relativeUri)
+            {
+            if (relativeUri == null) throw new ArgumentNullException(nameof(relativeUri));
+            var uri = new Uri(relativeUri.ToString(CultureInfo.InvariantCulture), UriKind.Relative);
+            return Select(uri);
+            }
+
+        /// <summary>
+        /// Performs a GET request to the OData service to query the 3E database
+        /// </summary>
+        /// <param name="relativeUri">The <see cref="Uri"/> that defines the request</param>
+        /// <returns>A <see cref="ODataServiceResult"/> that contains the response</returns>
+        /// <exception cref="ArgumentNullException">If the Uri specified is null</exception>
+        [Pure]
+        public ODataServiceResult Select(Uri relativeUri)
+            {
+            if (relativeUri == null)
+                throw new ArgumentNullException(nameof(relativeUri));
+            if (relativeUri.IsAbsoluteUri)
+                throw new ArgumentOutOfRangeException(nameof(relativeUri), "Specify a relative uri");
+
+            // ReSharper disable once AssignNullToNotNullAttribute - On HttpMethod.Get before .net 6
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, relativeUri);
+            LogDetailsOfTheJob(request);
+
+            var getRequestTask = this._httpClient.SendAsync(request);
+#if !NET6_0_OR_GREATER
+            if (getRequestTask == null)
+                throw new InvalidOperationException("This test exists to quieten a warning in Resharper.");
+#endif
+            var response = getRequestTask.Result;
+#if !NET6_0_OR_GREATER
+            if (response == null)
+                throw new InvalidOperationException("This test exists to quieten a warning in Resharper");
+#endif
+            LogForDebug($"{(response.IsSuccessStatusCode ? "Success" : "Failed")} {response.StatusCode:D}");
+
+            var result = new ODataServiceResult(request, response);
+            LogForDebug(result.ResponseString);
+
+            if (!result.IsResponseJSon)
+                {
+                throw new ExecuteProcessException("Received an invalid response during authentication.");
+                }
+
+            if (result.IsError)
+                {
+                var errorMessages = new List<string> { "An error occurred whilst trying to query 3E data through OData:" };
+                errorMessages.AddRange(result.ErrorMessages);
+                var msg = string.Join("\r\n", errorMessages);
+                throw new ExecuteProcessException(msg, result);
+                }
+
+            return result;
+            }
+
+        static ODataServices()
+            {
+            var jsonMediaType = MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+#if !NET6_0_OR_GREATER
+            // ReSharper disable once JoinNullCheckWithUsage
+            if (jsonMediaType == null)
+                throw new InvalidOperationException("This test exists to quieten a warning in Resharper");
+#endif
+            JsonMediaType = jsonMediaType;
+            }
+
+        private static readonly MediaTypeHeaderValue JsonMediaType;
+
+        /// <summary>
+        /// Makes a request to the OData service to run a process to edit data
+        /// </summary>
+        /// <param name="command">Specifies a command to execute</param>
+        /// <param name="options">Specifies any options required to execute the command</param>
+        /// <returns>A <see cref="ODataServiceResult"/> that contains the response</returns>
+        /// <exception cref="ExecuteProcessException"></exception>
+        public ODataServiceResult Execute(ProcessCommand command, ODataExecuteOptions options)
+            {
+            var renderer = new ODataRenderer();
+            var requestParameters = renderer.Render(command, options);
+            var request = new HttpRequestMessage(requestParameters.Verb, requestParameters.EndPoint)
+                {
+                Content = new ByteArrayContent(requestParameters.Json)
+                };
+            var headers = request.Content.Headers;
+#if !NET6_0_OR_GREATER
+            if (headers == null)
+                throw new InvalidOperationException("This test exists to quieten a warning in Resharper");
+#endif
+            headers.ContentType = JsonMediaType;
+            LogDetailsOfTheJob(request);
+            LogForDebug(Encoding.UTF8.GetString(requestParameters.Json));
+
+            var requestTask = this._httpClient.SendAsync(request);
+#if !NET6_0_OR_GREATER
+            if (requestTask == null)
+                throw new InvalidOperationException("This test exists to quieten a warning in Resharper");
+#endif
+            var response = requestTask.Result;
+#if !NET6_0_OR_GREATER
+            if (response == null)
+                throw new InvalidOperationException("This test exists to quieten a warning in Resharper");
+#endif
+            LogForDebug($"{(response.IsSuccessStatusCode ? "Success" : "Failed")} {response.StatusCode:D}");
+
+            var result = new ODataServiceResult(request, response);
+            LogForDebug(result.ResponseString);
+
+            if (!result.IsResponseJSon)
+                {
+                throw new ExecuteProcessException("Received an invalid response during authentication.");
+                }
+
+            if (result.IsError && options.ThrowExceptionIfProcessFails)
+                {
+                var errorMessages = new List<string> { "An error occurred whilst trying to execute a 3E process through OData:" };
+                errorMessages.AddRange(result.ErrorMessages);
+                var msg = string.Join("\r\n", errorMessages);
+                throw new ExecuteProcessException(msg, result);
+                }
+
+            return result;
+            }
+
+        private static HttpClient BuildHttpClient(Uri baseEndpoint, NetworkCredential? networkCredential)
             {
             if (baseEndpoint == null)
                 throw new ArgumentNullException(nameof(baseEndpoint));
@@ -63,136 +281,12 @@ namespace FacadeFor3e
                 baseEndpoint = new Uri(baseEndpoint, $"{baseEndpoint.AbsolutePath}/");
                 }
 
-            this.BaseEndpoint = baseEndpoint;
-            }
-
-        /// <summary>
-        /// Constructs a new ODataServices object which will impersonate the specified account during calls to the on premises 3E OData service
-        /// </summary>
-        /// <param name="baseEndpoint">The url to use to connect to the 3E OData service</param>
-        /// <param name="accountToImpersonate">The account to impersonate</param>
-        public ODataServices(Uri baseEndpoint, WindowsIdentity accountToImpersonate) : this(baseEndpoint)
-            {
-            this.AccountToImpersonate = accountToImpersonate ?? throw new ArgumentNullException(nameof(accountToImpersonate));
-            this._httpClient = BuildHttpClient(CredentialCache.DefaultNetworkCredentials);
-            }
-
-        /// <summary>
-        /// Constructs a new ODataServices object which will pass the specified credentials during calls to the on premises 3E OData service
-        /// </summary>
-        /// <param name="baseEndpoint">The url to use to connect to the 3E OData service</param>
-        /// <param name="networkCredential">The credentials to use when calling the 3E OData service</param>
-        public ODataServices(Uri baseEndpoint, NetworkCredential networkCredential) : this(baseEndpoint)
-            {
-            this.NetworkCredential = networkCredential ?? throw new ArgumentNullException(nameof(networkCredential));
-            this._httpClient = BuildHttpClient(networkCredential);
-            }
-
-        /// <summary>
-        /// Constructs a new ODataServices object which will pass the specified cloud credentials during calls to the 3E OData service
-        /// </summary>
-        /// <param name="baseEndpoint"></param>
-        /// <param name="oDataAuthentication"></param>
-        /// <param name="instanceId"></param>
-        public ODataServices(Uri baseEndpoint, ODataAuthentication oDataAuthentication, string instanceId) : this(baseEndpoint)
-            {
-            this._httpClient = BuildHttpClient(null);
-            // ReSharper disable once PossibleNullReferenceException
-            this._httpClient.DefaultRequestHeaders.Authorization = oDataAuthentication.Header;
-            this._httpClient.DefaultRequestHeaders.Add("X-3E-InstanceId", instanceId);
-            }
-
-        public static ODataAuthentication Authenticate(Uri tokenEndpoint, Dictionary<string, string> credentials)
-            {
-            using HttpClient httpClient = new HttpClient();
-            var content = new FormUrlEncodedContent(credentials);
-            LogForDebug("Acquiring token to access OData service from " + tokenEndpoint);
-            var postRequestTask = httpClient.PostAsync(tokenEndpoint, content);
-            if (postRequestTask == null)
-                throw new InvalidOperationException("This test exists to quieten a warning in Resharper.");
-            HttpResponseMessage? response = postRequestTask.Result;
-            LogForDebug($"{response.StatusCode:D}");
-            if (response == null || response.Content == null)
-                throw new InvalidOperationException("Received an invalid response during authentication.");
-            response.EnsureSuccessStatusCode();
-            var jsonDocument = JsonDocument.Parse(response.Content.ReadAsByteArrayAsync().Result);
-            var tokenType = jsonDocument.RootElement.GetProperty("token_type").GetString();
-            var token = jsonDocument.RootElement.GetProperty("access_token").GetString();
-            if (tokenType == null || token == null)
-                throw new InvalidOperationException("Invalid response.");
-            int secondsToExpiry = jsonDocument.RootElement.GetProperty("expires_in").GetInt32();
-            var result = new ODataAuthentication(tokenType, token, secondsToExpiry);
-            return result;
-            }
-
-        public ODataServiceResult Select(FormattableString relativeUri)
-            {
-            if (relativeUri == null) throw new ArgumentNullException(nameof(relativeUri));
-            var uri = new Uri(relativeUri.ToString(CultureInfo.InvariantCulture), UriKind.Relative);
-            return Select(uri);
-            }
-
-        public ODataServiceResult Select(Uri relativeUri)
-            {
-            if (relativeUri == null)
-                throw new ArgumentNullException(nameof(relativeUri));
-            if (relativeUri.IsAbsoluteUri)
-                throw new ArgumentOutOfRangeException(nameof(relativeUri), "Specify a relative uri");
-            // ReSharper disable once AssignNullToNotNullAttribute
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, relativeUri);
-            LogDetailsOfTheJob(request);
-
-            // ReSharper disable once PossibleNullReferenceException
-            // ReSharper disable once AssignNullToNotNullAttribute
-            HttpResponseMessage response = this._httpClient.SendAsync(request).Result;
-            // ReSharper disable once AssignNullToNotNullAttribute
-            // ReSharper disable PossibleNullReferenceException
-            string responseText = response.Content.ReadAsStringAsync().Result;
-            // ReSharper restore PossibleNullReferenceException
-            LogForDebug($"{response.StatusCode:D} {responseText}");
-            response.EnsureSuccessStatusCode();
-            var result = new ODataServiceResult(request, response);
-            return result;
-            }
-
-        public ODataServiceResult Execute(ProcessCommand command, ExecuteParams executeParams)
-            {
-            var renderer = new ODataRenderer();
-            var requestParameters = renderer.Render(command);
-            HttpRequestMessage request = new HttpRequestMessage(requestParameters.Verb, requestParameters.EndPoint);
-            request.Content = new ByteArrayContent(requestParameters.Json);
-            // ReSharper disable once PossibleNullReferenceException
-            // ReSharper disable once AssignNullToNotNullAttribute
-            request.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
-            LogDetailsOfTheJob(request);
-            LogForDebug(Encoding.UTF8.GetString(requestParameters.Json));
-
-            // ReSharper disable once PossibleNullReferenceException
-            // ReSharper disable once AssignNullToNotNullAttribute
-            HttpResponseMessage response = this._httpClient.SendAsync(request).Result;
-            // ReSharper disable once AssignNullToNotNullAttribute
-            // ReSharper disable PossibleNullReferenceException
-            string responseText = response.Content.ReadAsStringAsync().Result;
-            // ReSharper restore PossibleNullReferenceException
-            LogForDebug($"{response.StatusCode:D} {responseText}");
-            if (executeParams.ThrowExceptionIfProcessFails)
-                {
-                if (!response.IsSuccessStatusCode)
-                    throw new ExecuteProcessException(responseText);
-                }
-
-            var result = new ODataServiceResult(request, response);
-            return result;
-            }
-
-        private HttpClient BuildHttpClient(NetworkCredential? networkCredential)
-            {
             var handler = new HttpClientHandler();
             if (networkCredential != null)
                 {
                 var credentialCache = new CredentialCache
                     {
-                        { this.BaseEndpoint, "Negotiate", networkCredential }
+                        { baseEndpoint, "Negotiate", networkCredential }
                     };
                 handler.Credentials = credentialCache;
                 handler.PreAuthenticate = true;
@@ -206,7 +300,7 @@ namespace FacadeFor3e
             //        };
             
             var result = new HttpClient(handler);
-            result.BaseAddress = this.BaseEndpoint;
+            result.BaseAddress = baseEndpoint;
             return result;
             }
 
@@ -217,32 +311,18 @@ namespace FacadeFor3e
 
         internal void LogDetailsOfTheJob(HttpRequestMessage request)
             {
-            if (request == null) throw new ArgumentNullException(nameof(request));
+            if (request == null) 
+                throw new ArgumentNullException(nameof(request));
+
+            // ReSharper disable once ConditionalAccessQualifierIsNonNullableAccordingToAPIContract
+            string method = request.Method?.Method ?? "unknown";
+            // ReSharper disable once RedundantSuppressNullableWarningExpression
+            string authenticationMethod = this._authenticationMethod()!;
+
             var sb = new StringBuilder();
-            // ReSharper disable once PossibleNullReferenceException
-            // ReSharper disable once AssignNullToNotNullAttribute
-            sb.AppendFormat(request.Method.ToString());
+            sb.AppendFormat("\t{0} {1}", method, new Uri(this._httpClient.BaseAddress!, request.RequestUri!));
             sb.AppendLine();
-            sb.AppendFormat("\tURL: {0}", new Uri(this._httpClient.BaseAddress!, request.RequestUri!));
-            sb.AppendLine();
-            string userName;
-            string authenticationMethod;
-            if (this.IsImpersonating)
-                {
-                userName = this.AccountToImpersonate!.Name;
-                authenticationMethod = "using impersonation";
-                }
-            else if (this.NetworkCredential != null)
-                {
-                userName = $"{this.NetworkCredential.Domain}\\{this.NetworkCredential.UserName}";
-                authenticationMethod = "using credentials";
-                }
-            else
-                {
-                userName = GetCurrentWindowsIdentity();
-                authenticationMethod = "currently logged in user";
-                }
-            sb.AppendFormat("\tUser: {0} ({1})", userName, authenticationMethod);
+            sb.AppendFormat("\tauthentication: {0}", authenticationMethod);
             sb.AppendLine();
             Logger.Info(sb.ToString());
             }
@@ -258,17 +338,5 @@ namespace FacadeFor3e
             var result = wi.Name;
             return result;
             }
-        }
-
-    public class ExecuteParams
-        {
-        private static readonly ExecuteParams DefaultExecuteParams = new ExecuteParams
-            {
-            ThrowExceptionIfProcessFails = true
-            };
-
-        public bool ThrowExceptionIfProcessFails;
-
-        public static ExecuteParams Default => DefaultExecuteParams;
         }
     }

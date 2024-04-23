@@ -17,8 +17,17 @@ namespace FacadeFor3e
         {
         private const string ErrorMessagePrefix = "Error in the application.-";
 
-        internal ExecuteProcessResult(XmlDocument request, XmlDocument response)
+        /// <summary>
+        /// Constructs a new <see cref="ExecuteProcessResult"/> object with the specified request and response
+        /// </summary>
+        /// <param name="request">Specifies the request sent to the Transaction Service</param>
+        /// <param name="response">Specifies the response received from the Transaction Service</param>
+        /// <exception cref="ArgumentNullException">If the value for the request or response parameters is null</exception>
+        /// <exception cref="ArgumentException">If the request or response parameters appear to contain invalid values</exception>
+        public ExecuteProcessResult(XmlDocument request, XmlDocument response)
             {
+            if (request == null) throw new ArgumentNullException(nameof(request));
+            if (response == null) throw new ArgumentNullException(nameof(response));
             if (request.DocumentElement == null)
                 throw new ArgumentException("Invalid request.", nameof(request));
             if (response.DocumentElement == null || response.DocumentElement.LocalName != "ProcessExecutionResults")

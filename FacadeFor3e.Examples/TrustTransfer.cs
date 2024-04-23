@@ -68,11 +68,7 @@ namespace FacadeFor3e.Examples
             using (var rp = new TransactionServices(endpoint, credentials))
                 {
                 var ep = rp.ExecuteProcess;
-                ep.GetKeys = true;
-                ep.ThrowExceptionIfProcessDoesNotComplete = true;
-                ep.ThrowExceptionIfDataErrorsFound = true;
- 
-                var r = ep.Execute(p, ExecuteProcessParams.DefaultWithKeys);
+                var r = ep.Execute(p, ExecuteProcessOptions.DefaultWithKeys);
                 int result = int.Parse(r.GetKeys().First());
                 return result;
                 }

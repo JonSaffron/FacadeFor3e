@@ -17,7 +17,9 @@ namespace FacadeFor3e.Tests
             var a = new IdentifyByAlias("Number", "L12-345");
             ClassicAssert.IsInstanceOf<StringAttribute>(a.KeyValue);
             ClassicAssert.AreEqual("L12-345", a.KeyValue.Value);
-            var s = CommonLibrary.GetRenderedOutputWithNode(writer => TransactionServiceRenderer.RenderKey(a, writer));
+            var renderer = new TestTransactionServiceRenderer(true);
+            renderer.RenderKey(a);
+            var s = renderer.Result;
             ClassicAssert.AreEqual("<Test KeyValue=\"L12-345\" AliasField=\"Number\" />", s);
             }
 
@@ -27,7 +29,9 @@ namespace FacadeFor3e.Tests
             var a = new IdentifyByAlias("MattIndex", new IntAttribute(123456));
             ClassicAssert.IsInstanceOf<IntAttribute>(a.KeyValue);
             ClassicAssert.AreEqual(123456, a.KeyValue.Value);
-            var s = CommonLibrary.GetRenderedOutputWithNode(writer => TransactionServiceRenderer.RenderKey(a, writer));
+            var renderer = new TestTransactionServiceRenderer(true);
+            renderer.RenderKey(a);
+            var s = renderer.Result;
             ClassicAssert.AreEqual("<Test KeyValue=\"123456\" AliasField=\"MattIndex\" />", s);
             }
 

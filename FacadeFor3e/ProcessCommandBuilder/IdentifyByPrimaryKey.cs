@@ -78,6 +78,7 @@ namespace FacadeFor3e.ProcessCommandBuilder
         /// <param name="keyValue">Primary key value</param>
         public IdentifyByPrimaryKey(string keyValue)
             {
+            if (keyValue == null) throw new ArgumentNullException(nameof(keyValue));
             this.KeyValue = new StringAttribute(keyValue);
             }
 

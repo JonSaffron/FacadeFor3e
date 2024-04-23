@@ -92,7 +92,7 @@ namespace FacadeFor3e
         private static string? ExecuteInternal(ExecuteProcessService executeProcessService, ProcessCommand process)
             {
             bool getKey = process.Operations.Any(item => item is AddOperation);
-            var executeProcessParams = getKey ? ExecuteProcessParams.DefaultWithKeys : ExecuteProcessParams.Default;
+            var executeProcessParams = getKey ? ExecuteProcessOptions.DefaultWithKeys : ExecuteProcessOptions.Default;
             ExecuteProcessResult runProcessResult = executeProcessService.Execute(process, executeProcessParams);
 
             string? result = getKey ? runProcessResult.GetKeys().FirstOrDefault() : null;

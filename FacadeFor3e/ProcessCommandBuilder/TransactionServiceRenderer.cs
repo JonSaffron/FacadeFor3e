@@ -5,140 +5,166 @@ using System.Xml;
 
 namespace FacadeFor3e.ProcessCommandBuilder
     {
-    internal class TransactionServiceRenderer
+    /// <summary>
+    /// Renders a <see cref="ProcessCommand"/> into XML for the TransactionService
+    /// </summary>
+    public class TransactionServiceRenderer
         {
         /// <summary>
-        /// Generate the XML instructions to pass to 3E
+        /// The XMLWriter
         /// </summary>
+        /// <remarks>Exposed for unit testing purposes</remarks>
+        protected internal XmlWriter Writer = null!;
+
+        /// <summary>
+        /// Generate the XML instruction to pass to the ExecuteProcess command of the TransactionService
+        /// </summary>
+        /// <param name="processCommand">Specifies the command to be rendered</param>
+        /// <param name="options">Specifies options that affect the output</param>
         /// <returns>The transaction to be carried out</returns>
-        public XmlDocument Render(ProcessCommand processCommand)
+        public XmlDocument Render(ProcessCommand processCommand, ExecuteProcessOptions options)
             {
             if (processCommand == null) throw new ArgumentNullException(nameof(processCommand));
+            if (options == null) throw new ArgumentNullException(nameof(options));
+            
             var xmlDoc = new XmlDocument();
             // ReSharper disable once RedundantSuppressNullableWarningExpression
-            using XmlWriter w = xmlDoc.CreateNavigator()!.AppendChild()!;
-            Render(processCommand, w);
+            using (this.Writer = xmlDoc.CreateNavigator()!.AppendChild()!)
+                {
+                RenderProcess(processCommand, options);
+                }
+
             return xmlDoc;
             }
 
-        private static void Render(ProcessCommand processCommand, XmlWriter writer)
+        internal void RenderProcess(ProcessCommand processCommand, ExecuteProcessOptions options)
             {
-            writer.WriteStartDocument();
-            writer.WriteStartElement(processCommand.ProcessCode, processCommand.ProcessNameSpace);
-            RenderProcessAttributes(processCommand, writer);
-            writer.WriteStartElement("Initialize", processCommand.ObjectNameSpace);
+            this.Writer.WriteStartDocument();
+            this.Writer.WriteStartElement(processCommand.ProcessCode, processCommand.ProcessNameSpace);
+            RenderProcessOptions(options);
+            RenderProcessAttributes(processCommand);
+            this.Writer.WriteStartElement("Initialize", processCommand.ObjectNameSpace);
             foreach (OperationBase o in processCommand.Operations)
                 {
-                RenderOperation(o, writer, processCommand.ObjectName);
+                RenderOperation(o, processCommand.ObjectName);
                 }
-            writer.WriteEndElement();
-            writer.WriteEndElement();
-            writer.WriteEndDocument();
-            writer.Flush();
+            this.Writer.WriteEndElement();
+            this.Writer.WriteEndElement();
+            this.Writer.WriteEndDocument();
+            this.Writer.Flush();
             }
 
-        internal static void RenderProcessAttributes(ProcessCommand processCommand, XmlWriter writer)
+        internal void RenderProcessOptions(ExecuteProcessOptions options)
+            {
+            if (options.ProxyUser != null)
+                this.Writer.WriteAttributeString("ProxyUser", options.ProxyUser.Value.ToString("D"));
+
+            if (options.CheckSum.HasValue)
+                this.Writer.WriteAttributeString("CheckSum", options.CheckSum.Value.ToString(CultureInfo.InvariantCulture));
+            
+            if (options.ProcessExecutionRequestType != null)
+                this.Writer.WriteAttributeString("ProcessRequestType", options.ProcessExecutionRequestType.Type);
+            
+            if (options.ProcessAutomationRoleAfterFirstStep != null)
+                this.Writer.WriteAttributeString("ProcessAutomationRoleAfterFirstStep", options.ProcessAutomationRoleAfterFirstStep);
+            
+            if (options.ProcessRequestSignature != null)
+                this.Writer.WriteAttributeString("ProcessRequestSignature", options.ProcessRequestSignature);
+            }
+
+        internal void RenderProcessAttributes(ProcessCommand processCommand)
             {
             if (processCommand.ProcessName != null)
-                writer.WriteAttributeString("ObjectName", processCommand.ProcessName);
+                this.Writer.WriteAttributeString("Name", processCommand.ProcessName);
+
             if (processCommand.Description != null)
-                writer.WriteAttributeString("Description", processCommand.Description);
-            if (processCommand.Priority.HasValue)
-                writer.WriteAttributeString("Priority", processCommand.Priority.Value.ToString("G"));
+                this.Writer.WriteAttributeString("Description", processCommand.Description);
+
+            if (processCommand.Priority != null)
+                this.Writer.WriteAttributeString("Priority", processCommand.Priority.Priority);
+
             if (processCommand.OperatingUnit != null)
-                writer.WriteAttributeString("OperatingUnit", processCommand.OperatingUnit);
-            if (processCommand.CheckSum.HasValue)
-                writer.WriteAttributeString("CheckSum", processCommand.CheckSum.Value.ToString("G"));
-            if (processCommand.ProxyUser != null)
-                writer.WriteAttributeString("ProxyUser", processCommand.ProxyUser);
-            if (processCommand.ProxyUserId != null)
-                writer.WriteAttributeString("ProxyUserID", processCommand.ProxyUserId);
-            if (processCommand.ProcessRequestType.HasValue)
-                writer.WriteAttributeString("ProcessRequestType", processCommand.ProcessRequestType.Value.ToString("G"));
-            if (processCommand.ProcessAutomationRoleAfterFirstStep != null)
-                writer.WriteAttributeString("ProcessAutomationRoleAfterFirstStep", processCommand.ProcessAutomationRoleAfterFirstStep);
-            if (processCommand.ProcessRequestSignature != null)
-                writer.WriteAttributeString("ProcessRequestSignature", processCommand.ProcessRequestSignature);
+                this.Writer.WriteAttributeString("OperatingUnit", processCommand.OperatingUnit);
             }
 
-        private static void RenderOperation(OperationBase operation, XmlWriter writer, string objectSuperclassName)
+        private void RenderOperation(OperationBase operation, string objectSuperclassName)
             {
             switch (operation)
                 {
                 case AddOperation add:
-                    Render(add, writer, objectSuperclassName);
+                    Render(add, objectSuperclassName);
                     break;
                 case EditOperation edit:
-                    Render(edit, writer, objectSuperclassName);
+                    Render(edit, objectSuperclassName);
                     break;
                 case DeleteOperation delete:
-                    Render(delete, writer, objectSuperclassName);
+                    Render(delete, objectSuperclassName);
                     break;
                 default:
                     throw new InvalidOperationException();
                 }
             }
 
-        internal static void Render(AddOperation operation, XmlWriter writer, string objectSuperclassName)
+        internal void Render(AddOperation operation, string objectSuperclassName)
             {
-            writer.WriteStartElement("Add");
-            writer.WriteStartElement(operation.SubClass ?? objectSuperclassName);
+            this.Writer.WriteStartElement("Add");
+            this.Writer.WriteStartElement(operation.SubClass ?? objectSuperclassName);
 
-            RenderAttributes(operation, writer);
-            RenderChildren(operation, writer);
+            RenderAttributes(operation);
+            RenderChildren(operation);
 
-            writer.WriteEndElement();
-            writer.WriteEndElement();
+            this.Writer.WriteEndElement();
+            this.Writer.WriteEndElement();
             }
 
-        internal static void Render(EditOperation operation, XmlWriter writer, string objectSuperclassName)
+        internal void Render(EditOperation operation, string objectSuperclassName)
             {
-            writer.WriteStartElement("Edit");
-            writer.WriteStartElement(operation.SubClass ?? objectSuperclassName);
+            this.Writer.WriteStartElement("Edit");
+            this.Writer.WriteStartElement(operation.SubClass ?? objectSuperclassName);
 
-            RenderKey(operation.KeySpecification, writer);
+            RenderKey(operation.KeySpecification);
 
-            RenderAttributes(operation, writer);
-            RenderChildren(operation, writer);
+            RenderAttributes(operation);
+            RenderChildren(operation);
 
-            writer.WriteEndElement();
-            writer.WriteEndElement();
+            this.Writer.WriteEndElement();
+            this.Writer.WriteEndElement();
             }
 
-        internal static void Render(DeleteOperation operation, XmlWriter writer, string objectSuperclassName)
+        internal void Render(DeleteOperation operation, string objectSuperclassName)
             {
-            writer.WriteStartElement("Delete");
-            writer.WriteStartElement(operation.SubClass ?? objectSuperclassName);
+            this.Writer.WriteStartElement("Delete");
+            this.Writer.WriteStartElement(operation.SubClass ?? objectSuperclassName);
 
-            RenderKey(operation.KeySpecification, writer);
+            RenderKey(operation.KeySpecification);
 
-            writer.WriteEndElement();
-            writer.WriteEndElement();
+            this.Writer.WriteEndElement();
+            this.Writer.WriteEndElement();
             }
 
-        private static void RenderAttributes(OperationWithAttributesBase operation, XmlWriter writer)
+        private void RenderAttributes(OperationWithAttributesBase operation)
             {
             if (operation.Attributes.Any())
                 {
-                writer.WriteStartElement("Attributes");
+                this.Writer.WriteStartElement("Attributes");
                 foreach (NamedAttributeValue a in operation.Attributes)
                     {
-                    Render(a, writer);
+                    Render(a);
                     }
-                writer.WriteEndElement();
+                this.Writer.WriteEndElement();
                 }
             }
 
-        internal static void Render(NamedAttributeValue attribute, XmlWriter writer)
+        internal void Render(NamedAttributeValue attribute)
             {
-            writer.WriteStartElement(attribute.Name);
+            this.Writer.WriteStartElement(attribute.Name);
             if (attribute is AliasAttribute alias)
-                writer.WriteAttributeString("AliasField", alias.Alias);
-            RenderAttribute(attribute.Attribute, writer);
-            writer.WriteEndElement();
+                this.Writer.WriteAttributeString("AliasField", alias.Alias);
+            RenderAttribute(attribute.Attribute);
+            this.Writer.WriteEndElement();
             }
 
-        private static void RenderAttribute(IAttribute attribute, XmlWriter writer)
+        private void RenderAttribute(IAttribute attribute)
             {
             if (!attribute.HasValue)
                 return;
@@ -146,106 +172,106 @@ namespace FacadeFor3e.ProcessCommandBuilder
             switch (attribute)
                 {
                 case DecimalAttribute decimalAttribute:
-                    writer.WriteValue(decimalAttribute.Value!.Value.ToString(CultureInfo.InvariantCulture));
+                    this.Writer.WriteValue(decimalAttribute.Value!.Value.ToString(CultureInfo.InvariantCulture));
                     break;
                 case IntAttribute intAttribute:
-                    writer.WriteValue(intAttribute.Value!.Value.ToString(CultureInfo.InvariantCulture));
+                    this.Writer.WriteValue(intAttribute.Value!.Value.ToString(CultureInfo.InvariantCulture));
                     break;
                 case StringAttribute stringAttribute:
-                    writer.WriteValue(stringAttribute.Value!);
+                    this.Writer.WriteValue(stringAttribute.Value!);
                     break;
                 case GuidAttribute guidAttribute:
-                    writer.WriteValue(guidAttribute.Value!.Value.ToString("D"));
+                    this.Writer.WriteValue(guidAttribute.Value!.Value.ToString("D"));
                     break;
                 case DateAttribute dateAttribute:
-                    writer.WriteValue(dateAttribute.Value!.Value.ToString("yyyy-MM-dd"));
+                    this.Writer.WriteValue(dateAttribute.Value!.Value.ToString("yyyy-MM-dd"));
                     break;
                 case DateTimeAttribute dateTimeAttribute:
-                    writer.WriteValue(dateTimeAttribute.Value!.Value.ToString("yyyy-MM-dd HH:mm:ss"));
+                    this.Writer.WriteValue(dateTimeAttribute.Value!.Value.ToString("yyyy-MM-dd HH:mm:ss"));
                     break;
                 case BoolAttribute boolAttribute:
-                    writer.WriteValue(boolAttribute.Value.ToString().ToLowerInvariant());
+                    this.Writer.WriteValue(boolAttribute.Value.ToString().ToLowerInvariant());
                     break;
                 default:
                     throw new InvalidOperationException();
                 }
             }
 
-        private static void RenderChildren(OperationWithAttributesBase operation, XmlWriter writer)
+        private void RenderChildren(OperationWithAttributesBase operation)
             {
             if (!operation.Children.Any())
                 return;
 
-            writer.WriteStartElement("Children");
+            this.Writer.WriteStartElement("Children");
             foreach (DataObject a in operation.Children)
                 {
                 // ReSharper disable once PossibleNullReferenceException
-                Render(a, writer);
+                Render(a);
                 }
-            writer.WriteEndElement();
+            this.Writer.WriteEndElement();
             }
 
-        internal static void Render(DataObject dataObject, XmlWriter writer)
+        internal void Render(DataObject dataObject)
             {
-            writer.WriteStartElement(dataObject.ObjectName);
+            this.Writer.WriteStartElement(dataObject.ObjectName);
             foreach (OperationBase o in dataObject.Operations)
                 {
                 // ReSharper disable once PossibleNullReferenceException
-                RenderOperation(o, writer, dataObject.ObjectName);
+                RenderOperation(o, dataObject.ObjectName);
                 }
-            writer.WriteEndElement();
+            this.Writer.WriteEndElement();
             }
 
-        private static void RenderKey(IdentifyBase key, XmlWriter writer)
+        private void RenderKey(IdentifyBase key)
             {
             switch (key)
                 {
                 case IdentifyByPrimaryKey identifyByPrimaryKey:
-                    RenderKey(identifyByPrimaryKey, writer);
+                    RenderKey(identifyByPrimaryKey);
                     break;
                 case IdentifyByAlias identifyByAlias:
-                    RenderKey(identifyByAlias, writer);
+                    RenderKey(identifyByAlias);
                     break;
                 case IdentifyByPosition identifyByPosition:
-                    RenderKey(identifyByPosition, writer);
+                    RenderKey(identifyByPosition);
                     break;
                 case IdentifyByValue identifyByValue:
-                    RenderKey(identifyByValue, writer);
+                    RenderKey(identifyByValue);
                     break;
                 default:
                     throw new InvalidOperationException();
                 }
             }
 
-        internal static void RenderKey(IdentifyByPrimaryKey key, XmlWriter writer)
+        internal void RenderKey(IdentifyByPrimaryKey key)
             {
             if (!key.KeyValue.HasValue)
                 throw new InvalidOperationException("Primary Key value not set.");
             // ReSharper disable once AssignNullToNotNullAttribute
-            writer.WriteAttributeString("KeyValue", key.KeyValue.ToString());
+            this.Writer.WriteAttributeString("KeyValue", key.KeyValue.ToString());
             }
 
-        internal static void RenderKey(IdentifyByAlias key, XmlWriter writer)
+        internal void RenderKey(IdentifyByAlias key)
             {
             if (!key.KeyValue.HasValue)
                 throw new InvalidOperationException("Alias value not set.");
             // ReSharper disable once AssignNullToNotNullAttribute
-            writer.WriteAttributeString("KeyValue", key.KeyValue.ToString());
-            writer.WriteAttributeString("AliasField", key.AliasField);
+            this.Writer.WriteAttributeString("KeyValue", key.KeyValue.ToString());
+            this.Writer.WriteAttributeString("AliasField", key.AliasField);
             }
 
-        internal static void RenderKey(IdentifyByPosition key, XmlWriter writer)
+        internal void RenderKey(IdentifyByPosition key)
             {
-            writer.WriteAttributeString("Position", key.Position.ToString(CultureInfo.InvariantCulture));
+            this.Writer.WriteAttributeString("Position", key.Position.ToString(CultureInfo.InvariantCulture));
             }
 
-        internal static void RenderKey(IdentifyByValue key, XmlWriter writer)
+        internal void RenderKey(IdentifyByValue key)
             {
             if (!key.KeyValue.HasValue)
                 throw new InvalidOperationException("Value for key not set.");
             // ReSharper disable once AssignNullToNotNullAttribute
-            writer.WriteAttributeString("KeyValue", key.KeyValue.ToString());
-            writer.WriteAttributeString("KeyField", key.KeyField);
+            this.Writer.WriteAttributeString("KeyValue", key.KeyValue.ToString());
+            this.Writer.WriteAttributeString("KeyField", key.KeyField);
             }
         }
     }
