@@ -91,6 +91,11 @@ namespace FacadeFor3e
             }
 
         /// <summary>
+        /// Returns the value Element from a Select request
+        /// </summary>
+        public JsonElement Value => this.ResponseJSonDocument.RootElement.GetProperty("value");
+
+        /// <summary>
         /// Returns any error messages returned from the OData service
         /// </summary>
         /// <remarks>Returns no items if <see cref="IsError"/> returns false</remarks>

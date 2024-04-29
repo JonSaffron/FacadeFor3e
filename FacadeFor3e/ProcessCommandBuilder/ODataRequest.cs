@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
 
 namespace FacadeFor3e.ProcessCommandBuilder
@@ -17,7 +18,7 @@ namespace FacadeFor3e.ProcessCommandBuilder
         /// <summary>
         /// The URL to use
         /// </summary>
-        public readonly string EndPoint;
+        public readonly Uri EndPoint;
 
         /// <summary>
         /// The command to send
@@ -28,13 +29,17 @@ namespace FacadeFor3e.ProcessCommandBuilder
         /// Constructs a new OData request object
         /// </summary>
         /// <param name="verb">The HTML verb to use</param>
-        /// <param name="endPoint">The URL to use</param>
+        /// <param name="relativeEndPoint">The URL to use, relative to the OData base endpoint</param>
         /// <param name="json">The command to send</param>
-        internal ODataRequest(HttpMethod verb, string endPoint, byte[] json)
+        public ODataRequest(HttpMethod verb, Uri relativeEndPoint, byte[] json)
             {
-            this.Verb = verb;
-            this.EndPoint = endPoint;
-            this.Json = json;
+            this.Verb = verb ?? throw new ArgumentNullException(nameof(verb));
+            if (relativeEndPoint == null)
+                throw new ArgumentNullException(nameof(relativeEndPoint));
+            if (relativeEndPoint.IsAbsoluteUri)
+                throw new ArgumentOutOfRangeException(nameof(relativeEndPoint), "Specify a relative uri");
+            this.EndPoint = relativeEndPoint; 
+            this.Json = json ?? throw new ArgumentNullException(nameof(json));
             }
         }
     }

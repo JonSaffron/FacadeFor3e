@@ -1,8 +1,21 @@
-﻿4.0.0-rc1
+﻿4.0.0-rc4
+---------
+Update to support new syntax for specifying attribute values by alias
+Add ODataServices.Execute overload to alllow a process to be called without a ProcessCommand
+
+4.0.0-rc3
+---------
+Add Value property to ODataServiceResult to make it easier to consume results from Select requests
+
+4.0.0-rc2
+---------
+Improve code analysis for consumers of the library
+
+4.0.0-rc1
 ---------
 Introduces an interface for the 3E OData service
 Changes to the ExecuteProcessService for thread safety
-Internals changes and updates
+Internal changes and updates
 
 3.0.2
 -----

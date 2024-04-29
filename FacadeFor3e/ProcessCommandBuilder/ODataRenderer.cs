@@ -15,6 +15,7 @@ namespace FacadeFor3e.ProcessCommandBuilder
     public class ODataRenderer
         {
         private Utf8JsonWriter _writer = null!;
+        private ODataExecuteOptions _options = null!;
         
         /// <summary>
         /// Generate the JSON instruction to pass to the OData service
@@ -33,9 +34,10 @@ namespace FacadeFor3e.ProcessCommandBuilder
                 {
                 throw new InvalidOperationException("The 3E OData interface expects one and only one operation.");
                 }
+            this._options = options;
             HttpMethod verb = GetVerbForOperation(operation);
-            string endPoint = GetEndPointForOperation(operation, processCommand.ObjectName);
-            var jsonDocument = GetJson(processCommand, options);
+            Uri endPoint = GetEndPointForOperation(operation, processCommand.ObjectName);
+            var jsonDocument = GetJson(processCommand);
             return new ODataRequest(verb, endPoint, jsonDocument);
             }
 
@@ -52,14 +54,14 @@ namespace FacadeFor3e.ProcessCommandBuilder
                 }
             }
 
-        private static string GetEndPointForOperation(OperationBase operation, string superClass)
+        private static Uri GetEndPointForOperation(OperationBase operation, string superClass)
             {
             string entity = operation.SubClass ?? superClass;
             IdentifyBase key;
             switch (operation)
                 {
                 case AddOperation _:
-                    return entity;
+                    return new Uri(entity, UriKind.Relative);
 
                 case EditOperation edit: 
                     key = edit.KeySpecification;
@@ -71,15 +73,16 @@ namespace FacadeFor3e.ProcessCommandBuilder
 
                 default: throw new InvalidOperationException();
                 }
-            IdentifyByPrimaryKey? primaryKey = key as IdentifyByPrimaryKey;
-            if (primaryKey == null)
+
+            if (!(key is IdentifyByPrimaryKey primaryKey))
                 {
                 throw new InvalidOperationException("Don't know how to specify something other than the primary key");
                 }
-            return $"{entity}({primaryKey.KeyValue.Value})";
+            var result = new Uri($"{entity}({primaryKey.KeyValue.Value})", UriKind.Relative);
+            return result;
             }
 
-        private byte[] GetJson(ProcessCommand processCommand, ODataExecuteOptions options)
+        private byte[] GetJson(ProcessCommand processCommand)
             {
             var i = new JsonWriterOptions { Indented = true, SkipValidation = false };
             using var stream = new MemoryStream();
@@ -90,7 +93,7 @@ namespace FacadeFor3e.ProcessCommandBuilder
                 var operation = processCommand.Operations.Single();
                 var entity = operation.SubClass ?? processCommand.ObjectName;
                 this._writer.WriteString("@odata.type", $"E3E.OData.AllTypes.{entity}");
-                WriteProcessOptions(options);
+                WriteProcessOptions();
                 WriteProcessCommand(processCommand);
 
                 if (operation is OperationWithAttributesBase operationWithAttributes)
@@ -105,8 +108,10 @@ namespace FacadeFor3e.ProcessCommandBuilder
             return stream.ToArray();
             }
 
-        private void WriteProcessOptions(ODataExecuteOptions options)
+        private void WriteProcessOptions()
             {
+            ODataExecuteOptions options = this._options;
+
             this._writer.WriteBoolean("_release_process", options.ReleaseProcess);
             
             this._writer.WriteBoolean("_cleanup_process_on_failure", options.CleanupProcessOnFailure);
@@ -238,16 +243,28 @@ namespace FacadeFor3e.ProcessCommandBuilder
 
         private void WriteAttribute(NamedAttributeValue attribute)
             {
-            // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
             if (attribute is AliasAttribute)
                 {
-                this._writer.WritePropertyName($"{attribute.Name}_Alias");
+                if (this._options.AliasAttributesSupportBeingNamed)
+                    {
+                    this._writer.WriteStartObject($"{attribute.Name}_Alias");
+                    this._writer.WriteString("@odata.type", "E3E.OData.AllTypes.AttributeAlias");
+                    this._writer.WriteString("Attribute", attribute.Name);
+                    this._writer.WritePropertyName("Value");
+                    WriteAttributeValue(attribute.Attribute);
+                    this._writer.WriteEndObject();
+                    }
+                else
+                    {
+                    this._writer.WritePropertyName($"{attribute.Name}_Alias");
+                    WriteAttributeValue(attribute.Attribute);
+                    }
                 }
             else
                 {
                 this._writer.WritePropertyName(attribute.Name);
+                WriteAttributeValue(attribute.Attribute);
                 }
-            WriteAttributeValue(attribute.Attribute);
             }
 
         private void WriteAttributeValue(IAttribute attribute)

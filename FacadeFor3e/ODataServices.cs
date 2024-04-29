@@ -49,6 +49,8 @@ namespace FacadeFor3e
 
         private readonly Func<string> _authenticationMethod;
 
+        private static readonly MediaTypeHeaderValue JsonMediaType = MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+
         /// <summary>
         /// Constructs a new ODataServices object without impersonation or user credentials
         /// </summary>
@@ -110,16 +112,7 @@ namespace FacadeFor3e
             using var httpClient = new HttpClient();
             var content = new FormUrlEncodedContent(credentials);
             LogForDebug($"Acquiring token to access OData service from {tokenEndpoint}");
-            var postRequestTask = httpClient.PostAsync(tokenEndpoint, content);
-#if !NET6_0_OR_GREATER
-            if (postRequestTask == null)
-                throw new InvalidOperationException("This test exists to quieten a warning in Resharper.");
-#endif
-            var response = postRequestTask.Result;
-#if !NET6_0_OR_GREATER
-            if (response == null)
-                throw new InvalidOperationException("This test exists to quieten a warning in Resharper");
-#endif
+            var response = httpClient.PostAsync(tokenEndpoint, content).Result;
             LogForDebug($"{(response.IsSuccessStatusCode ? "Success" : "Failed")} {response.StatusCode:D}");
 
             var serviceResult = new ODataServiceResult(new HttpRequestMessage(), response);
@@ -143,7 +136,7 @@ namespace FacadeFor3e
         /// </summary>
         /// <param name="relativeUri">A <see cref="FormattableString"/> that defines the request</param>
         /// <returns>A <see cref="ODataServiceResult"/> that contains the response</returns>
-        /// <exception cref="ArgumentNullException">If the </exception>
+        /// <exception cref="ArgumentNullException">If the Uri specified is null</exception>
         /// <remarks>The string supplied will be formatted using the InvariantCulture before being turned into a Relative URI</remarks>
         [Pure]
         public ODataServiceResult Select(FormattableString relativeUri)
@@ -171,16 +164,7 @@ namespace FacadeFor3e
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, relativeUri);
             LogDetailsOfTheJob(request);
 
-            var getRequestTask = this._httpClient.SendAsync(request);
-#if !NET6_0_OR_GREATER
-            if (getRequestTask == null)
-                throw new InvalidOperationException("This test exists to quieten a warning in Resharper.");
-#endif
-            var response = getRequestTask.Result;
-#if !NET6_0_OR_GREATER
-            if (response == null)
-                throw new InvalidOperationException("This test exists to quieten a warning in Resharper");
-#endif
+            var response = this._httpClient.SendAsync(request).Result;
             LogForDebug($"{(response.IsSuccessStatusCode ? "Success" : "Failed")} {response.StatusCode:D}");
 
             var result = new ODataServiceResult(request, response);
@@ -202,62 +186,22 @@ namespace FacadeFor3e
             return result;
             }
 
-        static ODataServices()
-            {
-            var jsonMediaType = MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
-#if !NET6_0_OR_GREATER
-            // ReSharper disable once JoinNullCheckWithUsage
-            if (jsonMediaType == null)
-                throw new InvalidOperationException("This test exists to quieten a warning in Resharper");
-#endif
-            JsonMediaType = jsonMediaType;
-            }
-
-        private static readonly MediaTypeHeaderValue JsonMediaType;
-
         /// <summary>
         /// Makes a request to the OData service to run a process to edit data
         /// </summary>
         /// <param name="command">Specifies a command to execute</param>
         /// <param name="options">Specifies any options required to execute the command</param>
         /// <returns>A <see cref="ODataServiceResult"/> that contains the response</returns>
-        /// <exception cref="ExecuteProcessException"></exception>
+        /// <exception cref="ArgumentNullException">If the parameters specified have null values</exception>
+        /// <exception cref="ExecuteProcessException">If an invalid response is returned, or an error message is returned from 3E and <see cref="ODataExecuteOptions.ThrowExceptionIfProcessFails"/> is set</exception>
         public ODataServiceResult Execute(ProcessCommand command, ODataExecuteOptions options)
             {
+            if (command == null) throw new ArgumentNullException(nameof(command));
+            if (options == null) throw new ArgumentNullException(nameof(options));
+
             var renderer = new ODataRenderer();
-            var requestParameters = renderer.Render(command, options);
-            var request = new HttpRequestMessage(requestParameters.Verb, requestParameters.EndPoint)
-                {
-                Content = new ByteArrayContent(requestParameters.Json)
-                };
-            var headers = request.Content.Headers;
-#if !NET6_0_OR_GREATER
-            if (headers == null)
-                throw new InvalidOperationException("This test exists to quieten a warning in Resharper");
-#endif
-            headers.ContentType = JsonMediaType;
-            LogDetailsOfTheJob(request);
-            LogForDebug(Encoding.UTF8.GetString(requestParameters.Json));
-
-            var requestTask = this._httpClient.SendAsync(request);
-#if !NET6_0_OR_GREATER
-            if (requestTask == null)
-                throw new InvalidOperationException("This test exists to quieten a warning in Resharper");
-#endif
-            var response = requestTask.Result;
-#if !NET6_0_OR_GREATER
-            if (response == null)
-                throw new InvalidOperationException("This test exists to quieten a warning in Resharper");
-#endif
-            LogForDebug($"{(response.IsSuccessStatusCode ? "Success" : "Failed")} {response.StatusCode:D}");
-
-            var result = new ODataServiceResult(request, response);
-            LogForDebug(result.ResponseString);
-
-            if (!result.IsResponseJSon)
-                {
-                throw new ExecuteProcessException("Received an invalid response during authentication.");
-                }
+            var requestDetails = renderer.Render(command, options);
+            var result = Execute(requestDetails);
 
             if (result.IsError && options.ThrowExceptionIfProcessFails)
                 {
@@ -265,6 +209,38 @@ namespace FacadeFor3e
                 errorMessages.AddRange(result.ErrorMessages);
                 var msg = string.Join("\r\n", errorMessages);
                 throw new ExecuteProcessException(msg, result);
+                }
+
+            return result;
+            }
+
+        /// <summary>
+        /// Makes a request to the OData service to run a process to edit data
+        /// </summary>
+        /// <param name="requestDetails">Specifies a request to execute</param>
+        /// <returns>A <see cref="ODataServiceResult"/> that contains the response</returns>
+        /// <exception cref="ArgumentNullException">If the parameters specified have null values</exception>
+        /// <exception cref="ExecuteProcessException">If an invalid response is returned</exception>
+        public ODataServiceResult Execute(ODataRequest requestDetails)
+            {
+            if (requestDetails == null) throw new ArgumentNullException(nameof(requestDetails));
+            var request = new HttpRequestMessage(requestDetails.Verb, requestDetails.EndPoint)
+                {
+                Content = new ByteArrayContent(requestDetails.Json)
+                };
+            request.Content.Headers.ContentType = JsonMediaType;
+            LogDetailsOfTheJob(request);
+            LogForDebug(Encoding.UTF8.GetString(requestDetails.Json));
+
+            var response = this._httpClient.SendAsync(request).Result;
+            LogForDebug($"{(response.IsSuccessStatusCode ? "Success" : "Failed")} {response.StatusCode:D}");
+
+            var result = new ODataServiceResult(request, response);
+            LogForDebug(result.ResponseString);
+
+            if (!result.IsResponseJSon)
+                {
+                throw new ExecuteProcessException("Received an invalid response from running a process.");
                 }
 
             return result;

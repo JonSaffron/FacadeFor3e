@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using JetBrains.Annotations;
 
@@ -37,7 +38,7 @@ namespace FacadeFor3e.ProcessCommandBuilder
         /// <param name="name">The name of the attribute to retrieve</param>
         /// <param name="namedAttribute">When the method returns, contains the attribute with the specified name if the name is found, otherwise null.</param>
         /// <returns>True if the attribute specified was found, otherwise false.</returns>
-        public bool TryGetValue(string name, out NamedAttributeValue? namedAttribute)
+        public bool TryGetValue(string name, [NotNullWhen(true)] out NamedAttributeValue? namedAttribute)
             {
             if (name == null)
                 throw new ArgumentNullException(nameof(name));
