@@ -1,14 +1,14 @@
-﻿4.0.0-rc4
+﻿4.0.0-rc3
 ---------
-Update to support new syntax for specifying attribute values by alias
-Add ODataServices.Execute overload to alllow a process to be called without a ProcessCommand
-
-4.0.0-rc3
----------
-Add Value property to ODataServiceResult to make it easier to consume results from Select requests
+Change the ODataServiceResult.ErrorMesssages property to make it less brittle and enable it to cope with errors caused by rate limiting
+Updated the json deserialiser to be case-insensitive and to cache the options object
+Removed some over zealous checks that the response from the OData service was in JSON format - for 404 errors it won't be
 
 4.0.0-rc2
 ---------
+Update to support new syntax for specifying attribute values by alias
+Add ODataServices.Execute overload to alllow a process to be called without a ProcessCommand
+Add Value property to ODataServiceResult to make it easier to consume results from Select requests
 Improve code analysis for consumers of the library
 
 4.0.0-rc1

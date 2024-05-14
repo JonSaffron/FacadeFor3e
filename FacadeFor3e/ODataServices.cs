@@ -170,11 +170,6 @@ namespace FacadeFor3e
             var result = new ODataServiceResult(request, response);
             LogForDebug(result.ResponseString);
 
-            if (!result.IsResponseJSon)
-                {
-                throw new ExecuteProcessException("Received an invalid response during authentication.");
-                }
-
             if (result.IsError)
                 {
                 var errorMessages = new List<string> { "An error occurred whilst trying to query 3E data through OData:" };
@@ -220,7 +215,6 @@ namespace FacadeFor3e
         /// <param name="requestDetails">Specifies a request to execute</param>
         /// <returns>A <see cref="ODataServiceResult"/> that contains the response</returns>
         /// <exception cref="ArgumentNullException">If the parameters specified have null values</exception>
-        /// <exception cref="ExecuteProcessException">If an invalid response is returned</exception>
         public ODataServiceResult Execute(ODataRequest requestDetails)
             {
             if (requestDetails == null) throw new ArgumentNullException(nameof(requestDetails));
@@ -237,11 +231,6 @@ namespace FacadeFor3e
 
             var result = new ODataServiceResult(request, response);
             LogForDebug(result.ResponseString);
-
-            if (!result.IsResponseJSon)
-                {
-                throw new ExecuteProcessException("Received an invalid response from running a process.");
-                }
 
             return result;
             }
@@ -299,7 +288,6 @@ namespace FacadeFor3e
             sb.AppendFormat("\t{0} {1}", method, new Uri(this._httpClient.BaseAddress!, request.RequestUri!));
             sb.AppendLine();
             sb.AppendFormat("\tauthentication: {0}", authenticationMethod);
-            sb.AppendLine();
             Logger.Info(sb.ToString());
             }
 

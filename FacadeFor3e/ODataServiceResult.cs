@@ -107,15 +107,35 @@ namespace FacadeFor3e
                     return Array.Empty<string>();
 
                 if (!this.IsResponseJSon)
-                    return new[] { this.ResponseString };
-
-                var errors = this.ResponseJSonDocument.RootElement.GetProperty("error").GetProperty("message").GetString();
-                if (errors == null || string.IsNullOrWhiteSpace(errors))
                     {
-                    return new[] { $"Unknown error - HTTP status code {this.Response.StatusCode}" };
+                    return new[] { $"HTTP status code {this.Response.StatusCode:D}" };
                     }
 
-                var result = errors.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+                var result = new List<string>();
+                var root = this.ResponseJSonDocument.RootElement;
+                if (root.TryGetProperty("message", out var messageElement))
+                    {
+                    var message = messageElement.GetString();
+                    if (message != null && !string.IsNullOrWhiteSpace(message))
+                        {
+                        result.Add(message);
+                        }
+                    }
+
+                if (root.TryGetProperty("error", out var errorElement) && errorElement.TryGetProperty("message", out messageElement))
+                    {
+                    var errors = messageElement.GetString();
+                    if (errors != null && !string.IsNullOrWhiteSpace(errors))
+                        {
+                        result.AddRange(errors.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries));
+                        }
+                    }
+
+                if (result.Count == 0)
+                    {
+                    result.Add($"Unknown error - HTTP status code {this.Response.StatusCode:D}");
+                    }
+
                 return result;
                 }
             }

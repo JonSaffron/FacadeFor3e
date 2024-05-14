@@ -1,0 +1,23 @@
+﻿{
+    "@odata.context":"https://rdfin91tewa01.elite.global/TE_3E_DEV_EU_REPORT/odata/$metadata#Proforma_ndt/$entity",
+    "ProfMasterID":"54421a94-322c-470f-8224-2bda20a2264c",
+    "ProfIndex":225360,
+    "NxAttachments":[],
+    "ProfMatters":[],
+    "TRNValidationResultss":[],
+    "ProfDetailTimes":[],
+    "ProfDetailChrgs":[],
+    "ProfDetailCosts":[],
+    "ProfAdjusts":[],
+    "ProfPayors":[],
+    "ProfTrusts":[],
+    "ProfUnallocateds":[],
+    "ProfBOAs":[],
+    "ProfTemplateOptions":[],
+    "ProfPresParagraphs":[],
+    "ProfMasterDates":[],
+    "ProfTaxArticles":[],
+    "ProfPayorLayers":[],
+    "ProformaContacts_cccs":[],
+    "ProfUDF_cccs":[]
+}

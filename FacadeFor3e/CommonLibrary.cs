@@ -18,6 +18,11 @@ namespace FacadeFor3e
     public static class CommonLibrary
         {
         /// <summary>
+        /// Returns the default <see cref="JsonSerializerOptions"/> object used to deserialise the JSON returned by 3E into an object
+        /// </summary>
+        public static readonly JsonSerializerOptions DefaultJSonSerializerOptions = BuildDefaultJSonSerializerOptions();
+
+        /// <summary>
         /// Outputs an XML document as a formatted string for easy reading
         /// </summary>
         /// <param name="xmlDoc">Specifies the XML document to process</param>
@@ -68,14 +73,10 @@ namespace FacadeFor3e
         /// <param name="element">Specifies the JSON to convert</param>
         /// <returns>An object of the specified type</returns>
         /// <exception cref="InvalidOperationException">If it was not possible to deserialise the JSON</exception>
+        [Pure]
         public static T JsonDeserialise<T>(this JsonElement element)
             {
-            var options = new JsonSerializerOptions { IncludeFields = true };
-#if NET6_0_OR_GREATER
-            options.Converters.Add(new DateOnlyJsonConverter());
-#endif
-            options.Converters.Add(new DateTimeJsonConverter());
-            var result = element.Deserialize<T>(options);
+            var result = element.Deserialize<T>(DefaultJSonSerializerOptions);
             if (result == null)
                 throw new InvalidOperationException("Failed to deserialise json.");
             return result;
@@ -88,12 +89,24 @@ namespace FacadeFor3e
         /// <param name="arrayElement">Specifies the JSON to convert</param>
         /// <returns>A list of objects of the specified type</returns>
         /// <exception cref="InvalidOperationException">If it was not possible to deserialise the JSON</exception>
+        [Pure]
         public static List<T> JsonDeserialiseList<T>(this JsonElement arrayElement)
             {
             if (arrayElement.ValueKind != JsonValueKind.Array)
                 throw new ArgumentOutOfRangeException(nameof(arrayElement), "Element is not an array");
             var result = arrayElement.EnumerateArray().Select(item => item.JsonDeserialise<T>()).ToList();
             return result;
+            }
+
+        private static JsonSerializerOptions BuildDefaultJSonSerializerOptions()
+            {
+            var options = new JsonSerializerOptions { IncludeFields = true, PropertyNameCaseInsensitive = true, };
+#if NET6_0_OR_GREATER
+            options.Converters.Add(new DateOnlyJsonConverter());
+#endif
+            options.Converters.Add(new DateTimeJsonConverter());
+            options.MakeReadOnly(populateMissingResolver:true);
+            return options;
             }
 
 #if NET6_0_OR_GREATER

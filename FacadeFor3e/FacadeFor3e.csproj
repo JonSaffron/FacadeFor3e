@@ -5,7 +5,7 @@
     <PackageId>FacadeFor3E</PackageId>
     <Authors>J Saffron Consulting</Authors>
     <Product>FacadeFor3E</Product>
-    <Version>4.0.0-rc2</Version>
+    <Version>4.0.0-rc3</Version>
     <Description>A library that makes integrating with Elite 3E a little easier</Description>
     <Copyright>Copyright © J Saffron Consulting Ltd 2014 - 2024</Copyright>
     <RepositoryUrl>https://github.com/JonSaffron/FacadeFor3e</RepositoryUrl>
@@ -19,7 +19,7 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>A library to help you build apps that use Elite 3E</Title>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageTags>Elite;3E;TransactionService</PackageTags>
+    <PackageTags>Elite;3E;TransactionService;OData</PackageTags>
     <AssemblyVersion>$(VersionPrefix)</AssemblyVersion>
     <FileVersion>$(VersionPrefix)</FileVersion>
     <RepositoryType>git</RepositoryType>
@@ -31,7 +31,7 @@
         <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="NLog" Version="[5.0,6.0)" />
-    <PackageReference Include="System.Text.Json" Version="8.0.2" />
+    <PackageReference Include="System.Text.Json" Version="[8.0,9.0)" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net6.0-windows'">
@@ -41,7 +41,7 @@
 
   <ItemGroup Condition="'$(TargetFramework)' != 'net6.0-windows'">
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
-	<PackageReference Include="System.ServiceModel.Http" Version="4.10.3" />
+    <PackageReference Include="System.ServiceModel.Http" Version="4.10.3" />
     <PackageReference Include="System.ServiceModel.Security" Version="4.10.3" />
   </ItemGroup>
 

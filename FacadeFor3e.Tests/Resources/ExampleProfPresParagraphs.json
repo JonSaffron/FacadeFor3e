@@ -1,5 +1,5 @@
 ﻿{
-  "@odata.context": "https://rdfin91tewa01.dentons.global/TE_3E_DEV_EU_REPORT/odata/$metadata#Proforma_ndt(ProfPresParagraphs)",
+  "@odata.context": "https://rdfin91tewa01.elite.global/TE_3E_DEV_EU_REPORT/odata/$metadata#Proforma_ndt(ProfPresParagraphs)",
   "value": [
     {
       "ProfPresParagraphs": [
@@ -14,7 +14,7 @@
           "Currency": "EUR",
           "PresAmount": 1464.77,
           "PresHours": 2.5,
-          "Narrative": "505533b2-2df1-4ffa-bf16-31c3351c408e",
+          "Narrative": "ProfPresentationParagraph test",
           "SortString": "sorted",
           "ProfMaster": 225370
         },

@@ -131,3 +131,20 @@ Predicate				String					 No						 No
 String											Yes						Yes
 Text					String					 No						 No
 URL						String					Yes						Yes
+
+----
+
+Dependencies:
+
+System.Net.Http
+Contains basics like HttpRequestMessage and HttpResponseMessage
+Appears to be stuck on version 4.3.4 since 2018
+
+System.ServiceModel.Http
+Contains BasicHttpBinding for WCF
+Last version for .net framework and .net standard is 4.10.3
+Last version for .net 6 is 6.2.0
+
+System.ServiceModel.Security
+Contains WindowsClientCredential to set WCF impersonation level
+Last version for .net framework and .net standard is 4.10.3
