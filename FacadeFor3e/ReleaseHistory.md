@@ -1,4 +1,8 @@
-﻿4.0.0-rc3
+﻿4.0.0
+-----
+Added AddOrReplace to AttributeCollection to serve a particular use case
+
+4.0.0-rc3
 ---------
 Change the ODataServiceResult.ErrorMesssages property to make it less brittle and enable it to cope with errors caused by rate limiting
 Updated the json deserialiser to be case-insensitive and to cache the options object

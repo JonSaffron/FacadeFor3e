@@ -24,7 +24,6 @@ namespace FacadeFor3e.ProcessCommandBuilder
                 {
                 if (name == null)
                     throw new ArgumentNullException(nameof(name));
-                // ReSharper disable once PossibleNullReferenceException
                 var result = this.SingleOrDefault(a => a.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
                 if (result == null)
                     throw new KeyNotFoundException("An attribute could not be found with the specified name.");
@@ -42,9 +41,31 @@ namespace FacadeFor3e.ProcessCommandBuilder
             {
             if (name == null)
                 throw new ArgumentNullException(nameof(name));
-            // ReSharper disable once PossibleNullReferenceException
             namedAttribute = this.SingleOrDefault(a => a.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
             return namedAttribute != null;
+            }
+
+        /// <summary>
+        /// Adds the specified attribute to the collection, or replaces it if an attribute with the same name is already present
+        /// </summary>
+        /// <param name="namedAttribute">The attribute to add or to replace</param>
+        /// <exception cref="ArgumentNullException">If <see cref="namedAttribute"/> is null</exception>
+        public void AddOrReplace(NamedAttributeValue namedAttribute)
+            {
+            if (namedAttribute == null) throw new ArgumentNullException(nameof(namedAttribute));
+            for (int i = 0; i < this.Count; i++)
+                {
+                var a = this[i];
+
+                if (a.Name.Equals(namedAttribute.Name, StringComparison.OrdinalIgnoreCase))
+                    {
+                    // ReSharper disable once RedundantBaseQualifier
+                    this.SetItem(i, namedAttribute);
+                    return;
+                    }
+                }
+
+            base.Add(namedAttribute);
             }
 
         /// <inheritdoc />
@@ -53,7 +74,6 @@ namespace FacadeFor3e.ProcessCommandBuilder
             {
             if (item == null)
                 throw new ArgumentNullException(nameof(item));
-            // ReSharper disable once PossibleNullReferenceException
             if (this.Any(a => a.Name.Equals(item.Name, StringComparison.OrdinalIgnoreCase)))
                 throw new ArgumentOutOfRangeException($"An attribute with the name {item.Name} has already been added.");
             base.InsertItem(index, item);
@@ -71,8 +91,6 @@ namespace FacadeFor3e.ProcessCommandBuilder
                     continue;
 
                 var a = this[i];
-                if (a == null)
-                    throw new InvalidOperationException();
                 if (a.Name.Equals(item.Name, StringComparison.OrdinalIgnoreCase))
                     throw new ArgumentOutOfRangeException($"An attribute with the name {item.Name} already exists.");
                 }
@@ -94,8 +112,6 @@ namespace FacadeFor3e.ProcessCommandBuilder
                 {
                 var a = this[i];
 
-                if (a == null)
-                    throw new InvalidOperationException();
                 if (a.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
                     {
                     // ReSharper disable once RedundantBaseQualifier

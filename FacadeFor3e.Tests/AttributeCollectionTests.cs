@@ -165,6 +165,30 @@ namespace FacadeFor3e.Tests
             }
 
         [Test]
+        public void TestSetOrReplace()
+            {
+            var coll = new AttributeCollection
+                {
+                new NamedAttributeValue("boolean", new BoolAttribute(true)),
+                new NamedAttributeValue("integer", new IntAttribute(25)),
+                new NamedAttributeValue("guid", new GuidAttribute(Guid.NewGuid()))
+                };
+
+            var g = new NamedAttributeValue("guid", new BoolAttribute(true));
+            var i = new NamedAttributeValue("integer", new IntAttribute(25));
+            var t = new NamedAttributeValue("date", new DateTimeAttribute(DateTime.Now));
+
+            coll.AddOrReplace(g);
+            coll.AddOrReplace(i);
+            coll.AddOrReplace(t);
+
+            ClassicAssert.AreEqual(4, coll.Count);
+            ClassicAssert.AreEqual(g, coll["guid"]);
+            ClassicAssert.AreEqual(i, coll["integer"]);
+            ClassicAssert.AreEqual(t, coll["date"]);
+            }
+
+        [Test]
         public void GetErrors()
             {
             var b = new NamedAttributeValue("boolean", new BoolAttribute(true));
