@@ -43,15 +43,13 @@ namespace FacadeFor3e.ProcessCommandBuilder
 
         private static HttpMethod GetVerbForOperation(OperationBase operation)
             {
-            switch (operation)
+            return operation switch
                 {
-                // ReSharper disable once AssignNullToNotNullAttribute
-                case AddOperation _: return HttpMethod.Post;
-                case EditOperation _: return new HttpMethod("PATCH");
-                // ReSharper disable once AssignNullToNotNullAttribute
-                case DeleteOperation _: return HttpMethod.Delete;
-                default: throw new InvalidOperationException();
-                }
+                AddOperation _ => HttpMethod.Post,
+                EditOperation _ => new HttpMethod("PATCH"),
+                DeleteOperation _ => HttpMethod.Delete,
+                _ => throw new InvalidOperationException()
+                };
             }
 
         private static Uri GetEndPointForOperation(OperationBase operation, string superClass)
@@ -191,13 +189,13 @@ namespace FacadeFor3e.ProcessCommandBuilder
 
         private static string GetPatchType(OperationBase op)
             {
-            switch (op)
+            return op switch
                 {
-                case AddOperation _: return "Add";
-                case EditOperation _: return "Update";
-                case DeleteOperation _: return "Delete";
-                default: throw new InvalidOperationException();
-                }
+                AddOperation _ => "Add",
+                EditOperation _ => "Update",
+                DeleteOperation _ => "Delete",
+                _ => throw new InvalidOperationException()
+                };
             }
 
         private static Dictionary<string, List<OperationBase>> BuildChildOps(IEnumerable<DataObject> childObjects)

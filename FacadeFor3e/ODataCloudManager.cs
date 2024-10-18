@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 
 #pragma warning disable OData
 
@@ -10,6 +11,7 @@ namespace FacadeFor3e
     /// </summary>
     /// <remarks>This object will perform the initial authentication required to connect to the OData
     /// instance, and will re-authenticate when the authentication token has expired or is close to expiring</remarks>
+    [PublicAPI]
     public class ODataCloudManager
         {
         private readonly Uri _baseEndpoint;

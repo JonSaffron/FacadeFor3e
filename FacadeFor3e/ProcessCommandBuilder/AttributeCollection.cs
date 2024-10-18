@@ -65,6 +65,7 @@ namespace FacadeFor3e.ProcessCommandBuilder
                     }
                 }
 
+            // ReSharper disable once RedundantBaseQualifier
             base.Add(namedAttribute);
             }
 

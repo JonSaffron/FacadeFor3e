@@ -48,6 +48,31 @@ namespace FacadeFor3e
         public XmlDocument Response { get; }
 
         /// <summary>
+        /// Gets the ID of the process that was executed
+        /// </summary>
+        public string ProcessCode
+            {
+            get
+                {
+                var result = this.Response.DocumentElement!.GetAttribute("Process");
+                return result;
+                }
+            }
+
+        /// <summary>
+        /// Gets the name of the process that was executed
+        /// </summary>
+        /// <remarks>The process name can be changed programatically during execution</remarks>
+        public string ProcessName
+            {
+            get
+                {
+                var result = this.Response.DocumentElement!.GetAttribute("Process");
+                return result;
+                }
+            }
+
+        /// <summary>
         /// Gets the process ID that was used to run the request
         /// </summary>
         /// <remarks>This corresponds to a row in the NxFwkProcessItem table identified by the ProcItemID column</remarks>
@@ -55,7 +80,6 @@ namespace FacadeFor3e
             {
             get
                 {
-                // ReSharper disable once PossibleNullReferenceException
                 var result = new Guid(this.Response.DocumentElement!.GetAttribute("ProcessItemId"));
                 return result;
                 }
@@ -87,6 +111,32 @@ namespace FacadeFor3e
             get
                 {
                 var result = this.Response.DocumentElement!.GetAttribute("OutputId");
+                return result;
+                }
+            }
+
+        /// <summary>
+        /// Gets the step id the process is currently paused on. Only available when the process stopped on UI step.
+        /// </summary>
+        public string StepId
+            {
+            get
+                {
+                var result = this.Response.DocumentElement!.GetAttribute("StepId");
+                return result;
+                }
+            }
+
+        /// <summary>
+        /// Gets the name of the user used to run the process
+        /// </summary>
+        /// <remarks>If the process completed, this identifies the final user context.
+        /// If the process pauses on a UI step, this identifies the current owner of the process.</remarks>
+        public string User
+            {
+            get
+                {
+                var result = this.Response.DocumentElement!.GetAttribute("User");
                 return result;
                 }
             }

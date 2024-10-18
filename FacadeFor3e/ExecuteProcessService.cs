@@ -83,6 +83,7 @@ namespace FacadeFor3e
             var result = new ExecuteProcessResult(request, resultsDoc);
             if (result.ExecutionResult == "Failure")
                 {
+                // an exception was thrown during executing the process
                 this.TransactionServices.LogForError(responseFormatted);
                 var processException = ExecuteProcessExceptionBuilder.BuildForProcessError(result);
                 throw processException;
@@ -90,25 +91,52 @@ namespace FacadeFor3e
 
             if (result.ExecutionResult == "Interface" || result.ExecutionResult == "Success")
                 {
-                if (executeProcessParams.ThrowExceptionIfDataErrorsFound && result.HasDataError)
+                bool isInterface = executeProcessParams.ThrowExceptionIfProcessDoesNotComplete && result.ExecutionResult == "Interface";
+                bool isDataError = executeProcessParams.ThrowExceptionIfDataErrorsFound && result.HasDataError;
+                bool isFailureIndicated = result.ExecutionResult == "Success" && executeProcessParams.OutputIdsThatIndicateFailure != null && executeProcessParams.OutputIdsThatIndicateFailure.Contains(result.OutputId, StringComparer.OrdinalIgnoreCase);
+
+                if (isInterface || isDataError || isFailureIndicated)
                     {
+                    var problems = new List<string>();
+
+                    if (isInterface)
+                        {
+                        var userName = result.User;
+                        if (string.IsNullOrWhiteSpace(userName))
+                            {
+                            userName = "an unknown user";
+                            }
+                        problems.Add($"The process did not complete and will appear on the action list of {userName}.");
+                        }
+
+                    if (isDataError)
+                        {
+                        problems.Add("The following problems were found with the data supplied to the process:");
+                        problems.Add(ExecuteProcessResult.RenderDataErrors(result.DataErrors)!);
+                        }
+                    else if (isFailureIndicated)
+                        {
+                        var outputId = result.OutputId;
+                        if (string.IsNullOrWhiteSpace(outputId))
+                            {
+                            outputId = "unknown";
+                            }
+                        problems.Add($"The process completed via a step with the output id {outputId} indicating that it failed.");
+                        }
+
                     this.TransactionServices.LogForError(responseFormatted);
-                    var processException = ExecuteProcessExceptionBuilder.BuildForDataError(result);
+                    var processException = new ExecuteProcessException(string.Join("\r\n", problems));
                     throw processException;
                     }
 
-                if (result.ExecutionResult == "Interface" && executeProcessParams.ThrowExceptionIfProcessDoesNotComplete)
-                    {
-                    this.TransactionServices.LogForError(responseFormatted);
-                    var processException = new ExecuteProcessException("The process did not complete and will appear on action list.", result);
-                    throw processException;
-                    }
-
+                // success!
                 this.TransactionServices.LogForDebug(responseFormatted);
                 return result;
                 }
 
-            throw new InvalidOperationException("Unexpected result value in ProcessExecutionResults: " + result.ExecutionResult);
+            // This could only happen if Elite change how the transaction service works
+            this.TransactionServices.LogForError(responseFormatted);
+            throw new InvalidOperationException($"Unexpected result value in ProcessExecutionResults: {result.ExecutionResult}");
             }
 
         private static void ValidateProcess(ProcessCommand process)

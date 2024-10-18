@@ -1,4 +1,10 @@
-﻿4.0.0
+﻿4.0.1
+-----
+Added OutputIdsThatIndicateFailure and DefaultOutputIdsThatIndicateFailure properties to ExecuteProcessOptions
+Improved handling of responses from Transaction Services and the reporting of error conditions
+Updated versions of dependent nuget packages, including System.Text.Json which had a reported vulnerability
+
+4.0.0
 -----
 Added AddOrReplace to AttributeCollection to serve a particular use case
 

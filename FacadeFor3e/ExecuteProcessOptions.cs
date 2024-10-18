@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using JetBrains.Annotations;
 
 namespace FacadeFor3e
@@ -9,6 +10,11 @@ namespace FacadeFor3e
     [PublicAPI]
     public sealed class ExecuteProcessOptions
         {
+        /// <summary>
+        /// Default list of process step IDs that indicate failure
+        /// </summary>
+        public static IList<string> DefaultOutputIdsThatIndicateFailure { get; } = new List<string> { "Failure" };
+
         /// <summary>
         /// Asks 3E to return the primary key of any new records created
         /// </summary>
@@ -51,6 +57,11 @@ namespace FacadeFor3e
         /// Validates request is coming from an authorized external application.
         /// </summary>
         public string? ProcessRequestSignature { get; set; }
+
+        /// <summary>
+        /// List of process step IDs that indicate failure
+        /// </summary>
+        public IList<string>? OutputIdsThatIndicateFailure { get; set; } = DefaultOutputIdsThatIndicateFailure;
 
         /// <summary>
         /// Specifies the default options of throwing errors if the process does not complete or if data errors are returned

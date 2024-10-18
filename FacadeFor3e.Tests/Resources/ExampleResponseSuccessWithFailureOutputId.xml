@@ -1,0 +1,13 @@
+﻿<ProcessExecutionResults Process="TimeCardUpdate_ndt" Result="Success" OutputId="Failure" Records="1" User="Elite Services" Name="Time Modify (ndt)" ProcessItemId="239fa5b2-eab0-4a50-8025-59859fa6eb4f">
+	<Keys>
+		<TimeCard_ndt KeyValue="&lt;AUTO&gt;" />
+	</Keys>
+	<TimingInfo>
+		<ProcessCreation>00:00:00.6037673</ProcessCreation>
+		<DataCollectionCreation>00:00:01.8799263</DataCollectionCreation>
+		<ProcessRun>00:00:01.2592841</ProcessRun>
+		<WriteResults>00:00:00.0000342</WriteResults>
+		<TotalTime>00:00:03.7430119</TotalTime>
+	</TimingInfo>
+	<MESSAGE><![CDATA[Saving Time Index would cause a null constraint violation.]]></MESSAGE>
+</ProcessExecutionResults>
