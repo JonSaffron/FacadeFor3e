@@ -192,7 +192,7 @@ namespace FacadeFor3e
             if (this.SyncId != null)
                 return this.SyncId;
             _countOfUploads++;
-            var result = $"Upload {_countOfUploads} at {DateTime.Now:yyyy-MMM-dd hh:mm:ss} by FacadeFor3E";
+            var result = $"Upload {_countOfUploads} at {DateTime.Now:yyyy-MMM-dd HH:mm:ss} by FacadeFor3E";
             return result;
             }
         }

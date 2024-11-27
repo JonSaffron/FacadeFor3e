@@ -1,4 +1,11 @@
-﻿4.0.1
+﻿4.0.2
+-----
+Fixed a bug to always set ExecuteProcessResult where an ExecuteProcessException was raised
+Fixed a bug in the JSon converters to use 24 hour clock
+Updated some package dependencies - some transitive dependencies are marked vulnerable, but the affected code is not used
+Added direct support for .net 8 and .net standard 2.1
+
+4.0.1
 -----
 Added OutputIdsThatIndicateFailure and DefaultOutputIdsThatIndicateFailure properties to ExecuteProcessOptions
 Improved handling of responses from Transaction Services and the reporting of error conditions

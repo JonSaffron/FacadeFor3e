@@ -41,6 +41,7 @@ namespace FacadeFor3e
         /// Returns an ODataServices instance that can be used to make requests
         /// </summary>
         /// <returns>An instance of an <see cref="ODataServices"/> object</returns>
+        /// <remarks>The returned object should be used quickly and not retained in case the authentication token expires</remarks>
         public ODataServices GetODataServices()
             {
             if (IsNewTokenRequired())

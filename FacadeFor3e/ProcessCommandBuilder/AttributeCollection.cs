@@ -49,7 +49,7 @@ namespace FacadeFor3e.ProcessCommandBuilder
         /// Adds the specified attribute to the collection, or replaces it if an attribute with the same name is already present
         /// </summary>
         /// <param name="namedAttribute">The attribute to add or to replace</param>
-        /// <exception cref="ArgumentNullException">If <see cref="namedAttribute"/> is null</exception>
+        /// <exception cref="ArgumentNullException">If namedAttribute is null</exception>
         public void AddOrReplace(NamedAttributeValue namedAttribute)
             {
             if (namedAttribute == null) throw new ArgumentNullException(nameof(namedAttribute));

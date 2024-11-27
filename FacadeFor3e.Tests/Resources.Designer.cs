@@ -62,7 +62,7 @@ namespace FacadeFor3e.Tests {
         
         /// <summary>
         ///   Looks up a localized string similar to {
-        ///  &quot;@odata.context&quot;: &quot;https://rdfin91tewa01.dentons.global/TE_3E_DEV_EU_REPORT/odata/$metadata#Proforma_ndt(ProfPresParagraphs)&quot;,
+        ///  &quot;@odata.context&quot;: &quot;https://rdfin91tewa01.elite.global/TE_3E_DEV_EU_REPORT/odata/$metadata#Proforma_ndt(ProfPresParagraphs)&quot;,
         ///  &quot;value&quot;: [
         ///    {
         ///      &quot;ProfPresParagraphs&quot;: [
@@ -72,7 +72,7 @@ namespace FacadeFor3e.Tests {
         ///          &quot;LastProcItemID&quot;: &quot;c56a8cd3-374a-4089-be70-71b366b6285f&quot;,
         ///          &quot;OrigProcItemID&quot;: &quot;c56a8cd3-374a-4089-be70-71b366b6285f&quot;,
         ///          &quot;HasAttachments&quot;: false,
-        ///          &quot;Tim [rest of string was truncated]&quot;;.
+        ///      [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ExampleProfPresParagraphs {
             get {

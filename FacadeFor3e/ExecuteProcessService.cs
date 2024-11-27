@@ -125,7 +125,7 @@ namespace FacadeFor3e
                         }
 
                     this.TransactionServices.LogForError(responseFormatted);
-                    var processException = new ExecuteProcessException(string.Join("\r\n", problems));
+                    var processException = new ExecuteProcessException(string.Join("\r\n", problems), result);
                     throw processException;
                     }
 

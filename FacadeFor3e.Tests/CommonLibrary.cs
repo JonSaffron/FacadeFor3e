@@ -53,11 +53,11 @@ namespace FacadeFor3e.Tests
                 {
                 OmitXmlDeclaration = true
                 };
-            base.Writer = XmlWriter.Create(this._sw, settings);
+            this.Writer = XmlWriter.Create(this._sw, settings);
             if (addTestNode)
                 {
                 this._addTestNode = true;
-                base.Writer.WriteStartElement("Test");
+                this.Writer.WriteStartElement("Test");
                 }
             }
 
@@ -67,9 +67,9 @@ namespace FacadeFor3e.Tests
                 {
                 if (this._addTestNode)
                     {
-                    base.Writer.WriteEndElement();
+                    this.Writer.WriteEndElement();
                     }
-                base.Writer.Flush();
+                this.Writer.Flush();
                 this._sw.Flush();
                 return this._sw.ToString();
                 }

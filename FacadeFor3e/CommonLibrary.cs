@@ -136,7 +136,7 @@ namespace FacadeFor3e
         /// </summary>
         public class DateTimeJsonConverter : JsonConverter<DateTime>
             {
-            private const string Format = @"yyyy-MM-dd\Thh:mm:ss\Z";
+            private const string Format = @"yyyy-MM-dd\THH:mm:ss\Z";
 
             /// <inheritdoc />
             public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)

@@ -8,6 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System;
+
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 namespace FacadeFor3e.TransactionService
@@ -4017,19 +4019,22 @@ namespace FacadeFor3e.TransactionService
         {
         }
         
-        public TransactionServiceClient(string endpointConfigurationName) : 
-                base(endpointConfigurationName)
+        [Obsolete("No longer supported in .net", true)]
+        public TransactionServiceClient(string endpointConfigurationName)
         {
+            throw new NotImplementedException("No longer supported in .net");
         }
         
-        public TransactionServiceClient(string endpointConfigurationName, string remoteAddress) : 
-                base(endpointConfigurationName, remoteAddress)
+        [Obsolete("No longer supported in .net", true)]
+        public TransactionServiceClient(string endpointConfigurationName, string remoteAddress)
         {
+            throw new NotImplementedException("No longer supported in .net");
         }
         
-        public TransactionServiceClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
-                base(endpointConfigurationName, remoteAddress)
+        [Obsolete("No longer supported in .net", true)]
+        public TransactionServiceClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress)
         {
+            throw new NotImplementedException("No longer supported in .net");
         }
         
         public TransactionServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 

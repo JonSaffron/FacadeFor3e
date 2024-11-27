@@ -1,8 +1,10 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-// This class is available in .net 8 but currently not found in previous versions.
+// This class is public in .net 8 but currently not found in previous versions.
 // Nonetheless, recent versions of the c# compiler will obey it when it appears in this form.
+
+#if !NET8_0_OR_GREATER
 
 // ReSharper disable once CheckNamespace
 namespace System.Diagnostics.CodeAnalysis
@@ -57,3 +59,5 @@ namespace System.Diagnostics.CodeAnalysis
         public string? UrlFormat { get; set; }
     }
 }
+
+#endif

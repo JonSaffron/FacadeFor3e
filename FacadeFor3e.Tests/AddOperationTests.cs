@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Xml;
 using FacadeFor3e.ProcessCommandBuilder;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;

@@ -32,6 +32,7 @@ context of the currently logged in user.
 For cloud hosted environments, the OData service will run in the context of a specific 3E user.
 
 Compatible with:
-* .net framework 4.8
-* .net standard 2.0
-* .net 6.0
+* .net framework 4.81
+* .net standard 2.0 & 2.1
+* .net 6
+* .net 8

@@ -14,7 +14,7 @@ using FacadeFor3e.ProcessCommandBuilder;
 namespace FacadeFor3e
     {
     /// <summary>
-    /// Connects to the 3E ODara service and provides access to retrieve and update data
+    /// Connects to the 3E OData service and provides access to retrieve and update data
     /// </summary>
     [PublicAPI]
     [Experimental("OData")]
