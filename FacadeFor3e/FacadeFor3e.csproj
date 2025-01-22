@@ -7,7 +7,7 @@
     <Product>FacadeFor3E</Product>
     <Version>4.0.2</Version>
     <Description>A library that makes integrating with Elite 3E a little easier</Description>
-    <Copyright>Copyright © J Saffron Consulting Ltd 2014 - 2024</Copyright>
+    <Copyright>Copyright © J Saffron Consulting Ltd 2014 - 2025</Copyright>
     <RepositoryUrl>https://github.com/JonSaffron/FacadeFor3e</RepositoryUrl>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
   </PropertyGroup>
@@ -32,22 +32,29 @@
     </PackageReference>
     <PackageReference Include="NLog" Version="[5.0,6.0)" />
     <PackageReference Include="System.Text.Json" Version="[8.0.5,9.0)" />
+
+    <!-- Support for WindowsIdentity -->
+    <PackageReference Include="System.Security.Principal.Windows" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net6.0-windows'">
+	<!-- the 6.2 versions of these packages are the last that are available for .net 6, regardless of whatever nuget says  -->
+	<PackageReference Include="System.ServiceModel.Primitives" Version="[6.2.0,7.0)" />
 	<PackageReference Include="System.ServiceModel.Http" Version="[6.2.0,7.0)" />
-    <PackageReference Include="System.ServiceModel.Security" Version="[6.0,7.0)" />
+
+    <!-- Updates vulnerable package which is a dependency of the above packages  -->
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="6.0.5" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net8.0-windows'">
-	<PackageReference Include="System.ServiceModel.Http" Version="8.1.0" />
-	<PackageReference Include="System.ServiceModel.Primitives" Version="8.1.0" />
+	<PackageReference Include="System.ServiceModel.Http" Version="8.1.1" />
+	<PackageReference Include="System.ServiceModel.Primitives" Version="8.1.1" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' != 'net6.0-windows' and '$(TargetFramework)' != 'net8.0-windows'">
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
-    <PackageReference Include="System.ServiceModel.Http" Version="8.1.0" />
-    <PackageReference Include="System.ServiceModel.Primitives" Version="8.1.0" />
+    <PackageReference Include="System.ServiceModel.Primitives" Version="8.1.1" />
+    <PackageReference Include="System.ServiceModel.Http" Version="8.1.1" />
   </ItemGroup>
 
   <ItemGroup>

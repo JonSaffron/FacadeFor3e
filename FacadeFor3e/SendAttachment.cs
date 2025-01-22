@@ -117,7 +117,7 @@ namespace FacadeFor3e
                     action = () => CallTransactionServiceForContinuingTransfer(syncId, fileTitle, buffer, offset, fileLength.Value);
                     }
                 
-                this._transactionServices.LogForDebug($"- Chunk {i + 1:D0} of {totalChunksNeeded:D0}");
+                TransactionServices.LogForDebug($"- Chunk {i + 1:D0} of {totalChunksNeeded:D0}");
                 if (this._transactionServices.IsImpersonating)
                     {
                     // ReSharper disable AssignNullToNotNullAttribute
@@ -129,14 +129,14 @@ namespace FacadeFor3e
                     action();
                     }
                 }
-            this._transactionServices.LogForDebug($"{fileTitle} successfully attached");
+            TransactionServices.LogForDebug($"{fileTitle} successfully attached");
             }
 
         private void CallTransactionServiceForStartOfTransfer(string syncId, string archetypeId, Guid itemId, string fileTitle, byte[] data, long totalFileLength)
             {
             var ts = this._transactionServices.SoapClient;
             int chunkLength = data.GetLength(0);
-            this._transactionServices.LogForDebug($"  sending {(chunkLength == totalFileLength ? "all" : "initial")} content - {chunkLength:N0} bytes");
+            TransactionServices.LogForDebug($"  sending {(chunkLength == totalFileLength ? "all" : "initial")} content - {chunkLength:N0} bytes");
 
             int retry = 0;
 
@@ -148,8 +148,8 @@ namespace FacadeFor3e
                 }
             catch (FaultException ex) when (ex.Message != null && ex.Message.StartsWith("Failed to write file") && retry < 5)
                 {
-                this._transactionServices.LogForDebug($"Failed to write attachment chunk: {ex.Message}");
-                this._transactionServices.LogForDebug($"Waiting and retrying");
+                TransactionServices.LogForDebug($"Failed to write attachment chunk: {ex.Message}");
+                TransactionServices.LogForDebug($"Waiting and retrying");
                 retry++;
                 System.Threading.Thread.Sleep(retry * 1000);
                 goto retryLoop;
@@ -161,7 +161,7 @@ namespace FacadeFor3e
             var ts = this._transactionServices.SoapClient;
             int chunkLength = data.GetLength(0);
             bool isFinalChunk = (chunkLength + offset) == totalFileLength;
-            this._transactionServices.LogForDebug($"  sending {(isFinalChunk ? "final" : "additional")} content - {chunkLength:N0} bytes at {offset:N0}");
+            TransactionServices.LogForDebug($"  sending {(isFinalChunk ? "final" : "additional")} content - {chunkLength:N0} bytes at {offset:N0}");
             
             int retry = 0;
 
@@ -173,8 +173,8 @@ namespace FacadeFor3e
                 }
             catch (FaultException ex) when (ex.Message != null && ex.Message.StartsWith("Failed to write file") && retry < 5)
                 {
-                this._transactionServices.LogForDebug($"Failed to write attachment chunk: {ex.Message}");
-                this._transactionServices.LogForDebug($"Waiting and retrying");
+                TransactionServices.LogForDebug($"Failed to write attachment chunk: {ex.Message}");
+                TransactionServices.LogForDebug("Waiting and retrying");
                 retry++;
                 System.Threading.Thread.Sleep(retry * 1000);
                 goto retryLoop;

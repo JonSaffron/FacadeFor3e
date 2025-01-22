@@ -69,12 +69,12 @@ namespace FacadeFor3e
                 return ProcessResponseFromTransactionService(request, response, executeProcessParams);
                 }
 
-            this.TransactionServices.LogForError(response);
+            TransactionServices.LogForError(response);
             var processException = new ExecuteProcessException("An invalid response was returned from the web server:\r\n" + response);
             throw processException;
             }
 
-        private ExecuteProcessResult ProcessResponseFromTransactionService(XmlDocument request, string response, ExecuteProcessOptions executeProcessParams)
+        internal static ExecuteProcessResult ProcessResponseFromTransactionService(XmlDocument request, string response, ExecuteProcessOptions executeProcessParams)
             {
             var resultsDoc = new XmlDocument();
             resultsDoc.LoadXml(response);
@@ -84,7 +84,7 @@ namespace FacadeFor3e
             if (result.ExecutionResult == "Failure")
                 {
                 // an exception was thrown during executing the process
-                this.TransactionServices.LogForError(responseFormatted);
+                TransactionServices.LogForError(responseFormatted);
                 var processException = ExecuteProcessExceptionBuilder.BuildForProcessError(result);
                 throw processException;
                 }
@@ -124,18 +124,18 @@ namespace FacadeFor3e
                         problems.Add($"The process completed via a step with the output id {outputId} indicating that it failed.");
                         }
 
-                    this.TransactionServices.LogForError(responseFormatted);
+                    TransactionServices.LogForError(responseFormatted);
                     var processException = new ExecuteProcessException(string.Join("\r\n", problems), result);
                     throw processException;
                     }
 
                 // success!
-                this.TransactionServices.LogForDebug(responseFormatted);
+                TransactionServices.LogForDebug(responseFormatted);
                 return result;
                 }
 
             // This could only happen if Elite change how the transaction service works
-            this.TransactionServices.LogForError(responseFormatted);
+            TransactionServices.LogForError(responseFormatted);
             throw new InvalidOperationException($"Unexpected result value in ProcessExecutionResults: {result.ExecutionResult}");
             }
 
@@ -176,7 +176,7 @@ namespace FacadeFor3e
         private string CallTransactionService(XmlDocument request, ExecuteProcessOptions processParams)
             {
             OutputToConsoleDetailsOfTheJob(request);
-            this.TransactionServices.LogForDebug(request.PrettyPrintXml());
+            TransactionServices.LogForDebug(request.PrettyPrintXml());
 
             // ReSharper disable once BitwiseOperatorOnEnumWithoutFlags
             var returnInfoType = (int) ((processParams.GetKeys ? ReturnInfoType.Keys : ReturnInfoType.None) | ReturnInfoType.Timing);

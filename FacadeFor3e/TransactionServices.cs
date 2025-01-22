@@ -281,12 +281,12 @@ namespace FacadeFor3e
             Logger.Info(sb.ToString());
             }
 
-        internal void LogForDebug(string message)
+        internal static void LogForDebug(string message)
             {
             Logger.Debug(message);
             }
 
-        internal void LogForError(string message)
+        internal static void LogForError(string message)
             {
             Logger.Error(message);
             }

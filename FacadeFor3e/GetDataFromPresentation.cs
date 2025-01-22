@@ -87,11 +87,11 @@ namespace FacadeFor3e
                 var result = new XmlDocument();
                 result.LoadXml(response!);
                 string responseFormatted = result.PrettyPrintXml();
-                this._transactionServices.LogForDebug(responseFormatted);
+                TransactionServices.LogForDebug(responseFormatted);
                 return result;
                 }
 
-            this._transactionServices.LogForError(response ?? "(null response)");
+            TransactionServices.LogForError(response ?? "(null response)");
             throw new InvalidOperationException("An invalid response was received from the web server:\r\n" + response);
             }
 

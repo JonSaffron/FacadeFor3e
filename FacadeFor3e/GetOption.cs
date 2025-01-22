@@ -113,7 +113,7 @@ namespace FacadeFor3e
                 // ReSharper restore AssignNullToNotNullAttribute
                 : Func();
 
-            this._transactionServices.LogForDebug($"{optionName} = {result}");
+            TransactionServices.LogForDebug($"{optionName} = {result}");
             return result;
             }
 

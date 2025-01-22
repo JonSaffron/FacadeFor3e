@@ -189,7 +189,7 @@ namespace FacadeFor3e
         /// <summary>
         /// Returns a collection of data errors contained in the response from the Transaction Service
         /// </summary>
-        public IEnumerable<DataError> DataErrors => this.Response.SelectNodes(@"ProcessExecutionResults/DATA_ERRORS/*/ROW")!.Cast<XmlElement>().Select(item => new DataError(item));
+        public IEnumerable<DataError> DataErrors => this.Response.SelectNodes("ProcessExecutionResults/DATA_ERRORS/*/ROW")!.Cast<XmlElement>().Select(item => new DataError(item));
 
         /// <summary>
         /// An object representing one or more errors on the specified object or its children
@@ -241,7 +241,7 @@ namespace FacadeFor3e
                     string msg = exceptionElement.InnerText.Trim();
                     if (msg.StartsWith(ErrorMessagePrefix))
                         msg = msg.Substring(ErrorMessagePrefix.Length);
-                    var r = new Regex(@"^(.+) record was modified by (.+) since it was opened.  Reopen the record to save changes.$");
+                    var r = new Regex("^(.+) record was modified by (.+) since it was opened.  Reopen the record to save changes.$");
                     var m = r.Match(msg);
                     if (m.Success && m.Groups.Count == 3)
                         {

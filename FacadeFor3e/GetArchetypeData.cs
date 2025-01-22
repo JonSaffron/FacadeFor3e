@@ -345,7 +345,7 @@ namespace FacadeFor3e
                 // when no rows are returned, then return something useful
                 var result = new XmlDocument();
                 result.AppendChild(result.CreateElement("Data"));
-                this._transactionServices.LogForDebug("no results returned from xoql query");
+                TransactionServices.LogForDebug("no results returned from xoql query");
                 return result;
                 }
 
@@ -354,18 +354,18 @@ namespace FacadeFor3e
                 var result = new XmlDocument();
                 result.LoadXml(response);
                 string responseFormatted = result.PrettyPrintXml();
-                this._transactionServices.LogForDebug(responseFormatted);
+                TransactionServices.LogForDebug(responseFormatted);
                 return result;
                 }
 
-            this._transactionServices.LogForError(response);
+            TransactionServices.LogForError(response);
             throw new InvalidOperationException("An invalid response was received from the web server:\r\n" + response);
             }
 
         private string? CallTransactionService(XmlDocument xoql)
             {
             OutputToConsoleDetailsOfTheJob(xoql);
-            this._transactionServices.LogForDebug(xoql.PrettyPrintXml());
+            TransactionServices.LogForDebug(xoql.PrettyPrintXml());
 
             // deliberately only passing through the document element, not the xml declaration on any leading or following comments
             // this is because the 3E transaction service is intolerant of anything but the simplest xml
