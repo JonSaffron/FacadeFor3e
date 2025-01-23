@@ -1,4 +1,10 @@
-﻿4.0.2
+﻿4.0.3
+-----
+Bump the versions of some dependencies
+Get rid of warnings caused by security vulnerabilities in transitive dependencies
+Internal improvements to logging to NLog
+
+4.0.2
 -----
 Fixed a bug to always set ExecuteProcessResult where an ExecuteProcessException was raised
 Fixed a bug in the JSon converters to use 24 hour clock
