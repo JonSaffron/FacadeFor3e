@@ -42,7 +42,7 @@ namespace FacadeFor3e
 
         private readonly HttpClient _httpClient;
 
-        private static readonly Lazy<Logger> LazyLogger = new Lazy<Logger>(() => LogManager.GetCurrentClassLogger()!);
+        private static readonly Lazy<Logger> LazyLogger = new Lazy<Logger>(LogManager.GetCurrentClassLogger);
 
         // ReSharper disable once AssignNullToNotNullAttribute
         private static Logger Logger => LazyLogger.Value;

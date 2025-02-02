@@ -13,7 +13,7 @@ namespace FacadeFor3e
         /// <summary>
         /// Default list of process step IDs that indicate failure
         /// </summary>
-        public static IList<string> DefaultOutputIdsThatIndicateFailure { get; } = new List<string> { "Failure" };
+        public static IList<string> DefaultOutputIdsThatIndicateFailure { get; } = ["Failure", "Failed"];
 
         /// <summary>
         /// Asks 3E to return the primary key of any new records created
