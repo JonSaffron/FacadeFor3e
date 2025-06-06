@@ -180,10 +180,27 @@ namespace FacadeFor3e
 
             foreach (XmlElement node in keys.ChildNodes)
                 {
-                // ReSharper disable once PossibleNullReferenceException
                 string result = node.GetAttribute("KeyValue");
                 yield return result;
                 }
+            }
+
+        /// <summary>
+        /// Returns the primary keys of records created by the process.
+        /// </summary>
+        /// <returns>An enumerable list of integers generated when the archetype's primary key is an autonumber attribute</returns>
+        public IEnumerable<int> GetIntegerKeys()
+            {
+            return GetKeys().Select(int.Parse);
+            }
+
+        /// <summary>
+        /// Returns the primary keys of records created by the process.
+        /// </summary>
+        /// <returns>An enumerable list of guids generated when the archetype's primary key is the ID column</returns>
+        public IEnumerable<Guid> GetGuidKeys()
+            {
+            return GetKeys().Select(Guid.Parse);
             }
 
         /// <summary>
@@ -197,6 +214,8 @@ namespace FacadeFor3e
         [PublicAPI]
         public class DataError
             {
+            private static readonly Regex RecordLockedRegex = new Regex("^(.+) record was modified by (.+) since it was opened.  Reopen the record to save changes.$");
+
             /// <summary>
             /// The id of the object
             /// </summary>
@@ -240,14 +259,16 @@ namespace FacadeFor3e
                     {
                     string msg = exceptionElement.InnerText.Trim();
                     if (msg.StartsWith(ErrorMessagePrefix))
-                        msg = msg.Substring(ErrorMessagePrefix.Length);
-                    var r = new Regex("^(.+) record was modified by (.+) since it was opened.  Reopen the record to save changes.$");
-                    var m = r.Match(msg);
-                    if (m.Success && m.Groups.Count == 3)
                         {
-                        string objectName2 = m.Groups[1].Value;
+                        msg = msg.Substring(ErrorMessagePrefix.Length);
+                        }
+
+                    var m = RecordLockedRegex.Match(msg);
+                    if (m is { Success: true, Groups.Count: 3 })
+                        {
+                        string objectName = m.Groups[1].Value;
                         string lockingAccount = m.Groups[2].Value;
-                        msg = string.Format("The {0} record that you are trying to update is currently being edited and is locked by {1}. Please try again later, or ask {1} to complete or cancel their activity.", objectName2, lockingAccount);
+                        msg = $"The {objectName} record that you are trying to update is currently being edited and is locked by {lockingAccount}. Please try again later, or ask {lockingAccount} to complete or cancel their activity.";
                         }
 
                     ObjectException = msg;

@@ -1,4 +1,9 @@
-﻿4.0.3
+﻿4.0.4
+-----
+Add "Failed" to the list of output step IDs in ExecuteProcessOptions that indicate a process failed
+Add functionality to get new primary keys directly as integers or guids
+
+4.0.3
 -----
 Bump the versions of some dependencies
 Get rid of warnings caused by security vulnerabilities in transitive dependencies
