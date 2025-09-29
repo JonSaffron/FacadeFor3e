@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Globalization;
 using System.Security.Principal;
 using JetBrains.Annotations;
@@ -12,7 +13,8 @@ namespace FacadeFor3e
     public class GetServiceCulture
         {
         private readonly TransactionServices _transactionServices;
-        private CultureInfo? _cultureInfo;
+
+        private static readonly ConcurrentDictionary<Uri, CultureInfo> Cache = new();
 
         internal GetServiceCulture(TransactionServices transactionServices)
             {
@@ -25,20 +27,20 @@ namespace FacadeFor3e
         /// <returns>A CultureInfo object</returns>
         public CultureInfo Get()
             {
-            if (this._cultureInfo != null)
-                {
-                return this._cultureInfo;
-                }
+            var result = Cache.GetOrAdd(this._transactionServices.Endpoint, _ => RetrieveServiceCulture());
+            TransactionServices.LogForDebug($"ServiceCulture = {result}");
+            return result;
+            }
+
+        private CultureInfo RetrieveServiceCulture()
+            {
+            var response = this._transactionServices.IsImpersonating
+                ? WindowsIdentity.RunImpersonated(this._transactionServices.AccountToImpersonate!.AccessToken, Func)
+                : Func();
+            var result = response == null ? CultureInfo.InvariantCulture : new CultureInfo(response);
+            return result;
 
             string? Func() => CallTransactionService();
-            var response = this._transactionServices.IsImpersonating
-                // ReSharper disable AssignNullToNotNullAttribute
-                ? WindowsIdentity.RunImpersonated(this._transactionServices.AccountToImpersonate!.AccessToken, Func)
-                // ReSharper restore AssignNullToNotNullAttribute
-                : Func();
-            this._cultureInfo = response == null ? CultureInfo.InvariantCulture : new CultureInfo(response);
-            TransactionServices.LogForDebug($"ServiceCulture = {this._cultureInfo}");
-            return this._cultureInfo;
             }
 
         private string? CallTransactionService()

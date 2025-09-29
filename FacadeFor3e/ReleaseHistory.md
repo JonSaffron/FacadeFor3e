@@ -1,4 +1,9 @@
-﻿4.0.4
+﻿4.0.5
+-----
+Cache return value of GetServiceCulture to improve performance
+Add Contains method to AttributeCollection
+
+4.0.4
 -----
 Add "Failed" to the list of output step IDs in ExecuteProcessOptions that indicate a process failed
 Add functionality to get new primary keys directly as integers or guids

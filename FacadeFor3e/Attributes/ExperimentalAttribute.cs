@@ -1,5 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
+// The .NET Foundation licenses this file to you under the MIT licence.
 
 // This class is public in .net 8 but currently not found in previous versions.
 // Nonetheless, recent versions of the c# compiler will obey it when it appears in this form.

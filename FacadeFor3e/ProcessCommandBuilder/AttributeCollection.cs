@@ -17,7 +17,8 @@ namespace FacadeFor3e.ProcessCommandBuilder
         /// Gets the attribute with the specified name
         /// </summary>
         /// <param name="name">The name of the attribute to retrieve</param>
-        /// <returns>The attribute with the specified name. If the specified name is not found, a <exception cref="KeyNotFoundException">KeyNotFoundException</exception> is thrown.</returns>
+        /// <returns>The attribute with the specified name.</returns>
+        /// <exception cref="KeyNotFoundException">If the specified name is not found in the collection</exception>
         public NamedAttributeValue this[string name]
             {
             get
@@ -25,10 +26,19 @@ namespace FacadeFor3e.ProcessCommandBuilder
                 if (name == null)
                     throw new ArgumentNullException(nameof(name));
                 var result = this.SingleOrDefault(a => a.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
-                if (result == null)
-                    throw new KeyNotFoundException("An attribute could not be found with the specified name.");
-                return result;
+                return result ?? throw new KeyNotFoundException("An attribute could not be found with the specified name.");
                 }
+            }
+
+        /// <summary>
+        /// Returns whether an attribute with the specified name exists in the collection
+        /// </summary>
+        /// <param name="attributeName">The name of the attribute to search for</param>
+        /// <returns>True if an attribute matching the specified name exists</returns>
+        public bool Contains(string attributeName)
+            {
+            if (attributeName == null) throw new ArgumentNullException(nameof(attributeName));
+            return this.TryGetValue(attributeName, out _);
             }
 
         /// <summary>

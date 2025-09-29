@@ -33,7 +33,10 @@ namespace FacadeFor3e
         public ProcessExecutionRequestType(ProcessExecutionRequestTypeEnum processExecutionRequestType, bool suppressChildAutoGeneration = false)
             {
             if (!Enum.IsDefined(typeof(ProcessExecutionRequestTypeEnum), processExecutionRequestType))
+                {
                 throw new ArgumentOutOfRangeException(nameof(processExecutionRequestType));
+                }
+
             this.Type = $"{processExecutionRequestType:G}{(suppressChildAutoGeneration ? "_SuppressChildAutogeneration" : string.Empty)}";
             }
         }

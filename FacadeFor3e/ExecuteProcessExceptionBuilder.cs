@@ -44,7 +44,7 @@ namespace FacadeFor3e
                 bool isNew = errors.Add(message);
                 if (message.StartsWith("An error occurred in the "))
                     {
-                    var parts = message.Split(new[] { ':' }, 2);
+                    var parts = message.Split([':'], 2);
                     if (parts.Length == 2)
                         {
                         isNew = errors.Add(parts[1].Trim());

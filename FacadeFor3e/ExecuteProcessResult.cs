@@ -175,8 +175,10 @@ namespace FacadeFor3e
             {
             var keys = this.Response.SelectSingleNode("ProcessExecutionResults/Keys");
             if (keys == null)
+                {
                 // The presence of the Keys node is dependent only upon whether ReturnInfoType.Keys was specified when calling ExecuteProcess 
                 throw new InvalidOperationException("Key information was not requested when making the request to the Transaction Service.");
+                }
 
             foreach (XmlElement node in keys.ChildNodes)
                 {
@@ -214,7 +216,7 @@ namespace FacadeFor3e
         [PublicAPI]
         public class DataError
             {
-            private static readonly Regex RecordLockedRegex = new Regex("^(.+) record was modified by (.+) since it was opened.  Reopen the record to save changes.$");
+            private static readonly Regex RecordLockedRegex = new("^(.+) record was modified by (.+) since it was opened.  Reopen the record to save changes.$");
 
             /// <summary>
             /// The id of the object
@@ -274,9 +276,9 @@ namespace FacadeFor3e
                     ObjectException = msg;
                     }
 
-                Children = rowElement.SelectNodes("*/ROW")!.Cast<XmlElement>().Select(item => new DataError(item)).ToList();
+                Children = [.. rowElement.SelectNodes("*/ROW")!.Cast<XmlElement>().Select(item => new DataError(item))];
 
-                AttributeErrors = rowElement.SelectNodes("ATTS/ATT")!.Cast<XmlElement>().Select(item => new AttributeError(item)).ToList();
+                AttributeErrors = [.. rowElement.SelectNodes("ATTS/ATT")!.Cast<XmlElement>().Select(item => new AttributeError(item))];
                 }
             }
 
@@ -359,8 +361,8 @@ namespace FacadeFor3e
             if (dataError == null) throw new ArgumentNullException(nameof(dataError));
             if (sb == null) throw new ArgumentNullException(nameof(sb));
 
-            string indent = new string(' ', indentLevel * 2);
-            bool isNumber = dataError.PrimaryKey.All(Char.IsDigit);
+            var indent = new string(' ', indentLevel * 2);
+            bool isNumber = dataError.PrimaryKey.All(char.IsDigit);
             sb.AppendFormat("{0}{1} with {2} {3}:", indent, dataError.ObjectId, isNumber ? "number" : "id", dataError.PrimaryKey);
             sb.AppendLine();
 

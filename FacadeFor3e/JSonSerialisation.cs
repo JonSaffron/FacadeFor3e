@@ -11,6 +11,7 @@ namespace FacadeFor3e
     /// <summary>
     /// Support for serialising data between 3E and JSon
     /// </summary>
+    [PublicAPI]
     public static class JSonSerialisation
         {
         /// <summary>

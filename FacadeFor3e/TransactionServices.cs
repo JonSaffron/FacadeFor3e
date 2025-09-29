@@ -42,7 +42,7 @@ namespace FacadeFor3e
         private ExecuteProcessService? _executeProcess;
         private SendAttachment? _sendAttachment;
 
-        private static readonly Lazy<Logger> LazyLogger = new Lazy<Logger>(LogManager.GetCurrentClassLogger);
+        private static readonly Lazy<Logger> LazyLogger = new(LogManager.GetCurrentClassLogger);
 
         /// <summary>
         /// Constructs a new TransactionServices object without impersonation or user credentials

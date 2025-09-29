@@ -5,7 +5,7 @@
     <PackageId>FacadeFor3E</PackageId>
     <Authors>J Saffron Consulting</Authors>
     <Product>FacadeFor3E</Product>
-    <Version>4.0.4</Version>
+    <Version>4.0.5</Version>
     <Description>A library that makes integrating with Elite 3E a little easier</Description>
     <Copyright>Copyright © J Saffron Consulting Ltd 2014 - 2025</Copyright>
     <RepositoryUrl>https://github.com/JonSaffron/FacadeFor3e</RepositoryUrl>
