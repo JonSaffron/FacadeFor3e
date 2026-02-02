@@ -639,7 +639,13 @@ namespace FacadeFor3e
                 return (T)(object)decimal.Parse(value, cultureInfo);
                 }
 
-            throw new InvalidOperationException("Type for return value is not supported.");
+            var typeName = typeof(T).Name;
+            var msg = $"Cannot assign a value to a property/field which has type {typeof(T).Name}.";
+            if (typeName == "DateOnly")
+                {
+                msg += " DateOnly is only supported in .net 6 and later, and you should ensure that your target framework specifies -windows.";
+                }
+            throw new InvalidOperationException(msg);
             }
 
         internal interface ICompoundMemberAccess
