@@ -1,25 +1,25 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard2.1;net481;net6.0-windows;net8.0-windows</TargetFrameworks>
+    <TargetFrameworks>net481;net8.0-windows;net10.0-windows</TargetFrameworks>
     <PackageId>FacadeFor3E</PackageId>
     <Authors>J Saffron Consulting</Authors>
     <Product>FacadeFor3E</Product>
-    <Version>4.0.5</Version>
+    <Version>4.0.6</Version>
     <Description>A library that makes integrating with Elite 3E a little easier</Description>
-    <Copyright>Copyright © J Saffron Consulting Ltd 2014 - 2025</Copyright>
+    <Copyright>Copyright © J Saffron Consulting Ltd 2014 - 2026</Copyright>
     <RepositoryUrl>https://github.com/JonSaffron/FacadeFor3e</RepositoryUrl>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
   </PropertyGroup>
 
   <PropertyGroup>
-    <LangVersion>13.0</LangVersion>
+    <LangVersion>14.0</LangVersion>
     <Nullable>enable</Nullable>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>A library to help you build apps that use Elite 3E</Title>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageTags>Elite;3E;TransactionService;OData</PackageTags>
+    <PackageTags>Elite;3E;TransactionService</PackageTags>
     <AssemblyVersion>$(VersionPrefix)</AssemblyVersion>
     <FileVersion>$(VersionPrefix)</FileVersion>
     <RepositoryType>git</RepositoryType>
@@ -27,34 +27,32 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="2024.3.0">
+    <PackageReference Include="JetBrains.Annotations" Version="2025.2.4">
         <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="NLog" Version="[5.0,6.0)" />
-    <PackageReference Include="System.Text.Json" Version="[8.0.5,9.0)" />
+    <PackageReference Include="NLog" Version="[6,)" />
 
     <!-- Support for WindowsIdentity -->
     <PackageReference Include="System.Security.Principal.Windows" Version="5.0.0" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0-windows'">
-	<!-- the 6.2 versions of these packages are the last that are available for .net 6, regardless of whatever nuget says  -->
-	<PackageReference Include="System.ServiceModel.Primitives" Version="[6.2.0,7.0)" />
-	<PackageReference Include="System.ServiceModel.Http" Version="[6.2.0,7.0)" />
-
-    <!-- Updates vulnerable package which is a dependency of the above packages  -->
-    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="6.0.5" />
-  </ItemGroup>
-
+  <!-- .net 8 -->
   <ItemGroup Condition="'$(TargetFramework)' == 'net8.0-windows'">
-	<PackageReference Include="System.ServiceModel.Http" Version="8.1.1" />
-	<PackageReference Include="System.ServiceModel.Primitives" Version="8.1.1" />
+	<PackageReference Include="System.ServiceModel.Http" Version="8.1.2" />
+	<PackageReference Include="System.ServiceModel.Primitives" Version="8.1.2" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' != 'net6.0-windows' and '$(TargetFramework)' != 'net8.0-windows'">
-    <PackageReference Include="System.Net.Http" Version="4.3.4" />
-    <PackageReference Include="System.ServiceModel.Primitives" Version="8.1.1" />
-    <PackageReference Include="System.ServiceModel.Http" Version="8.1.1" />
+  <!-- .net 10 -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0-windows'">
+	  <PackageReference Include="System.ServiceModel.Http" Version="10.0.652802" />
+	  <PackageReference Include="System.ServiceModel.Primitives" Version="10.0.652802" />
+  </ItemGroup>
+  
+  <!-- .net framework -->
+  <ItemGroup Condition="'$(TargetFramework)' != 'net8.0-windows' and '$(TargetFramework)' != 'net10.0-windows'">
+    <PackageReference Include="System.ServiceModel.Http" Version="10.0.652802" />
+    <PackageReference Include="System.ServiceModel.Primitives" Version="10.0.652802" />
+	<PackageReference Include="System.Net.Http" Version="4.3.4" />
   </ItemGroup>
 
   <ItemGroup>

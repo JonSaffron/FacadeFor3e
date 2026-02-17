@@ -1,0 +1,16 @@
+﻿<ProcessExecutionResults Process="Entity_txn_ccc" Result="Success" OutputId="Failure" Records="1" User="Cobra Admin" Name="Entity_txn_ccc" ProcessItemId="32f7599d-7e09-4278-bcfd-c1eea802ccc8">
+	<Keys>
+		<EntityOrg KeyValue="&amp;lt;AUTO&amp;gt;"/>
+	</Keys>
+	<DATA_ERRORS>
+		<Entity>
+			<ROW ID="&lt;AUTO&gt;" Idx="0">
+				<EntityUse/>
+				<Relate/>
+				<RelateInverse/>
+				<EntityCliDueDillInfo_ccc/>
+				<EntAltNameOrg/>
+			</ROW>
+		</Entity>
+	</DATA_ERRORS>
+</ProcessExecutionResults>

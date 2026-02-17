@@ -26,26 +26,6 @@ namespace FacadeFor3e.Tests
             }
 
         [Test]
-        public void TestDecimalChanges()
-            {
-            int n = -100;
-            do
-                {
-                DecimalAttribute d = n;
-                ClassicAssert.AreEqual(n, d.Value);
-                n++;
-
-                d.Value = null;
-                ClassicAssert.IsNull(d.Value);
-                n++;
-
-                d.Value = n;
-                ClassicAssert.AreEqual(n, d.Value);
-                n++;
-                } while (n < 100);
-            }
-
-        [Test]
         public void TestIntegerWithNumber()
             {
             const int testNumber = 111222333;
@@ -60,26 +40,6 @@ namespace FacadeFor3e.Tests
             var i = new IntAttribute(null);
             ClassicAssert.IsNull(i.Value);
             ClassicAssert.AreEqual(string.Empty, i.ToString());
-            }
-
-        [Test]
-        public void TestIntegerChanges()
-            {
-            int n = -100;
-            do
-                {
-                IntAttribute i = n;
-                ClassicAssert.AreEqual(n, i.Value);
-                n++;
-
-                i.Value = null;
-                ClassicAssert.IsNull(i.Value);
-                n++;
-
-                i.Value = n;
-                ClassicAssert.AreEqual(n, i.Value);
-                n++;
-                } while (n < 100);
             }
 
         [Test]
@@ -100,28 +60,6 @@ namespace FacadeFor3e.Tests
             }
 
         [Test]
-        public void TestStringChanges()
-            {
-            int n = -100;
-            do
-                {
-                var testString = $"blah{n}blah";
-                StringAttribute s = testString;
-                ClassicAssert.AreEqual(testString, s.Value);
-                n++;
-
-                s.Value = null;
-                ClassicAssert.IsNull(s.Value);
-                n++;
-
-                testString = $"blah{n}blah";
-                s.Value = testString;
-                ClassicAssert.AreEqual(testString, s.Value);
-                n++;
-                } while (n < 100);
-            }
-
-        [Test]
         public void TestGuidWithValue()
             {
             Guid testGuid = Guid.Parse("(4772822E-16F9-40B8-8265-47AF6648D60E)");
@@ -136,28 +74,6 @@ namespace FacadeFor3e.Tests
             var g = new GuidAttribute(null);
             ClassicAssert.IsNull(g.Value);
             ClassicAssert.AreEqual(string.Empty, g.ToString());
-            }
-
-        [Test]
-        public void TestGuidChanges()
-            {
-            int n = -100;
-            do
-                {
-                var testGuid = Guid.NewGuid();
-                GuidAttribute g = testGuid;
-                ClassicAssert.AreEqual(testGuid, g.Value);
-                n++;
-
-                g.Value = null;
-                ClassicAssert.IsNull(g.Value);
-                n++;
-
-                testGuid = Guid.NewGuid();
-                g.Value = testGuid;
-                ClassicAssert.AreEqual(testGuid, g.Value);
-                n++;
-                } while (n < 100);
             }
 
         [Test]
@@ -194,45 +110,12 @@ namespace FacadeFor3e.Tests
             ClassicAssert.AreEqual(string.Empty, d.ToString());
             }
 
-        [Test]
-        public void TestDateChanges()
-            {
-            int n = -100;
-            do
-                {
-#if NET6_0_OR_GREATER
-                var testDate = DateOnly.FromDateTime(DateTime.Today).AddDays(n);
-#else
-                var testDate = DateTime.Today.AddDays(n);
-#endif
-                DateAttribute d = testDate;
-                ClassicAssert.AreEqual(testDate, d.Value);
-                n++;
-
-                d.Value = null;
-                ClassicAssert.IsNull(d.Value);
-                n++;
-
-#if NET6_0_OR_GREATER
-                testDate = DateOnly.FromDateTime(DateTime.Today).AddDays(n);
-#else
-                testDate = DateTime.Today.AddDays(n);
-#endif
-                d.Value = testDate;
-                ClassicAssert.AreEqual(testDate, d.Value);
-                n++;
-                } while (n < 100);
-            }
-
 #if !NET6_0_OR_GREATER
         [Test]
         public void TestDateWithTimeCausesException()
             {
             // ReSharper disable once ObjectCreationAsStatement
             Assert.Throws<ArgumentOutOfRangeException>(() => new DateAttribute(DateTime.Now));
-
-            var d = new DateAttribute(DateTime.Today);
-            Assert.Throws<ArgumentOutOfRangeException>(() => d.Value = DateTime.Now);
             }
 #endif
 
@@ -263,33 +146,12 @@ namespace FacadeFor3e.Tests
             }
 
         [Test]
-        public void TestDateTimeChanges()
-            {
-            int n = -100;
-            do
-                {
-                var testDateTime = DateTime.Now.AddDays(n);
-                DateTimeAttribute dt = testDateTime;
-                ClassicAssert.AreEqual(testDateTime, dt.Value);
-                n++;
-
-                dt.Value = null;
-                ClassicAssert.IsNull(dt.Value);
-                n++;
-
-                testDateTime = DateTime.Now.AddDays(n);
-                dt.Value = testDateTime;
-                ClassicAssert.AreEqual(testDateTime, dt.Value);
-                n++;
-                } while (n < 100);
-            }
-
-        [Test]
         public void TestBoolWithTrue()
             {
             var bt = new BoolAttribute(true);
             ClassicAssert.IsTrue(bt.Value);
             ClassicAssert.AreEqual("true", bt.ToString());
+            ClassicAssert.AreEqual(bt, BoolAttribute.True);
             }
 
         [Test]
@@ -309,10 +171,13 @@ namespace FacadeFor3e.Tests
                 var testBool = n % 2 == 0;
                 BoolAttribute b = testBool;
                 ClassicAssert.AreEqual(testBool, b.Value);
+                ClassicAssert.IsTrue(testBool == b.Value);
 
                 testBool = !testBool;
-                b.Value = testBool;
-                ClassicAssert.AreEqual(testBool, b.Value);
+                ClassicAssert.AreNotEqual(testBool, b.Value);
+                ClassicAssert.IsFalse(testBool == b.Value);
+
+
 
                 n++;
                 } while (n < 100);

@@ -7,12 +7,12 @@ namespace FacadeFor3e.ProcessCommandBuilder
     /// A 3E integer attribute value
     /// </summary>
     [PublicAPI]
-    public sealed class IntAttribute : IAttribute
+    public readonly struct IntAttribute : IAttribute
         {
         /// <summary>
         /// Gets/sets the value of this attribute
         /// </summary>
-        public int? Value;
+        public readonly int? Value;
 
         /// <summary>
         /// Constructs a new 3E integer attribute value

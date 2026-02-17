@@ -12,9 +12,12 @@ namespace FacadeFor3e.ProcessCommandBuilder
     /// A 3E date attribute value
     /// </summary>
     [PublicAPI]
-    public sealed class DateAttribute : IAttribute
+    public readonly struct DateAttribute : IAttribute
         {
-        private DateOnly? _internalValue;
+        /// <summary>
+        /// Gets/sets the value of this attribute
+        /// </summary>
+        public readonly DateOnly? Value;
 
         /// <summary>
         /// Constructs a new 3E date attribute value
@@ -22,6 +25,10 @@ namespace FacadeFor3e.ProcessCommandBuilder
         /// <param name="value">The initial value of the attribute</param>
         public DateAttribute(DateOnly? value)
             {
+#if !NET6_0_OR_GREATER
+                if (value.HasValue && value.Value.TimeOfDay != TimeSpan.Zero)
+                    throw new ArgumentOutOfRangeException(nameof(value), "DateAttribute value cannot include time element.");
+#endif
             this.Value = value;
             }
 
@@ -34,22 +41,6 @@ namespace FacadeFor3e.ProcessCommandBuilder
         public DateAttribute(int year, int month, int day)
             {
             this.Value = new DateOnly(year, month, day);
-            }
-
-        /// <summary>
-        /// Gets/sets the value of this attribute
-        /// </summary>
-        public DateOnly? Value
-            {
-            get => this._internalValue;
-            set
-                {
-#if !NET6_0_OR_GREATER
-                if (value.HasValue && value.Value.TimeOfDay != TimeSpan.Zero)
-                    throw new ArgumentOutOfRangeException(nameof(value), "DateAttribute value cannot include time element.");
-#endif
-                this._internalValue = value;
-                }
             }
 
         /// <inheritdoc />

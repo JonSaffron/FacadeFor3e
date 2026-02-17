@@ -15,11 +15,6 @@ namespace FacadeFor3e
         public ExecuteProcessResult? ExecuteProcessResult { get; }
 
         /// <summary>
-        /// Where available, this returns an object providing information on the response returned from the OData service
-        /// </summary>
-        public ODataServiceResult? ODataServiceResult { get; }
-
-        /// <summary>
         /// Constructs a new ExecuteProcessException
         /// </summary>
         /// <param name="message">The message that describes the error</param>
@@ -35,16 +30,6 @@ namespace FacadeFor3e
         public ExecuteProcessException(string message, ExecuteProcessResult executeProcessResult) : base(message)
             {
             this.ExecuteProcessResult = executeProcessResult ?? throw new ArgumentNullException(nameof(executeProcessResult));
-            }
-
-        /// <summary>
-        /// Constructs a new ExecuteProcessException
-        /// </summary>
-        /// <param name="message">The error message that explains the reason for the exception</param>
-        /// <param name="odataServiceResult">The run process result</param>
-        public ExecuteProcessException(string message, ODataServiceResult odataServiceResult) : base(message)
-            {
-            this.ODataServiceResult = odataServiceResult ?? throw new ArgumentNullException(nameof(odataServiceResult));
             }
         }
     }

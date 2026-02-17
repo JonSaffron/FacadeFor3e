@@ -27,7 +27,7 @@ namespace FacadeFor3e
         /// <returns>A CultureInfo object</returns>
         public CultureInfo Get()
             {
-            var result = Cache.GetOrAdd(this._transactionServices.Endpoint, _ => RetrieveServiceCulture());
+            var result = Cache.GetOrAdd(this._transactionServices.Endpoint, _ => RetrieveServiceCulture())!;
             TransactionServices.LogForDebug($"ServiceCulture = {result}");
             return result;
             }
@@ -35,7 +35,7 @@ namespace FacadeFor3e
         private CultureInfo RetrieveServiceCulture()
             {
             var response = this._transactionServices.IsImpersonating
-                ? WindowsIdentity.RunImpersonated(this._transactionServices.AccountToImpersonate!.AccessToken, Func)
+                ? WindowsIdentity.RunImpersonated(this._transactionServices.AccountToImpersonate!.AccessToken!, Func)
                 : Func();
             var result = response == null ? CultureInfo.InvariantCulture : new CultureInfo(response);
             return result;

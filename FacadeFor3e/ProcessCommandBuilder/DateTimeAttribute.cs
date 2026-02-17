@@ -7,12 +7,12 @@ namespace FacadeFor3e.ProcessCommandBuilder
     /// A 3E datetime attribute value
     /// </summary>
     [PublicAPI]
-    public sealed class DateTimeAttribute : IAttribute
+    public readonly struct DateTimeAttribute : IAttribute
         {
         /// <summary>
         /// Gets/sets the value of this attribute
         /// </summary>
-        public DateTime? Value;
+        public readonly DateTime? Value;
 
         /// <summary>
         /// Constructs a new 3E datetime attribute value

@@ -4019,24 +4019,6 @@ namespace FacadeFor3e.TransactionService
         {
         }
         
-        [Obsolete("No longer supported in .net", true)]
-        public TransactionServiceClient(string endpointConfigurationName)
-        {
-            throw new NotImplementedException("No longer supported in .net");
-        }
-        
-        [Obsolete("No longer supported in .net", true)]
-        public TransactionServiceClient(string endpointConfigurationName, string remoteAddress)
-        {
-            throw new NotImplementedException("No longer supported in .net");
-        }
-        
-        [Obsolete("No longer supported in .net", true)]
-        public TransactionServiceClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress)
-        {
-            throw new NotImplementedException("No longer supported in .net");
-        }
-        
         public TransactionServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress)
         {

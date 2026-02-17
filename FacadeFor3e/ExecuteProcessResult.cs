@@ -362,21 +362,36 @@ namespace FacadeFor3e
             if (sb == null) throw new ArgumentNullException(nameof(sb));
 
             var indent = new string(' ', indentLevel * 2);
-            bool isNumber = dataError.PrimaryKey.All(char.IsDigit);
-            sb.AppendFormat("{0}{1} with {2} {3}:", indent, dataError.ObjectId, isNumber ? "number" : "id", dataError.PrimaryKey);
-            sb.AppendLine();
-
-            indent = new string(' ', (indentLevel + 1) * 2);
-            if (dataError.ObjectException != null)
+            if (dataError.PrimaryKey == "<AUTO>")
                 {
-                sb.AppendFormat("{0}- {1}", indent, dataError.ObjectException);
-                sb.AppendLine();
+                sb.AppendLine($"{indent}New {dataError.ObjectId} record:");
+                }
+            else if (dataError.PrimaryKey == string.Empty)
+                {
+                sb.AppendLine($"{indent}Unidentified {dataError.ObjectId} record:");
+                }
+            else
+                {
+                bool isNumber = dataError.PrimaryKey.All(char.IsDigit);
+                sb.AppendLine($"{indent}{dataError.ObjectId} record with {(isNumber ? "number" : "id")} {dataError.PrimaryKey}:");
                 }
 
-            foreach (var attributeError in dataError.AttributeErrors)
+            indent = new string(' ', (indentLevel + 1) * 2);
+            if (dataError.ObjectException != null || dataError.AttributeErrors.Count != 0)
                 {
-                sb.AppendFormat("{0}- {1} (error caused when setting {2} to '{3}')", indent, attributeError.Error, attributeError.AttributeId, attributeError.Value);
-                sb.AppendLine();
+                if (dataError.ObjectException != null)
+                    {
+                    sb.AppendLine($"{indent}- {dataError.ObjectException}");
+                    }
+
+                foreach (var attributeError in dataError.AttributeErrors)
+                    {
+                    sb.AppendLine($"{indent}- {attributeError.Error} (error caused when setting {attributeError.AttributeId} to '{attributeError.Value}')");
+                    }
+                }
+            else if (dataError.Children.Count == 0)
+                {
+                sb.AppendLine($"{indent}No error information available");
                 }
 
             foreach (var childDataError in dataError.Children)

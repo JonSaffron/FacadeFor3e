@@ -19,7 +19,7 @@ namespace FacadeFor3e.Tests {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -197,6 +197,31 @@ namespace FacadeFor3e.Tests {
         internal static string ExampleResponseWithMessage {
             get {
                 return ResourceManager.GetString("ExampleResponseWithMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;ProcessExecutionResults Process=&quot;Entity_txn_ccc&quot; Result=&quot;Success&quot; OutputId=&quot;Failure&quot; Records=&quot;1&quot; User=&quot;Cobra Admin&quot; Name=&quot;Entity_txn_ccc&quot; ProcessItemId=&quot;32f7599d-7e09-4278-bcfd-c1eea802ccc8&quot;&gt;
+        ///	&lt;Keys&gt;
+        ///		&lt;EntityOrg KeyValue=&quot;&amp;amp;lt;AUTO&amp;amp;gt;&quot;/&gt;
+        ///	&lt;/Keys&gt;
+        ///	&lt;DATA_ERRORS&gt;
+        ///		&lt;Entity&gt;
+        ///			&lt;ROW ID=&quot;&amp;lt;AUTO&amp;gt;&quot; Idx=&quot;0&quot;&gt;
+        ///				&lt;EntityUse/&gt;
+        ///				&lt;Relate/&gt;
+        ///				&lt;RelateInverse/&gt;
+        ///				&lt;EntityCliDueDillInfo_ccc/&gt;
+        ///				&lt;EntAltNameOrg/&gt;
+        ///			&lt;/ROW&gt;
+        ///		&lt;/Entity&gt;
+        ///	&lt;/DATA_ERRORS&gt;
+        ///&lt;/ProcessExecutionResults&gt;
+        ///.
+        /// </summary>
+        internal static string ExampleResponseWithoutAnyUsefulErrors {
+            get {
+                return ResourceManager.GetString("ExampleResponseWithoutAnyUsefulErrors", resourceCulture);
             }
         }
     }

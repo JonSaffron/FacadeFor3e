@@ -1,9 +1,0 @@
-﻿{
-     "@odata.context": "https://rdfin91tewa01.dentons.global/TE_3E_DEV_EU_REPORT/odata/$metadata#Office/$entity",
-     "OfficeID": "29a69ad1-970b-4636-8ede-80d90cc0f222",
-     "Code": "0000",
-     "Description": "Default 2024-02-23T16:11:06",
-     "OfficeTaxCodes": [],
-     "OfficeAddressLangs": [],
-     "OfficeTemplateTexts": []
-}

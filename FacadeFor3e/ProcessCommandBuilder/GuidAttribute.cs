@@ -7,12 +7,12 @@ namespace FacadeFor3e.ProcessCommandBuilder
     /// A 3E guid attribute value
     /// </summary>
     [PublicAPI]
-    public sealed class GuidAttribute : IAttribute
+    public readonly struct GuidAttribute : IAttribute
         {
         /// <summary>
         /// Gets/sets the value of this attribute
         /// </summary>
-        public Guid? Value;
+        public readonly Guid? Value;
 
         /// <summary>
         /// Constructs a new 3E guid attribute value

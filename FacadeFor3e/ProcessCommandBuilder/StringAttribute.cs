@@ -6,12 +6,12 @@ namespace FacadeFor3e.ProcessCommandBuilder
     /// A 3E string attribute value
     /// </summary>
     [PublicAPI]
-    public sealed class StringAttribute : IAttribute
+    public readonly struct StringAttribute : IAttribute
         {
         /// <summary>
         /// Gets/sets the value of this attribute
         /// </summary>
-        public string? Value;
+        public readonly string? Value;
 
         /// <summary>
         /// Constructs a new 3E string attribute value

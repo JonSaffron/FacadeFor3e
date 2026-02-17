@@ -7,12 +7,15 @@ namespace FacadeFor3e.ProcessCommandBuilder
     /// </summary>
     /// <remarks>Boolean attributes don't support null values</remarks>
     [PublicAPI]
-    public sealed class BoolAttribute : IAttribute
+    public readonly struct BoolAttribute : IAttribute
         {
+        private static readonly BoolAttribute FalseValue = new BoolAttribute(false);
+        private static readonly BoolAttribute TrueValue = new BoolAttribute(true);
+
         /// <summary>
         /// Gets/sets the value of this attribute
         /// </summary>
-        public bool Value;
+        public readonly bool Value;
 
         /// <summary>
         /// Constructs a new 3E Boolean attribute value
@@ -22,6 +25,18 @@ namespace FacadeFor3e.ProcessCommandBuilder
             {
             this.Value = value;
             }
+
+        /// <summary>
+        /// Returns a BoolAttribute with a true value
+        /// </summary>
+        // ReSharper disable once ConvertToAutoProperty
+        public static BoolAttribute True => TrueValue;
+
+        /// <summary>
+        /// Returns a BoolAttribute with a false value
+        /// </summary>
+        // ReSharper disable once ConvertToAutoProperty
+        public static BoolAttribute False => FalseValue;
 
         /// <inheritdoc />
         public override string ToString()
@@ -41,8 +56,7 @@ namespace FacadeFor3e.ProcessCommandBuilder
         /// <inheritdoc />
         object IAttribute.Value => this.Value;
 
-
         /// <inheritdoc />
         public bool HasValue => true;
         }
-    }
+    }    

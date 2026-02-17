@@ -63,8 +63,7 @@ namespace FacadeFor3e.Tests
         [Test]
         public void CannotConstructForNullValuesOrInvalidTypes()
             {
-            IntAttribute att = null;
-            Assert.Throws<ArgumentNullException>(() => new IdentifyByPrimaryKey(att));
+            Assert.Throws<ArgumentNullException>(() => new IdentifyByPrimaryKey((IAttribute)null));
 
             var i = new IntAttribute(null);
             Assert.Throws<ArgumentOutOfRangeException>(() => new IdentifyByPrimaryKey(i));

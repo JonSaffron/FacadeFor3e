@@ -35,14 +35,6 @@ namespace FacadeFor3e.Tests
             }
 
         [Test]
-        public void CanChangeAttribute()
-            {
-            var na = new NamedAttributeValue("matter", new IntAttribute(1234));
-            ((IntAttribute)na.Attribute).Value = 10;
-            ClassicAssert.AreEqual(10, na.Attribute.Value);
-            }
-
-        [Test]
         public void RenderAttribute()
             {
             var na = new NamedAttributeValue("Matter", new IntAttribute(12345));

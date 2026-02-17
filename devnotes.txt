@@ -148,3 +148,18 @@ Last version for .net 6 is 6.2.0
 System.ServiceModel.Security
 Contains WindowsClientCredential to set WCF impersonation level
 Last version for .net framework and .net standard is 4.10.3
+
+
+----
+
+Notes on using HTTPClient
+
+https://devblogs.microsoft.com/dotnet/configureawait-faq/
+https://learn.microsoft.com/en-us/archive/blogs/jpsanders/asp-net-do-not-use-task-result-in-main-context
+
+https://stackoverflow.com/questions/53529061/whats-the-right-way-to-use-httpclient-synchronously
+https://github.com/davidfowl/AspNetCoreDiagnosticScenarios/blob/master/AsyncGuidance.md
+https://josef.codes/you-are-probably-still-using-httpclient-wrong-and-it-is-destabilizing-your-software/
+https://medium.com/@riquecosta/httpclient-mastery-how-to-make-generic-resilient-and-performant-http-calls-in-net-04223259b907
+https://addons.mozilla.org/en-US/firefox/addon/canvasblocker/
+https://browserleaks.com/canvas#how-does-it-work

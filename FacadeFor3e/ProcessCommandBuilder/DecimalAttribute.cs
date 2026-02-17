@@ -7,12 +7,12 @@ namespace FacadeFor3e.ProcessCommandBuilder
     /// A 3E decimal attribute value
     /// </summary>
     [PublicAPI]
-    public sealed class DecimalAttribute : IAttribute
+    public readonly struct DecimalAttribute : IAttribute
         {
         /// <summary>
         /// Gets/sets the value of this attribute
         /// </summary>
-        public decimal? Value;
+        public readonly decimal? Value;
 
         /// <summary>
         /// Constructs a new 3E decimal attribute value

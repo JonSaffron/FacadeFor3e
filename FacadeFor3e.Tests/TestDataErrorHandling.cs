@@ -66,5 +66,20 @@ namespace FacadeFor3e.Tests
             ClassicAssert.True(lines[4].Contains("sample exception"));
             ClassicAssert.True(lines[5].Contains("allowed for Disbursement Entry"));
             }
+
+        [Test]
+        public void TestErrorHandlingWhenNothingUsefulReturned()
+            {
+            var request = new XmlDocument();
+            request.LoadXml("<dummyrequest />");
+            var response = new XmlDocument();
+            response.LoadXml(Resources.ExampleResponseWithoutAnyUsefulErrors);
+
+            var processResult = new ExecuteProcessResult(request, response);
+            var dataErrors = processResult.DataErrors.ToList();
+            ClassicAssert.AreEqual(1, dataErrors.Count());
+            var output = ExecuteProcessResult.RenderDataErrors(dataErrors);
+            ClassicAssert.IsNotNull(output);
+            }
         }
     }

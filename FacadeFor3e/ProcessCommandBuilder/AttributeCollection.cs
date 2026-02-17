@@ -65,7 +65,7 @@ namespace FacadeFor3e.ProcessCommandBuilder
             if (namedAttribute == null) throw new ArgumentNullException(nameof(namedAttribute));
             for (int i = 0; i < this.Count; i++)
                 {
-                var a = this[i];
+                var a = this[i]!;
 
                 if (a.Name.Equals(namedAttribute.Name, StringComparison.OrdinalIgnoreCase))
                     {
@@ -101,7 +101,7 @@ namespace FacadeFor3e.ProcessCommandBuilder
                 if (i == index)
                     continue;
 
-                var a = this[i];
+                var a = this[i]!;
                 if (a.Name.Equals(item.Name, StringComparison.OrdinalIgnoreCase))
                     throw new ArgumentOutOfRangeException($"An attribute with the name {item.Name} already exists.");
                 }
@@ -121,7 +121,7 @@ namespace FacadeFor3e.ProcessCommandBuilder
                 throw new ArgumentNullException(nameof(name));
             for (int i = 0; i < this.Count; i++)
                 {
-                var a = this[i];
+                var a = this[i]!;
 
                 if (a.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
                     {
