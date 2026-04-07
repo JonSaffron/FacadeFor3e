@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+<!--
+Dim tTaxDate as Query.TaxDate = Query.TaxDate.Current
+
+Dim selectQ as ISelect = QueryBuilder.SelectFrom(tTaxDate)
+Call selectQ.Values(tTaxDate.TaxLkUp, tTaxDate.EffStart, tTaxDate.NxStartDate, tTaxDate.NxEndDate)
+Call selectQ.Values(tTaxDate.Rate, tTaxDate.RatePercent)
+
+Return selectQ
+-->
+
+<SELECT ID="SelectStatement" Class="NextGen.Framework.OQL.Symbols.SelectStatement" xmlns="http://elite.com/schemas/query">
+  <OQL_CONTEXT Class="NextGen.Framework.Managers.ObjectMgr.ExContextProvider">
+    <NODEMAP ID="Node#1" QueryID="TaxDate" Class="NextGen.Application.Query.TaxDate" Assembly="NextGen.Archetype.Tax" />
+  </OQL_CONTEXT>
+  <SELECT_LIST>
+    <SINGLE_SELECT Union="Distinct">
+      <NODE NodeID="Node#1" />
+      <VALUES>
+        <VALUE>
+          <LEAF QueryID="TaxLkUp">
+            <NODE NodeID="Node#1" />
+          </LEAF>
+        </VALUE>
+        <VALUE>
+          <LEAF QueryID="EffStart">
+            <NODE NodeID="Node#1" />
+          </LEAF>
+        </VALUE>
+        <VALUE>
+          <LEAF QueryID="NxStartDate">
+            <NODE NodeID="Node#1" />
+          </LEAF>
+        </VALUE>
+        <VALUE>
+          <LEAF QueryID="NxEndDate">
+            <NODE NodeID="Node#1" />
+          </LEAF>
+        </VALUE>
+        <VALUE>
+          <LEAF QueryID="Rate">
+            <NODE NodeID="Node#1" />
+          </LEAF>
+        </VALUE>
+        <VALUE>
+          <LEAF QueryID="RatePercent">
+            <NODE NodeID="Node#1" />
+          </LEAF>
+        </VALUE>
+      </VALUES>
+    </SINGLE_SELECT>
+  </SELECT_LIST>
+</SELECT>

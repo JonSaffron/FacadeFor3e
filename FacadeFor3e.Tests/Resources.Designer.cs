@@ -224,5 +224,26 @@ namespace FacadeFor3e.Tests {
                 return ResourceManager.GetString("ExampleResponseWithoutAnyUsefulErrors", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt; 
+        ///&lt;!--
+        ///Dim tTaxDate as Query.TaxDate = Query.TaxDate.Current
+        ///
+        ///Dim selectQ as ISelect = QueryBuilder.SelectFrom(tTaxDate)
+        ///Call selectQ.Values(tTaxDate.TaxLkUp, tTaxDate.EffStart, tTaxDate.NxStartDate, tTaxDate.NxEndDate)
+        ///Call selectQ.Values(tTaxDate.Rate, tTaxDate.RatePercent)
+        ///
+        ///Return selectQ
+        ///--&gt;
+        ///
+        ///&lt;SELECT ID=&quot;SelectStatement&quot; Class=&quot;NextGen.Framework.OQL.Symbols.SelectStatement&quot; xmlns=&quot;http://elite.com/schemas/query&quot;&gt;
+        ///  &lt;OQL_CONTEXT Class=&quot;NextGen.Framework. [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string GetTaxDates {
+            get {
+                return ResourceManager.GetString("GetTaxDates", resourceCulture);
+            }
+        }
     }
 }
