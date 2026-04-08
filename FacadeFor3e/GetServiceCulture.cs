@@ -27,16 +27,26 @@ namespace FacadeFor3e
         /// <returns>A CultureInfo object</returns>
         public CultureInfo Get()
             {
+#if NET6_0_OR_GREATER
             var result = Cache.GetOrAdd(this._transactionServices.Endpoint, _ => RetrieveServiceCulture());
+#else
+            var result = Cache.GetOrAdd(this._transactionServices.Endpoint, _ => RetrieveServiceCulture())!;
+#endif
             TransactionServices.LogForDebug($"ServiceCulture = {result}");
             return result;
             }
 
         private CultureInfo RetrieveServiceCulture()
             {
+#if NET6_0_OR_GREATER
             var response = this._transactionServices.IsImpersonating
                 ? WindowsIdentity.RunImpersonated(this._transactionServices.AccountToImpersonate!.AccessToken, Func)
                 : Func();
+#else
+            var response = this._transactionServices.IsImpersonating
+                ? WindowsIdentity.RunImpersonated(this._transactionServices.AccountToImpersonate!.AccessToken!, Func)
+                : Func();
+#endif
             var result = response == null ? CultureInfo.InvariantCulture : new CultureInfo(response);
             return result;
 
