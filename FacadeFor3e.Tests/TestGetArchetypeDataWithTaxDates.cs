@@ -21,7 +21,7 @@ namespace FacadeFor3e.Tests
             var xmlDoc = new XmlDocument();
             xmlDoc.LoadXml(xoql);
 
-            var url = new Uri("https://dev.eliteenv.freshfieldsbruckhaus.com/TE_3E_DEV/web/TransactionService.asmx");
+            var url = new Uri("https://localhost/TE_3E_DEV/web/TransactionService.asmx");
             var ts = new TransactionServices(url);
             var result = ts.GetCompoundList<TaxDateInfo>(xmlDoc);
             ClassicAssert.IsNotNull(result);

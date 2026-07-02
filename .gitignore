@@ -303,3 +303,6 @@ __pycache__/
 
 # OpenCover UI analysis results
 OpenCover/
+FacadeFor3e.Tests/TestLockAlreadyLockedProforma.cs
+FacadeFor3e.Tests/PingTransactionServices.cs
+FacadeFor3e.Tests/NLog.xsd

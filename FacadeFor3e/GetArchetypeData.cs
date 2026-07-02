@@ -549,10 +549,11 @@ namespace FacadeFor3e
             {
             if (typeof(T).IsAssignableFrom(typeof(bool)))
                 {
-                if (value == "")
+                if (value == string.Empty)
                     {
                     if (typeof(T) == typeof(bool?))
                         {
+                        // ReSharper disable once PreferConcreteValueOverDefault
                         return (T) (object) new bool?()!;
                         }
                     throw new InvalidOperationException("Null value cannot be assigned to Boolean field/property.");
@@ -565,10 +566,11 @@ namespace FacadeFor3e
                 }
             if (typeof(T).IsAssignableFrom(typeof(int)))
                 {
-                if (value == "")
+                if (value == string.Empty)
                     {
                     if (typeof(T) == typeof(int?))
                         {
+                        // ReSharper disable once PreferConcreteValueOverDefault
                         return (T) (object) new int?()!;
                         }
                     throw new InvalidOperationException("Null value cannot be assigned to int field/property.");
@@ -577,10 +579,11 @@ namespace FacadeFor3e
                 }
             if (typeof(T).IsAssignableFrom(typeof(Guid)))
                 {
-                if (value == "")
+                if (value == string.Empty)
                     {
                     if (typeof(T) == typeof(Guid?))
                         {
+                        // ReSharper disable once PreferConcreteValueOverDefault
                         return (T) (object) new Guid?()!;
                         }
                     throw new InvalidOperationException("Null value cannot be assigned to Guid field/property.");
@@ -589,18 +592,20 @@ namespace FacadeFor3e
                 }
             if (typeof(T) == typeof(string))
                 {
-                if (value == "")
+                if (value == string.Empty)
                     {
+                    // ReSharper disable once PreferConcreteValueOverDefault
                     return (T) (object) default(string)!;
                     }
                 return (T)(object) value;
                 }
             if (typeof(T).IsAssignableFrom(typeof(DateTime)))
                 {
-                if (value == "")
+                if (value == string.Empty)
                     {
                     if (typeof(T) == typeof(DateTime?))
                         {
+                        // ReSharper disable once PreferConcreteValueOverDefault
                         return (T) (object) new DateTime?()!;
                         }
                     throw new InvalidOperationException("Null value cannot be assigned to DateTime field/property.");
@@ -610,7 +615,7 @@ namespace FacadeFor3e
 #if NET6_0_OR_GREATER
             if (typeof(T).IsAssignableFrom(typeof(DateOnly)))
                 {
-                if (value == "")
+                if (value == string.Empty)
                     {
                     if (typeof(T) == typeof(DateOnly?))
                         {
@@ -621,9 +626,42 @@ namespace FacadeFor3e
                 var dt = DateTime.Parse(value, cultureInfo);
                 if (dt.TimeOfDay != TimeSpan.Zero)
                     {
-                    throw new FormatException("Data has a time component and cannot be converted to a DateOnly.");
+                    throw new FormatException("Date has a time component and cannot be converted to a DateOnly.");
                     }
                 return (T)(object)DateOnly.FromDateTime(dt);
+                }
+#elif NETSTANDARD
+            // .net standard doesn't support DateOnly, but we can fake it. Obviously this will be _slow_.
+            if (typeof(T).Name == "DateOnly")
+                {
+                if (value == string.Empty)
+                    {
+                    throw new InvalidOperationException("Null value cannot be assigned to DateOnly field/property.");
+                    }
+                var dt = DateTime.Parse(value, cultureInfo);
+                if (dt.TimeOfDay != TimeSpan.Zero)
+                    {
+                    throw new FormatException("Date has a time component and cannot be converted to a DateOnly.");
+                    }
+                var methodInfo = typeof(T).GetMethod("FromDateTime")!;
+                var result = methodInfo.Invoke(null, [dt]);
+                return (T)result;
+                }
+            Type t = typeof(T);
+            if (t.IsGenericType && t.GetGenericTypeDefinition() == typeof(Nullable<>) && string.Equals(Nullable.GetUnderlyingType(t)?.Name, "DateOnly"))
+                {
+                if (value == string.Empty)
+                    {
+                    return default!;
+                    }
+                var dt = DateTime.Parse(value, cultureInfo);
+                if (dt.TimeOfDay != TimeSpan.Zero)
+                    {
+                    throw new FormatException("Date has a time component and cannot be converted to a DateOnly.");
+                    }
+                var methodInfo = Nullable.GetUnderlyingType(t)!.GetMethod("FromDateTime")!;
+                var result = methodInfo.Invoke(null, [dt]);
+                return (T)result;
                 }
 #endif
             if (typeof(T).IsAssignableFrom(typeof(decimal)))
@@ -632,6 +670,7 @@ namespace FacadeFor3e
                     {
                     if (typeof(T) == typeof(decimal?))
                         {
+                        // ReSharper disable once PreferConcreteValueOverDefault
                         return (T) (object) new decimal?()!;
                         }
                     throw new InvalidOperationException("Null value cannot be assigned to decimal field/property.");
@@ -640,11 +679,7 @@ namespace FacadeFor3e
                 }
 
             var typeName = typeof(T).Name;
-            var msg = $"Cannot assign a value to a property/field which has type {typeof(T).Name}.";
-            if (typeName == "DateOnly")
-                {
-                msg += " DateOnly is only supported in .net 6 and later, and you should ensure that your target framework specifies -windows.";
-                }
+            var msg = $"Cannot assign a value to a property/field which has type {typeName}.";
             throw new InvalidOperationException(msg);
             }
 

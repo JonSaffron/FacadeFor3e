@@ -67,7 +67,11 @@ namespace FacadeFor3e.ProcessCommandBuilder
                 {
                 var a = this[i];
 
+#if NETFRAMEWORK
+                if (a!.Name.Equals(namedAttribute.Name, StringComparison.OrdinalIgnoreCase))
+#else
                 if (a.Name.Equals(namedAttribute.Name, StringComparison.OrdinalIgnoreCase))
+#endif
                     {
                     // ReSharper disable once RedundantBaseQualifier
                     this.SetItem(i, namedAttribute);
@@ -102,7 +106,11 @@ namespace FacadeFor3e.ProcessCommandBuilder
                     continue;
 
                 var a = this[i];
+#if NETFRAMEWORK
+                if (a!.Name.Equals(item.Name, StringComparison.OrdinalIgnoreCase))
+#else
                 if (a.Name.Equals(item.Name, StringComparison.OrdinalIgnoreCase))
+#endif
                     throw new ArgumentOutOfRangeException($"An attribute with the name {item.Name} already exists.");
                 }
 
@@ -123,7 +131,11 @@ namespace FacadeFor3e.ProcessCommandBuilder
                 {
                 var a = this[i];
 
+#if NETFRAMEWORK
+                if (a!.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
+#else
                 if (a.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
+#endif
                     {
                     // ReSharper disable once RedundantBaseQualifier
                     base.RemoveAt(i);

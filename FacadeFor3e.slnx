@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="devnotes.txt" />
+  </Folder>
+  <Project Path="FacadeFor3e.Examples/FacadeFor3e.Examples.csproj" />
+  <Project Path="FacadeFor3e.Tests/FacadeFor3e.Tests.csproj" />
+  <Project Path="FacadeFor3e/FacadeFor3e.csproj" />
+</Solution>

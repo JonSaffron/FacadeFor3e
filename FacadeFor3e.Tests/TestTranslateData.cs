@@ -11,6 +11,39 @@ namespace FacadeFor3e.Tests
         {
         private readonly CultureInfo _cultureInfo = new ("en-US");
 
+#if NET8_0_OR_GREATER
+
+        /// <summary>
+        /// This test exists to help verify that GetArchetypeData.TranslateValue can cope with
+        /// DateOnly values when compiled as a .net standard library.
+        /// For this to work, the TargetFrameworks line in the FacadeFor3e project file must be
+        /// edited to leave only the netstandard2.0 value.
+        /// </summary>
+        [Test]
+        public void TestDateOnly()
+            {
+            var date = GetArchetypeData.TranslateValue<DateOnly>("2026-07-01", CultureInfo.CurrentCulture);
+            ClassicAssert.AreEqual(1, date.Day);
+            ClassicAssert.AreEqual(7, date.Month);
+            ClassicAssert.AreEqual(2026, date.Year);
+
+            Assert.Throws<InvalidOperationException>(() => GetArchetypeData.TranslateValue<DateOnly>(string.Empty, CultureInfo.CurrentCulture));
+
+            Assert.Throws<FormatException>(() => GetArchetypeData.TranslateValue<DateOnly>("2026-07-01 12:34:56", CultureInfo.CurrentCulture));
+
+            var nullDate = GetArchetypeData.TranslateValue<DateOnly?>(string.Empty, CultureInfo.CurrentCulture);
+            ClassicAssert.IsNull(nullDate);
+
+            var notNullDate = GetArchetypeData.TranslateValue<DateOnly?>("1974-3-23", CultureInfo.CurrentCulture);
+            ClassicAssert.IsNotNull(notNullDate);
+            ClassicAssert.AreEqual(23, notNullDate.GetValueOrDefault().Day);
+            ClassicAssert.AreEqual(3, notNullDate.GetValueOrDefault().Month);
+            ClassicAssert.AreEqual(1974, notNullDate.GetValueOrDefault().Year);
+
+            Assert.Throws<FormatException>(() => GetArchetypeData.TranslateValue<DateOnly?>("2026-07-01 12:34:56", CultureInfo.CurrentCulture));
+            }
+#endif
+
         [Test]
         public void TestNoData()
             {
@@ -674,6 +707,31 @@ namespace FacadeFor3e.Tests
             public decimal PresHrs;
             public decimal PresAmt;
             public string PresNarrative;
+            }
+
+        [Test]
+        public void TestTimekeeperCredit()
+            {
+            string data = "<Data><Matter><Id /><Number /><Percentage /><IsPrimary /></Matter></Data>";
+
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(data);
+
+            Assert.Throws<InvalidOperationException>(() => GetArchetypeData.TranslateCompoundValue<TimekeeperCreditWithId>(xmlDoc, new CultureInfo("en-US")));
+            }
+
+        internal record TimekeeperCredit
+            {
+            public string Number;
+            public decimal Percentage;
+            public bool IsPrimary;
+            }
+
+        internal record TimekeeperCreditWithId : TimekeeperCredit
+            {
+            public Guid Id;
+
+            public TimekeeperCredit TimekeeperCredit => new() { Number = this.Number, Percentage = this.Percentage, IsPrimary = this.IsPrimary };
             }
         }
     }
