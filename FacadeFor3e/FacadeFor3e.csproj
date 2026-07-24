@@ -42,8 +42,8 @@
 	<PackageReference Include="System.ServiceModel.Http" Version="8.1.2" />
 	<PackageReference Include="System.ServiceModel.Primitives" Version="8.1.2" />
 
-	<!-- This package is not normally referenced directly, but versions before 8.0.3 contain a vulnerability -->
-	<PackageReference Include="System.Security.Cryptography.Xml" Version="[8.0.3,)" />
+	<!-- This package is not normally referenced directly, but versions before 8.0.4 contain a vulnerability -->
+	<PackageReference Include="System.Security.Cryptography.Xml" Version="[8.0.4,)" />
   </ItemGroup>
 
   <!-- .net 10 -->
@@ -51,8 +51,8 @@
 	  <PackageReference Include="System.ServiceModel.Http" Version="10.0.652802" />
 	  <PackageReference Include="System.ServiceModel.Primitives" Version="10.0.652802" />
 
-	  <!-- This package is not normally referenced directly, but versions before 10.0.6 contain a vulnerability -->
-	  <PackageReference Include="System.Security.Cryptography.Xml" Version="[10.0.6,)" />
+	  <!-- This package is not normally referenced directly, but versions before 10.0.10 contain a vulnerability -->
+	  <PackageReference Include="System.Security.Cryptography.Xml" Version="[10.0.10,)" />
   </ItemGroup>
   
   <!-- .net framework -->
@@ -61,8 +61,8 @@
     <PackageReference Include="System.ServiceModel.Primitives" Version="10.0.652802" />
 	<PackageReference Include="System.Net.Http" Version="4.3.4" />
 
-    <!-- This package is not normally referenced directly, but versions before 10.0.6 contain a vulnerability -->
-    <PackageReference Include="System.Security.Cryptography.Xml" Version="[10.0.6,)" />
+    <!-- This package is not normally referenced directly, but versions before 10.0.10 contain a vulnerability -->
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="[10.0.10,)" />
   </ItemGroup>
 
   <!-- .net standard 2 -->
@@ -71,8 +71,8 @@
 	<PackageReference Include="System.ServiceModel.Primitives" Version="10.0.652802" />
 	<PackageReference Include="System.Net.Http" Version="4.3.4" />
 
-	<!-- This package is not normally referenced directly, but versions before 10.0.6 contain a vulnerability -->
-	<PackageReference Include="System.Security.Cryptography.Xml" Version="[10.0.6,)" />
+	<!-- This package is not normally referenced directly, but versions before 10.0.10 contain a vulnerability -->
+	<PackageReference Include="System.Security.Cryptography.Xml" Version="[10.0.10,)" />
   </ItemGroup>
 
   <ItemGroup>
