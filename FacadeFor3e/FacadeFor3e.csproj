@@ -52,7 +52,7 @@
 	  <PackageReference Include="System.ServiceModel.Primitives" Version="10.0.652802" />
 
 	  <!-- This package is not normally referenced directly, but versions before 10.0.10 contain a vulnerability -->
-	  <PackageReference Include="System.Security.Cryptography.Xml" Version="[10.0.10,)" />
+	  <PackageReference Include="System.Security.Cryptography.Xml" Version="[10.0.12,)" />
   </ItemGroup>
   
   <!-- .net framework -->
