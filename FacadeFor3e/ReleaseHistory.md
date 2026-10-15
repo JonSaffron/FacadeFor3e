@@ -1,4 +1,9 @@
-﻿5.0.0 (July 2026)
+﻿5.0.1 (October 2026)
+--------------------
+- Bumped up versions of dependencies libraries that were flagged as containing vulnerabilities
+- Added NullAttribute for when you specifically want to clear the value of an attribute
+
+5.0.0 (July 2026)
 -----------------
 - Remove the experimental support for the 3E OData API (this is moved to a separate library)
 - Changed the implementation of attribute values from mutable classes to immutable readonly struct

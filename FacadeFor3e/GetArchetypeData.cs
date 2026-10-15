@@ -65,6 +65,9 @@ namespace FacadeFor3e
         /// <param name="accountToImpersonate">The account to impersonate</param>
         /// <returns>An XML representation of the result set</returns>
         /// <remarks>The query is run in the context of the account running the process. Row level security will be observed.</remarks>
+#if NET6_0_OR_GREATER
+        [System.Runtime.Versioning.SupportedOSPlatform("windows")]
+#endif
         public static XmlDocument GetData(XmlDocument xoql, Uri endpoint, WindowsIdentity accountToImpersonate)
             {
             using var services = new TransactionServices(endpoint, accountToImpersonate);
@@ -111,6 +114,9 @@ namespace FacadeFor3e
         /// <param name="accountToImpersonate">The account to impersonate</param>
         /// <returns>One of the following: Boolean, Integer, DateTime, DateOnly, Decimal, Guid, String</returns>
         /// <remarks>The query is run in the context of the account running the process. Row level security will be observed.</remarks>
+#if NET6_0_OR_GREATER
+        [System.Runtime.Versioning.SupportedOSPlatform("windows")]
+#endif
         public static T GetScalarValue<T>(XmlDocument xoql, Uri endpoint, WindowsIdentity accountToImpersonate)
             {
             using var services = new TransactionServices(endpoint, accountToImpersonate);
@@ -157,6 +163,9 @@ namespace FacadeFor3e
         /// <param name="accountToImpersonate">The account to impersonate</param>
         /// <returns>A List of one of the following: Boolean, Integer, DateTime, DateOnly, Decimal, Guid, String</returns>
         /// <remarks>The query is run in the context of the account running the process. Row level security will be observed.</remarks>
+#if NET6_0_OR_GREATER
+        [System.Runtime.Versioning.SupportedOSPlatform("windows")]
+#endif
         public static List<T> GetScalarList<T>(XmlDocument xoql, Uri endpoint, WindowsIdentity accountToImpersonate)
             {
             using var services = new TransactionServices(endpoint, accountToImpersonate);
@@ -203,6 +212,9 @@ namespace FacadeFor3e
         /// <param name="accountToImpersonate">The account to impersonate</param>
         /// <returns>A POCO whose fields/properties match the column names returned and are of one of the following: Boolean, Integer, DateTime, DateOnly, Decimal, Guid, String</returns>
         /// <remarks>The query is run in the context of the account running the process. Row level security will be observed.</remarks>
+#if NET6_0_OR_GREATER
+        [System.Runtime.Versioning.SupportedOSPlatform("windows")]
+#endif
         public static T GetCompoundValue<T>(XmlDocument xoql, Uri endpoint, WindowsIdentity accountToImpersonate) where T : class, new()
             {
             using var services = new TransactionServices(endpoint, accountToImpersonate);
@@ -249,6 +261,9 @@ namespace FacadeFor3e
         /// <param name="accountToImpersonate">The account to impersonate</param>
         /// <returns>A List of POCOs whose fields/properties match the column names returned and are of one of the following: Boolean, Integer, DateTime, DateOnly, Decimal, Guid, String</returns>
         /// <remarks>The query is run in the context of the account running the process. Row level security will be observed.</remarks>
+#if NET6_0_OR_GREATER
+        [System.Runtime.Versioning.SupportedOSPlatform("windows")]
+#endif
         public static List<T> GetCompoundList<T>(XmlDocument xoql, Uri endpoint, WindowsIdentity accountToImpersonate) where T : class, new()
             {
             using var services = new TransactionServices(endpoint, accountToImpersonate);
@@ -335,10 +350,11 @@ namespace FacadeFor3e
                 throw new ArgumentOutOfRangeException(nameof(xoql));
             
             string? Func() => CallTransactionService(xoql);
+#pragma warning disable CA1416
             var response = this._transactionServices.IsImpersonating
-                // ReSharper disable once AssignNullToNotNullAttribute
                 ? WindowsIdentity.RunImpersonated(this._transactionServices.AccountToImpersonate!.AccessToken, Func)
                 : Func();
+#pragma warning restore CA1416
 
             if (response == null)
                 {

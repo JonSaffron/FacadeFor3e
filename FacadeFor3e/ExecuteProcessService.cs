@@ -58,11 +58,11 @@ namespace FacadeFor3e
                 throw new ArgumentNullException(nameof(request));
 
             string Func() => CallTransactionService(request, executeProcessParams);
+#pragma warning disable CA1416
             string response = this.TransactionServices.IsImpersonating
-                // ReSharper disable AssignNullToNotNullAttribute
                 ? WindowsIdentity.RunImpersonated(this.TransactionServices.AccountToImpersonate!.AccessToken, Func)
-                // ReSharper restore AssignNullToNotNullAttribute
                 : Func();
+#pragma warning restore CA1416
 
             if (response.StartsWith("<ProcessExecutionResults ") && response.EndsWith("</ProcessExecutionResults>"))
                 {

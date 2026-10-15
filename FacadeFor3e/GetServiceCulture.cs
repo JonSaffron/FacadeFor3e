@@ -38,15 +38,12 @@ namespace FacadeFor3e
 
         private CultureInfo RetrieveServiceCulture()
             {
-#if NET6_0_OR_GREATER
-            var response = this._transactionServices.IsImpersonating
-                ? WindowsIdentity.RunImpersonated(this._transactionServices.AccountToImpersonate!.AccessToken, Func)
-                : Func();
-#else
+#pragma warning disable CA1416
             var response = this._transactionServices.IsImpersonating
                 ? WindowsIdentity.RunImpersonated(this._transactionServices.AccountToImpersonate!.AccessToken!, Func)
                 : Func();
-#endif
+#pragma warning restore CA1416
+
             var result = response == null ? CultureInfo.InvariantCulture : new CultureInfo(response);
             return result;
 

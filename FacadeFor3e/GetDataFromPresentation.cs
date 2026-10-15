@@ -43,6 +43,9 @@ namespace FacadeFor3e
         /// <param name="accountToImpersonate">The account to impersonate</param>
         /// <returns>An XML representation of the result set</returns>
         /// <remarks>The query is run in the context of the account running the process. Row level security will be observed.</remarks>
+#if NET6_0_OR_GREATER
+        [System.Runtime.Versioning.SupportedOSPlatform("windows")]
+#endif
         public static XmlDocument GetData(string presentationId, Uri endpoint, WindowsIdentity accountToImpersonate)
             {
             using var services = new TransactionServices(endpoint, accountToImpersonate);
@@ -77,10 +80,11 @@ namespace FacadeFor3e
                 throw new ArgumentNullException(nameof(presentationId));
             
             string? Func() => CallTransactionService(presentationId);
+#pragma warning disable CA1416
             var response = this._transactionServices.IsImpersonating
-                // ReSharper disable once AssignNullToNotNullAttribute
                 ? WindowsIdentity.RunImpersonated(this._transactionServices.AccountToImpersonate!.AccessToken, Func)
                 : Func();
+#pragma warning restore CA1416
 
             if (IsResponseValid(response))
                 {

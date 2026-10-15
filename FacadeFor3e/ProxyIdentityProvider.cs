@@ -15,6 +15,9 @@ namespace FacadeFor3e
     /// Creates a WindowsIdentity object that can be used for impersonation
     /// </summary>
     [PublicAPI]
+#if NET6_0_OR_GREATER
+        [System.Runtime.Versioning.SupportedOSPlatform("windows")]
+#endif
     public sealed class ProxyIdentityProvider : IDisposable
         {
         private readonly NetworkCredential _credentials;

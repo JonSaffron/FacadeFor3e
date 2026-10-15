@@ -27,6 +27,9 @@ namespace FacadeFor3e
         /// </summary>
         /// <param name="endpoint">The url to use to connect to the 3E transaction service</param>
         /// <param name="accountToImpersonate">The account to impersonate</param>
+#if NET6_0_OR_GREATER
+        [System.Runtime.Versioning.SupportedOSPlatform("windows")]
+#endif
         public ExecuteProcess(Uri endpoint, WindowsIdentity accountToImpersonate)
             : base(new TransactionServices(endpoint, accountToImpersonate))
             {
@@ -64,6 +67,9 @@ namespace FacadeFor3e
         /// <param name="endpoint">Specifies the url of the transaction service</param>
         /// <param name="accountToImpersonate">The account details to impersonate</param>
         /// <returns>For a single Add operation, the primary key of the first record affected, or null otherwise</returns>
+#if NET6_0_OR_GREATER
+        [System.Runtime.Versioning.SupportedOSPlatform("windows")]
+#endif
         public static string? Execute(ProcessCommand process, Uri endpoint, WindowsIdentity accountToImpersonate)
             {
             if (process == null) throw new ArgumentNullException(nameof(process));

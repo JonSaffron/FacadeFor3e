@@ -107,11 +107,11 @@ namespace FacadeFor3e
                 throw new ArgumentNullException(nameof(optionName));
             
             string Func() => CallTransactionService(optionName, optionType);
+#pragma warning disable CA1416
             var result = this._transactionServices.IsImpersonating
-                // ReSharper disable AssignNullToNotNullAttribute
                 ? WindowsIdentity.RunImpersonated(this._transactionServices.AccountToImpersonate!.AccessToken, Func)
-                // ReSharper restore AssignNullToNotNullAttribute
                 : Func();
+#pragma warning restore CA1416
 
             TransactionServices.LogForDebug($"{optionName} = {result}");
             return result;

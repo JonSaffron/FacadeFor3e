@@ -13,7 +13,7 @@ namespace FacadeFor3e.ProcessCommandBuilder
         private static readonly BoolAttribute TrueValue = new BoolAttribute(true);
 
         /// <summary>
-        /// Gets/sets the value of this attribute
+        /// Gets the value of this attribute
         /// </summary>
         public readonly bool Value;
 

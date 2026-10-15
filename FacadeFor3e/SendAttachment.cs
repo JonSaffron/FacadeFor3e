@@ -120,9 +120,9 @@ namespace FacadeFor3e
                 TransactionServices.LogForDebug($"- Chunk {i + 1:D0} of {totalChunksNeeded:D0}");
                 if (this._transactionServices.IsImpersonating)
                     {
-                    // ReSharper disable AssignNullToNotNullAttribute
+#pragma warning disable CA1416
                     WindowsIdentity.RunImpersonated(this._transactionServices.AccountToImpersonate!.AccessToken, action);
-                    // ReSharper restore AssignNullToNotNullAttribute
+#pragma warning restore CA1416
                     }
                 else
                     {

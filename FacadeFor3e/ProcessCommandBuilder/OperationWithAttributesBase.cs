@@ -152,6 +152,18 @@ namespace FacadeFor3e.ProcessCommandBuilder
             }
 
         /// <summary>
+        /// Appends a new null valued attribute to the operation
+        /// </summary>
+        /// <param name="name">The column name</param>
+        /// <returns>A reference to this operation object</returns>
+        public OperationWithAttributesBase AddNullAttribute(string name)
+            {
+            var a = new NamedAttributeValue(name, new NullAttribute());
+            this.Attributes.Add(a);
+            return this;
+            }
+
+        /// <summary>
         /// Appends a new attribute to the operation
         /// </summary>
         /// <param name="name">The column name</param>

@@ -53,5 +53,46 @@ namespace FacadeFor3e.Tests
             var s = renderer.Result;
             ClassicAssert.AreEqual("<Matter AliasField=\"Number\">L1.10</Matter>", s);
             }
+
+        [Test]
+        public void RenderProformaGeneration()
+            {
+            var proformaGenerationProcess = new ProcessCommand("ProfGeneration", "ProfGenerationRun");
+            var addOperation = proformaGenerationProcess.AddRecord();
+
+            var description = "Proforma generation test";
+            addOperation.AddAttribute("Description", description);
+
+            addOperation.AddAttribute("IsCreateSingleProforma", true);
+
+            // to clear the Reset Dates Using attribute and enable the date fields
+            addOperation.AddNullAttribute("ProfNotationalDateType");
+
+            addOperation.AddAttribute("IsIncludeOtherProforma", false);
+
+            addOperation.AddAttribute("IsIgnoreExcludedEntry", true);
+
+            addOperation.AddAttribute("ProfStatus", "CURRENT");
+
+            var today = DateTime.Today;
+            var startDate = new DateTime(today.Year, today.Month, 1);
+            addOperation.AddDateTimeAttribute("TimeStart", startDate);
+            addOperation.AddDateTimeAttribute("CostStart", startDate);
+            addOperation.AddDateTimeAttribute("ChrgStart", startDate);
+
+            addOperation.AddDateTimeAttribute("TimeEnd", today);
+            addOperation.AddDateTimeAttribute("CostEnd", today);
+            addOperation.AddDateTimeAttribute("ChrgEnd", today);
+
+            var child = addOperation.AddChild("ProfGeneration");
+            var addSpecification = child.AddRecord();
+            addSpecification.AddAliasedAttribute("Matter", "Number", "A1234-12345");
+            addSpecification.AddAttribute("IsCreateNoTrans", true);
+
+            var renderer = new TestTransactionServiceRenderer();
+            renderer.Render(proformaGenerationProcess);
+            var s = renderer.Result;
+            Console.WriteLine(s);
+            }
         }
     }

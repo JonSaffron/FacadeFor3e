@@ -59,6 +59,9 @@ namespace FacadeFor3e
         /// </summary>
         /// <param name="endpoint">The url to use to connect to the 3E transaction service</param>
         /// <param name="accountToImpersonate">The account to impersonate</param>
+#if NET6_0_OR_GREATER
+        [System.Runtime.Versioning.SupportedOSPlatform("windows")]
+#endif
         public TransactionServices(Uri endpoint, WindowsIdentity accountToImpersonate) : this(endpoint)
             {
             this.AccountToImpersonate = accountToImpersonate ?? throw new ArgumentNullException(nameof(accountToImpersonate));
@@ -221,12 +224,20 @@ namespace FacadeFor3e
         /// <summary>
         /// Gets whether impersonation is being used during calls to the 3E transaction service
         /// </summary>
-        public bool IsImpersonating => this.AccountToImpersonate != null && this.AccountToImpersonate != WindowsIdentity.GetCurrent();
+        public bool IsImpersonating
+            {
+            get
+                {
+#if NET6_0_OR_GREATER
+                if (!OperatingSystem.IsWindows())
+                    return false;
+#endif
+                return this.AccountToImpersonate != null && this.AccountToImpersonate != WindowsIdentity.GetCurrent();
+                }
+            }
 
-        // ReSharper disable once RedundantSuppressNullableWarningExpression (applies to .net 6 only)
         internal TransactionServiceClient SoapClient => this._transactionServiceSoapClient.Value!;
 
-        // ReSharper disable once RedundantSuppressNullableWarningExpression (applies to .net 6 only)
         private static Logger Logger => LazyLogger.Value!;
 
         private static TransactionServiceClient BuildSoapClient(Uri endPoint, NetworkCredential? networkCredentials)
@@ -263,7 +274,9 @@ namespace FacadeFor3e
             string authenticationMethod;
             if (this.IsImpersonating)
                 {
+#pragma warning disable CA1416
                 userName = this.AccountToImpersonate!.Name;
+#pragma warning restore CA1416
                 authenticationMethod = "using impersonation";
                 }
             else if (this.NetworkCredential != null)
@@ -271,10 +284,19 @@ namespace FacadeFor3e
                 userName = $"{this.NetworkCredential.Domain}\\{this.NetworkCredential.UserName}";
                 authenticationMethod = "using credentials";
                 }
+#if NET6_0_OR_GREATER
+            else if (!OperatingSystem.IsWindows())
+                {
+                userName = "currently logged in user";
+                authenticationMethod = "none";
+                }
+#endif
             else
                 {
+#pragma warning disable CA1416
                 userName = GetCurrentWindowsIdentity();
-                authenticationMethod = "currently logged in user";
+#pragma warning restore CA1416
+                authenticationMethod = "none";
                 }
             sb.AppendFormat("\tUser: {0} ({1})", userName, authenticationMethod);
             sb.AppendLine();
@@ -321,6 +343,9 @@ namespace FacadeFor3e
             return result;
             }
 
+#if NET6_0_OR_GREATER
+        [System.Runtime.Versioning.SupportedOSPlatform("windows")]
+#endif
         internal static string GetCurrentWindowsIdentity()
             {
             using var wi = WindowsIdentity.GetCurrent();

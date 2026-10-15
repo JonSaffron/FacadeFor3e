@@ -1,12 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	<!-- Must target using the -windows suffix otherwise attributes like ServiceContractAttribute are not found -->
+	<!-- Using the -windows suffix eliminates warnings about the use of WindowsIdentity -->
 	<TargetFrameworks>net481;netstandard2.0;net8.0-windows;net10.0-windows</TargetFrameworks>
     <PackageId>FacadeFor3E</PackageId>
     <Authors>J Saffron Consulting</Authors>
     <Product>FacadeFor3E</Product>
-    <Version>5.0.0</Version>
+    <Version>5.0.1</Version>
     <Description>A library that makes integrating with Elite 3E a little easier</Description>
     <Copyright>Copyright © J Saffron Consulting Ltd 2014 - 2026</Copyright>
     <RepositoryUrl>https://github.com/JonSaffron/FacadeFor3e</RepositoryUrl>
@@ -38,21 +38,21 @@
   </ItemGroup>
 
   <!-- .net 8 -->
-  <ItemGroup Condition="'$(TargetFramework)' == 'net8.0-windows'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'net8.0-windows' or '$(TargetFramework)' == 'net8.0'">
 	<PackageReference Include="System.ServiceModel.Http" Version="8.1.2" />
 	<PackageReference Include="System.ServiceModel.Primitives" Version="8.1.2" />
 
-	<!-- This package is not normally referenced directly, but versions before 8.0.4 contain a vulnerability -->
-	<PackageReference Include="System.Security.Cryptography.Xml" Version="[8.0.4,)" />
+	<!-- This package is not normally referenced directly, but versions before 8.0.5 contain a vulnerability -->
+	<PackageReference Include="System.Security.Cryptography.Xml" Version="[8.0.5,)" />
   </ItemGroup>
 
   <!-- .net 10 -->
-  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0-windows'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0-windows' or '$(TargetFramework)' == 'net10.0'">
 	  <PackageReference Include="System.ServiceModel.Http" Version="10.0.652802" />
 	  <PackageReference Include="System.ServiceModel.Primitives" Version="10.0.652802" />
 
-	  <!-- This package is not normally referenced directly, but versions before 10.0.10 contain a vulnerability -->
-	  <PackageReference Include="System.Security.Cryptography.Xml" Version="[10.0.12,)" />
+	  <!-- This package is not normally referenced directly, but versions before 10.0.13 contain a vulnerability -->
+	  <PackageReference Include="System.Security.Cryptography.Xml" Version="[10.0.13,)" />
   </ItemGroup>
   
   <!-- .net framework -->
@@ -61,8 +61,8 @@
     <PackageReference Include="System.ServiceModel.Primitives" Version="10.0.652802" />
 	<PackageReference Include="System.Net.Http" Version="4.3.4" />
 
-    <!-- This package is not normally referenced directly, but versions before 10.0.10 contain a vulnerability -->
-    <PackageReference Include="System.Security.Cryptography.Xml" Version="[10.0.10,)" />
+    <!-- This package is not normally referenced directly, but versions before 10.0.13 contain a vulnerability -->
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="[10.0.13,)" />
   </ItemGroup>
 
   <!-- .net standard 2 -->
@@ -71,8 +71,8 @@
 	<PackageReference Include="System.ServiceModel.Primitives" Version="10.0.652802" />
 	<PackageReference Include="System.Net.Http" Version="4.3.4" />
 
-	<!-- This package is not normally referenced directly, but versions before 10.0.10 contain a vulnerability -->
-	<PackageReference Include="System.Security.Cryptography.Xml" Version="[10.0.10,)" />
+	<!-- This package is not normally referenced directly, but versions before 10.0.13 contain a vulnerability -->
+	<PackageReference Include="System.Security.Cryptography.Xml" Version="[10.0.13,)" />
   </ItemGroup>
 
   <ItemGroup>

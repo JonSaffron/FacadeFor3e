@@ -10,7 +10,7 @@ namespace FacadeFor3e.ProcessCommandBuilder
     public readonly struct IntAttribute : IAttribute
         {
         /// <summary>
-        /// Gets/sets the value of this attribute
+        /// Gets the value of this attribute
         /// </summary>
         public readonly int? Value;
 
